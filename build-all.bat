@@ -3,6 +3,8 @@ REM Build Everything.
 
 ECHO "Building everything..."
 
+IF NOT EXIST bin\ MKDIR bin
+
 PUSHD engine
 CALL build.bat
 POPD
