@@ -4,7 +4,7 @@ set echo on
 
 echo "Building everything..."
 
-mkdir -p ../bin
+mkdir -p bin
 
 pushd engine
 source build.sh
