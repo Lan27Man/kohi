@@ -1,5 +1,6 @@
 #include "kmemory.h"
 #include "core/logger.h"
+#include "core/kstring.h"
 #include "platform/platform.h"
 
 // TODO: Custom string lib.
@@ -131,7 +132,7 @@ char* get_memory_usage_str()
         offset += length;
     }
 
-    char* out_string = _strdup(buffer);
+    char* out_string = string_duplicate(buffer);
 
     return out_string;
 }
