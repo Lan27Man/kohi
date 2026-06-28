@@ -1,9 +1,10 @@
 #pragma once
 
+#include "game_types.h"
+
 #include "core/application.h"
 #include "core/logger.h"
 #include "core/kmemory.h"
-#include "game_types.h"
 
 // Externally-defined function to create a game.
 extern b8 create_game(game* out_game);
@@ -41,7 +42,7 @@ int main(void)
     // Begin the game loop.
     if (!application_run())
     {
-        KINFO("Application did not shutdown gracefully.");
+        KINFO("Application did not shutdown gracefully!");
         return 2;
     }
 

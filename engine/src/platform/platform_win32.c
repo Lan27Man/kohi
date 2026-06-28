@@ -26,14 +26,16 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
 b8 platform_startup(platform_state* plat_state, const char* application_name, i32 x, i32 y, i32 width, i32 height)
 {
     plat_state->internal_state = malloc(sizeof(internal_state));
-    internal_state* state = (internal_state*)plat_state->internal_state;
 
+    internal_state* state = (internal_state*)plat_state->internal_state;
     state->h_instance = GetModuleHandleA(0);
 
     // Setup and register window class.
     HICON icon = LoadIcon(state->h_instance, IDI_APPLICATION);
     WNDCLASSA wc;
+
     memset(&wc, 0, sizeof(wc));
+
     wc.style = CS_DBLCLKS; // Get double-clicks.
     wc.lpfnWndProc = win32_process_message;
     wc.cbClsExtra = 0;
@@ -70,6 +72,7 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
 
     // Obtain the size of the border.
     RECT border_rect = {0, 0, 0, 0};
+
     AdjustWindowRectEx(&border_rect, window_style, 0, window_ex_style);
 
     // In this case, the border rectangle is negative.
@@ -106,8 +109,11 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
 
     // Clock setup.
     LARGE_INTEGER frequency;
+
     QueryPerformanceFrequency(&frequency);
+
     clock_frequency = 1.0 / (f64)frequency.QuadPart;
+
     QueryPerformanceCounter(&start_time);
 
     return TRUE;
@@ -166,33 +172,43 @@ void* platform_set_memory(void* dest, i32 value, u64 size)
 void platform_console_write(const char* message, u8 colour)
 {
     HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
     // FATAL, ERROR, WARN, INFO, DEBUG, TRACE.
     static u8 levels[6] = {64, 4, 6, 2, 1, 8};
+
     SetConsoleTextAttribute(console_handle, levels[colour]);
 
     OutputDebugStringA(message);
+
     u64 length = strlen(message);
     LPDWORD number_written = 0;
+
     WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), message, (DWORD)length, number_written, 0);
 }
 
 void platform_console_write_error(const char* message, u8 colour)
 {
     HANDLE console_handle = GetStdHandle(STD_ERROR_HANDLE);
+
     // FATAL, ERROR, WARN, INFO, DEBUG, TRACE.
     static u8 levels[6] = {64, 4, 6, 2, 1, 8};
+
     SetConsoleTextAttribute(console_handle, levels[colour]);
 
     OutputDebugStringA(message);
+
     u64 length = strlen(message);
     LPDWORD number_written = 0;
+
     WriteConsoleA(GetStdHandle(STD_ERROR_HANDLE), message, (DWORD)length, number_written, 0);
 }
 
 f64 platform_get_absolute_time()
 {
     LARGE_INTEGER now_time;
+
     QueryPerformanceCounter(&now_time);
+    
     return (f64)now_time.QuadPart * clock_frequency;
 }
 

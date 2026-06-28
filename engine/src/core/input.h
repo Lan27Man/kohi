@@ -15,8 +15,8 @@ typedef enum buttons
 typedef enum keys
 {
     DEFINE_KEY(BACKSPACE, 0x08),
-    DEFINE_KEY(ENTER, 0x0D),
     DEFINE_KEY(TAB, 0x09),
+    DEFINE_KEY(ENTER, 0x0D),
     DEFINE_KEY(SHIFT, 0x10),
     DEFINE_KEY(CONTROL, 0x11),
 
@@ -24,7 +24,6 @@ typedef enum keys
     DEFINE_KEY(CAPITAL, 0x14),
 
     DEFINE_KEY(ESCAPE, 0x1B),
-
     DEFINE_KEY(CONVERT, 0x1C),
     DEFINE_KEY(NONCONVERT, 0x1D),
     DEFINE_KEY(ACCEPT, 0x1E),
@@ -73,7 +72,6 @@ typedef enum keys
     DEFINE_KEY(X, 0x58),
     DEFINE_KEY(Y, 0x59),
     DEFINE_KEY(Z, 0x5A),
-
     DEFINE_KEY(LWIN, 0x5B),
     DEFINE_KEY(RWIN, 0x5C),
     DEFINE_KEY(APPS, 0x5D),
@@ -123,7 +121,6 @@ typedef enum keys
 
     DEFINE_KEY(NUMLOCK, 0x90),
     DEFINE_KEY(SCROLL, 0x91),
-
     DEFINE_KEY(NUMPAD_EQUAL, 0x92),
 
     DEFINE_KEY(LSHIFT, 0xA0),

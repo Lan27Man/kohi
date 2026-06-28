@@ -1,10 +1,10 @@
 #include "vulkan_backend.h"
 #include "vulkan_types.inl"
 #include "vulkan_platform.h"
+
 #include "core/logger.h"
 #include "core/kstring.h"
 #include "containers/darray.h"
-#include "platform/platform.h"
 
 // Static Vulkan context.
 static vulkan_context context;
@@ -34,13 +34,14 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 
     // Obtain a list of required extensions.
     const char** required_extensions = darray_create(const char*);
+
     darray_push(required_extensions, &VK_KHR_SURFACE_EXTENSION_NAME);       // Generic surface extension.
     platform_get_required_extension_names(&required_extensions);            // Platform-specific extension(s).
 
 #if defined(_DEBUG)
     darray_push(required_extensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);   // Debug utilities.
-
     KDEBUG("Required extensions:");
+
     u32 length = darray_length(required_extensions);
 
     for (u32 i = 0; i < length; ++i)
@@ -63,19 +64,25 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 
     // The list of validation layers required.
     required_validation_layer_names = darray_create(const char*);
+
     darray_push(required_validation_layer_names, &"VK_LAYER_KHRONOS_validation");
+
     required_validation_layer_count = darray_length(required_validation_layer_names);
 
     // Obtain a list of available validation layers.
     u32 available_layer_count = 0;
+
     VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, 0));
+
     VkLayerProperties* available_layers = darray_reserve(VkLayerProperties, available_layer_count);
+
     VK_CHECK(vkEnumerateInstanceLayerProperties(&available_layer_count, available_layers));
 
     // Verify all required layers are available.
     for (u32 i = 0; i < required_validation_layer_count; ++i)
     {
         KINFO("Searching for layer: %s...", required_validation_layer_names[i]);
+
         b8 found = FALSE;
 
         for (u32 j = 0; j < available_layer_count; ++j)
@@ -107,6 +114,7 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 // Debugger.
 #if defined(_DEBUG)
     KDEBUG("Creating Vulkan debugger...");
+
     u32 log_severity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT |
                        VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT; // |
                                                                         //      VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
@@ -120,6 +128,7 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 
     PFN_vkCreateDebugUtilsMessengerEXT func =
         (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkCreateDebugUtilsMessengerEXT");
+        
     KASSERT_MSG(func, "Failed to create debug messenger!");
     VK_CHECK(func(context.instance, &debug_create_info, context.allocator, &context.debug_messenger));
     KDEBUG("Vulkan debugger created!");

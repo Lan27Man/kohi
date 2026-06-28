@@ -1,4 +1,5 @@
 #include "kmemory.h"
+
 #include "core/logger.h"
 #include "core/kstring.h"
 #include "platform/platform.h"
@@ -60,6 +61,7 @@ void* kallocate(u64 size, memory_tag tag)
     void* block = platform_allocate(size, FALSE);
 
     platform_zero_memory(block, size);
+
     return block;
 }
 
@@ -67,7 +69,7 @@ void kfree(void* block, u64 size, memory_tag tag)
 {
     if (tag == MEMORY_TAG_UNKNOWN)
     {
-        KWARN("kfree() called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        KWARN("kfree() called using MEMORY_TAG_UNKNOWN! Re-class this allocation.");
     }
 
     stats.total_allocated -= size;

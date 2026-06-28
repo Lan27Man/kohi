@@ -42,6 +42,7 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
 {
     // Create the internal state.
     plat_state->internal_state = malloc(sizeof(internal_state));
+
     internal_state* state = (internal_state*)plat_state->internal_state;
 
     // Connect to X.
@@ -195,7 +196,6 @@ b8 platform_pump_messages(platform_state* plat_state)
 
     xcb_generic_event_t* event;
     xcb_client_message_event_t* cm;
-
     b8 quit_flagged = FALSE;
 
     // Poll for events until NULL is returned.
@@ -323,6 +323,7 @@ void platform_console_write(const char* message, u8 colour)
 {
     // FATAL, ERROR, WARN, INFO, DEBUG, TRACE.
     const char* colour_strings[] = {"0;41", "1;31", "1;33", "1;32", "1;34", "1;30"};
+
     printf("\033[%sm%s\033[0m", colour_strings[colour], message);
 }
 
@@ -330,31 +331,35 @@ void platform_console_write_error(const char* message, u8 colour)
 {
     // FATAL, ERROR, WARN, INFO, DEBUG, TRACE.
     const char* colour_strings[] = {"0;41", "1;31", "1;33", "1;32", "1;34", "1;30"};
+
     printf("\033[%sm%s\033[0m", colour_strings[colour], message);
 }
 
 f64 platform_get_absolute_time()
 {
     struct timespec now;
+
     clock_gettime(CLOCK_MONOTONIC, &now);
+
     return now.tv_sec + now.tv_nsec * 0.000000001;
 }
 
 void platform_sleep(u64 ms)
 {
-    #if _POSIX_C_SOURCE >= 199309L
+#if _POSIX_C_SOURCE >= 199309L
     struct timespec ts;
     ts.tv_sec = ms / 1000;
     ts.tv_nsec = (ms % 1000) * 1000 * 1000;
+
     nanosleep(&ts, 0);
-    #else
+#else
     if (ms >= 1000)
     {
         sleep(ms / 1000);
     }
 
     usleep((ms % 1000) * 1000);
-    #endif
+#endif
 }
 
 void platform_get_required_extension_names(const char*** names_darray)

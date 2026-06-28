@@ -1,6 +1,7 @@
 #include "application.h"
 #include "game_types.h"
 #include "logger.h"
+
 #include "platform/platform.h"
 #include "core/kmemory.h"
 #include "core/event.h"
@@ -31,7 +32,7 @@ b8 application_create(game* game_inst)
 {
     if (initialized)
     {
-        KERROR("application_create called more than once.");
+        KERROR("application_create called more than once!");
         return FALSE;
     }
 
@@ -54,7 +55,7 @@ b8 application_create(game* game_inst)
 
     if (!event_initialize())
     {
-        KERROR("Event system failed initialization. Application cannot continue.");
+        KERROR("Event system failed initialization! Application cannot continue.");
         return FALSE;
     }
 
@@ -77,7 +78,7 @@ b8 application_create(game* game_inst)
     // Renderer startup.
     if (!renderer_initialize(game_inst->app_config.name, &app_state.platform))
     {
-        KFATAL("Failed to initialize renderer. Aborting application.");
+        KFATAL("Failed to initialize renderer! Aborting application.");
         return FALSE;
     }
 
@@ -89,7 +90,6 @@ b8 application_create(game* game_inst)
     }
 
     app_state.game_inst->on_resize(app_state.game_inst, app_state.width, app_state.height);
-
     initialized = TRUE;
 
     return TRUE;
@@ -119,6 +119,7 @@ b8 application_run()
         {
             // Update clock and get delta time.
             clock_update(&app_state.clock);
+
             f64 current_time = app_state.clock.elapsed;
             f64 delta = (current_time - app_state.last_time);
             f64 frame_start_time = platform_get_absolute_time();
@@ -126,7 +127,7 @@ b8 application_run()
             // Call the game's update routine.
             if (!app_state.game_inst->update(app_state.game_inst, (f32)delta))
             {
-                KFATAL("Game update failed, shutting down.");
+                KFATAL("Game update failed, shutting down!");
                 app_state.is_running = FALSE;
                 break;
             }
@@ -134,7 +135,7 @@ b8 application_run()
             // Call the game's render routine.
             if (!app_state.game_inst->render(app_state.game_inst, (f32)delta))
             {
-                KFATAL("Game render failed, shutting down.");
+                KFATAL("Game render failed, shutting down!");
                 app_state.is_running = FALSE;
                 break;
             }
@@ -142,12 +143,15 @@ b8 application_run()
             // TODO: Refactor packet creation.
             render_packet packet;
             packet.delta_time = delta;
+
             renderer_draw_frame(&packet);
 
             // Figure out how long the frame took and, if below.
             f64 frame_end_time = platform_get_absolute_time();
             f64 frame_elapsed_time = frame_end_time - frame_start_time;
+            
             // running_time += frame_elapsed_time;
+
             f64 remaining_seconds = target_frame_seconds - frame_elapsed_time;
 
             if (remaining_seconds > 0)
@@ -198,7 +202,7 @@ b8 application_on_event(u16 code, void* sender, void* listener_inst, event_conte
     {
         case EVENT_CODE_APPLICATION_QUIT:
         {
-            KINFO("EVENT_CODE_APPLICATION_QUIT received, shutting down.\n");
+            KINFO("EVENT_CODE_APPLICATION_QUIT received, shutting down!\n");
             app_state.is_running = FALSE;
             return TRUE;
         }
@@ -217,6 +221,7 @@ b8 application_on_key(u16 code, void* sender, void* listener_inst, event_context
         {
             // NOTE: Technically firing an event to itself, but there may be other listeners.
             event_context data = {};
+            
             event_fire(EVENT_CODE_APPLICATION_QUIT, 0, data);
 
             // Block anything else from processing this.

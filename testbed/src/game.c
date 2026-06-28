@@ -1,4 +1,5 @@
 #include "game.h"
+
 #include <core/logger.h>
 
 b8 game_initialize(game* game_inst)

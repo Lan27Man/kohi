@@ -12,7 +12,9 @@ char* string_duplicate(const char* str)
 {
     u64 length = string_length(str);
     char* copy = kallocate(length + 1, MEMORY_TAG_STRING);
+
     kcopy_memory(copy, str, length + 1);
+    
     return copy;
 }
 

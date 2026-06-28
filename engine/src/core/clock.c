@@ -1,4 +1,5 @@
 #include "clock.h"
+
 #include "platform/platform.h"
 
 void clock_update(clock* clock)

@@ -30,7 +30,9 @@ static input_state state = {};
 void initialize_input()
 {
     kzero_memory(&state, sizeof(input_state));
+
     initialized = TRUE;
+
     KINFO("Input subsystem initialized!");
 }
 
@@ -63,6 +65,7 @@ void input_process_key(keys key, b8 pressed)
         // Fire off an event for immediate processing.
         event_context context;
         context.data.u16[0] = key;
+
         event_fire(pressed ? EVENT_CODE_KEY_PRESSED : EVENT_CODE_KEY_RELEASED, 0, context);
     }
 }
@@ -77,6 +80,7 @@ void input_process_button(buttons button, b8 pressed)
         // Fire the event.
         event_context context;
         context.data.u16[0] = button;
+
         event_fire(pressed ? EVENT_CODE_BUTTON_PRESSED : EVENT_CODE_BUTTON_RELEASED, 0, context);
     }
 }
@@ -97,6 +101,7 @@ void input_process_mouse_move(i16 x, i16 y)
         event_context context;
         context.data.u16[0] = x;
         context.data.u16[1] = y;
+
         event_fire(EVENT_CODE_MOUSE_MOVED, 0, context);
     }
 }
@@ -108,6 +113,7 @@ void input_process_mouse_wheel(i8 z_delta)
     // Fire the event.
     event_context context;
     context.data.u8[0] = z_delta;
+    
     event_fire(EVENT_CODE_MOUSE_WHEEL, 0, context);
 }
 
