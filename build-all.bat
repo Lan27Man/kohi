@@ -1,22 +1,18 @@
 @ECHO OFF
-REM Build Everything.
+REM Build Everything
 
-ECHO "Building everything..."
+ECHO "Building Everything..."
 
-IF NOT EXIST bin\ MKDIR bin
-
-PUSHD engine
-CALL build.bat
-POPD
+REM Engine
+make -f "Makefile.engine.windows.mak" all
 IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && exit
+    ECHO Error: %ERRORLEVEL% && EXIT
 )
 
-PUSHD testbed
-CALL build.bat
-POPD
+REM Testbed
+make -f "Makefile.testbed.windows.mak" all
 IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && exit
+    ECHO Error: %ERRORLEVEL% && EXIT
 )
 
 ECHO "All assemblies built successfully."

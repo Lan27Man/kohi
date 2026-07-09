@@ -13,12 +13,14 @@ My progress of creating a game engine in C with Vulkan from scratch using the tu
     * Visual Studio (any edition) with C++ Desktop Development (this includes the latest Windows SDK)
     * Vulkan SDK for Windows
     * LLVM for Windows
+    * Make for Windows
 * Linux:
     * Vulkan SDK for Linux
-    * The clang, libX11-dev and libxkbcommon-X11-dev packages
+    * The clang, make, libX11-dev and libxkbcommon-X11-dev packages
 * Visual Studio Code:
     * Extensions:
         * C/C++ Extension Pack (required)
         * Gruvbox Themes (Optional)
         * Shader languages support for VSCode (Optional)
         * TODO Highlight (Optional)
+        * Makefile Tools (Optional)
