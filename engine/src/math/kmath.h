@@ -44,7 +44,7 @@ KAPI f32 kabs(f32 x);
 /**
  * Indicates if the value is a power of 2. 0 is considered _not_ a power of 2.
  * @param value The value to be interpreted.
- * @returns TRUE if a power of 2, otherwise FALSE.
+ * @returns true if a power of 2, otherwise false.
  */
 KINLINE b8 is_power_of_2(u64 value)
 {
@@ -236,21 +236,21 @@ KINLINE vec2 vec2_normalized(vec2 vector)
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
- * @returns TRUE if within tolerance; otherwise FALSE.
+ * @returns true if within tolerance; otherwise false.
  */
 KINLINE const b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {
-        return FALSE;
+        return false;
     }
 
     if (kabs(vector_0.y - vector_1.y) > tolerance)
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /**
@@ -546,26 +546,26 @@ KINLINE vec3 vec3_cross(vec3 vector_0, vec3 vector_1)
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
- * @returns TRUE if within tolerance; otherwise FALSE.
+ * @returns true if within tolerance; otherwise false.
  */
 KINLINE const b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {
-        return FALSE;
+        return false;
     }
     
     if (kabs(vector_0.y - vector_1.y) > tolerance)
     {
-        return FALSE;
+        return false;
     }
     
     if (kabs(vector_0.z - vector_1.z) > tolerance)
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /**

@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-static b8 rand_seeded = FALSE;
+static b8 rand_seeded = false;
 
 /**
  * Note that these are here in order to prevent having to import the
@@ -48,7 +48,7 @@ static b8 rand_seeded = FALSE;
     {
         srand((u32)platform_get_absolute_time());
 
-        rand_seeded = TRUE;
+        rand_seeded = true;
     }
 
     return rand();
@@ -60,7 +60,7 @@ static b8 rand_seeded = FALSE;
     {
         srand((u32)platform_get_absolute_time());
 
-        rand_seeded = TRUE;
+        rand_seeded = true;
     }
 
     return (rand() % (max - min + 1)) + min;

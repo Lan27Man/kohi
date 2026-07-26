@@ -134,7 +134,7 @@ b8 vulkan_result_is_success(VkResult result)
         case VK_PIPELINE_COMPILE_REQUIRED_EXT:
         case VK_PIPELINE_BINARY_MISSING_KHR:
         case VK_INCOMPATIBLE_SHADER_BINARY_EXT:
-            return TRUE;
+            return true;
 
         // Error Codes
         case VK_ERROR_OUT_OF_HOST_MEMORY:
@@ -174,6 +174,6 @@ b8 vulkan_result_is_success(VkResult result)
         case VK_ERROR_NOT_PERMITTED:
         case VK_ERROR_NOT_ENOUGH_SPACE_KHR:
         case VK_ERROR_UNKNOWN:
-            return FALSE;
+            return false;
     }
 }

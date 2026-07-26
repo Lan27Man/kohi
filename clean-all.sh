@@ -4,7 +4,7 @@ set echo on
 
 echo "Cleaning Everything..."
 
-make -f Makefile.engine.linux.mak clean
+make -f engine/Makefile.engine.linux.mak clean
 
 ERRORLEVEL=$?
 if [ $ERRORLEVEL -ne 0 ]
@@ -12,7 +12,15 @@ then
 echo "Error: " $ERRORLEVEL && exit
 fi
 
-make -f Makefile.testbed.linux.mak clean
+make -f testbed/Makefile.testbed.linux.mak clean
+
+ERRORLEVEL=$?
+if [ $ERRORLEVEL -ne 0 ]
+then
+echo "Error: " $ERRORLEVEL && exit
+fi
+
+make -f tests/Makefile.tests.linux.mak clean
 
 ERRORLEVEL=$?
 if [ $ERRORLEVEL -ne 0 ]
