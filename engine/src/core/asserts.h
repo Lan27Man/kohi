@@ -62,8 +62,6 @@ KAPI void report_assertion_failure(const char* expression, const char* message, 
 #else
 // Does nothing at all.
 #define KASSERT(expr)
-// Does nothing at all.
 #define KASSERT_MSG(expr, message)
-// Does nothing at all.
 #define KASSERT_DEBUG(expr)
 #endif

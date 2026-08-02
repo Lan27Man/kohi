@@ -4,10 +4,10 @@
 
 /*
 Memory layout
-u64 capacity = number of elements that can be held
-u64 length = number of elements currently contained
-u64 stride = size of each element in bytes
-void* elements
+u64 capacity = number of elements that can be held.
+u64 length = number of elements currently contained.
+u64 stride = size of each element in bytes.
+void* elements = the elements in the array.
 */
 
 enum
@@ -41,7 +41,8 @@ KAPI void* _darray_insert_at(void* array, u64 index, void* value_ptr);
 #define darray_reserve(type, capacity) \
     _darray_create(capacity, sizeof(type))
 
-#define darray_destroy(array) _darray_destroy(array);
+#define darray_destroy(array) \
+    _darray_destroy(array)
 
 #define darray_push(array, value)           \
     {                                       \

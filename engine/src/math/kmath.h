@@ -238,7 +238,7 @@ KINLINE vec2 vec2_normalized(vec2 vector)
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
  * @returns true if within tolerance; otherwise false.
  */
-KINLINE const b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
+KINLINE b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {
@@ -548,7 +548,7 @@ KINLINE vec3 vec3_cross(vec3 vector_0, vec3 vector_1)
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
  * @returns true if within tolerance; otherwise false.
  */
-KINLINE const b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
+KINLINE b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {

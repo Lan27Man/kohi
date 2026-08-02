@@ -17,6 +17,7 @@
 
 // Static Vulkan context.
 static vulkan_context context;
+
 static u32 cached_framebuffer_width = 0;
 static u32 cached_framebuffer_height = 0;
 
@@ -35,7 +36,7 @@ void regenerate_framebuffers(renderer_backend* backend, vulkan_swapchain* swapch
 
 b8 recreate_swapchain(renderer_backend* backend);
 
-b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* application_name, struct platform_state* plat_state)
+b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* application_name)
 {
     // Function pointers.
     context.find_memory_index = find_memory_index;
@@ -45,14 +46,14 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 
     application_get_framebuffer_size(&cached_framebuffer_width, &cached_framebuffer_height);
 
-    context.framebuffer_width = cached_framebuffer_width != 0 ? cached_framebuffer_width : 800;
-    context.framebuffer_height = cached_framebuffer_height != 0 ? cached_framebuffer_height : 600;
+    context.framebuffer_width = (cached_framebuffer_width != 0) ? cached_framebuffer_width : 800;
+    context.framebuffer_height = (cached_framebuffer_height != 0) ? cached_framebuffer_height : 600;
     cached_framebuffer_width = 0;
     cached_framebuffer_height = 0;
 
     // Setup Vulkan instance.
     VkApplicationInfo app_info = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
-    app_info.apiVersion = VK_API_VERSION_1_2;
+    app_info.apiVersion = VK_API_VERSION_1_4;
     app_info.pApplicationName = application_name;
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName = "Kohi Engine";
@@ -145,9 +146,9 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
     KDEBUG("Creating Vulkan debugger...");
 
     u32 log_severity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT |
-                       VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT; // |
-                                                                        //      VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
-                                                                        //      VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
+                       VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                       VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT;
+                                                                        // | VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT;
 
     VkDebugUtilsMessengerCreateInfoEXT debug_create_info = {VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT};
     debug_create_info.messageSeverity = log_severity;
@@ -166,7 +167,7 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
     // Surface creation.
     KDEBUG("Creating Vulkan surface...");
 
-    if (!platform_create_vulkan_surface(plat_state, &context))
+    if (!platform_create_vulkan_surface(&context))
     {
         KERROR("Failed to create platform surface!");
         return false;
@@ -301,7 +302,6 @@ void vulkan_renderer_backend_shutdown(renderer_backend* backend)
     }
 
     darray_destroy(context.graphics_command_buffers);
-
     context.graphics_command_buffers = 0;
 
     // Destroy framebuffers.
@@ -317,7 +317,6 @@ void vulkan_renderer_backend_shutdown(renderer_backend* backend)
     vulkan_swapchain_destroy(&context, &context.swapchain);
 
     KDEBUG("Destroying Vulkan device...");
-
     vulkan_device_destroy(&context);
 
     KDEBUG("Destroying Vulkan surface...");
@@ -329,6 +328,7 @@ void vulkan_renderer_backend_shutdown(renderer_backend* backend)
         context.surface = 0;
     }
 
+#if defined(_DEBUG)
     KDEBUG("Destroying Vulkan debugger...");
 
     if (context.debug_messenger)
@@ -337,6 +337,7 @@ void vulkan_renderer_backend_shutdown(renderer_backend* backend)
             (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(context.instance, "vkDestroyDebugUtilsMessengerEXT");
         func(context.instance, context.debug_messenger, context.allocator);
     }
+#endif
 
     KDEBUG("Destroying Vulkan instance...");
     vkDestroyInstance(context.instance, context.allocator);
@@ -364,7 +365,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
 
         if (!vulkan_result_is_success(result))
         {
-            KERROR("vkDeviceWaitIdle() (1) failed: '%s'", vulkan_result_string(result, true));
+            KERROR("vulkan_renderer_backend_begin_frame() vkDeviceWaitIdle() (1) failed: '%s'", vulkan_result_string(result, true));
             return false;
         }
 
@@ -379,7 +380,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
 
         if (!vulkan_result_is_success(result))
         {
-            KERROR("vkDeviceWaitIdle() (2) failed: '%s'", vulkan_result_string(result, true));
+            KERROR("vulkan_renderer_backend_begin_frame() vkDeviceWaitIdle() (2) failed: '%s'", vulkan_result_string(result, true));
             return false;
         }
 
@@ -436,7 +437,8 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
 
     // Scissor.
     VkRect2D scissor;
-    scissor.offset.x = scissor.offset.y = 0;
+    scissor.offset.x = 0;
+    scissor.offset.y = 0;
     scissor.extent.width = context.framebuffer_width;
     scissor.extent.height = context.framebuffer_height;
 
@@ -602,6 +604,7 @@ void create_command_buffers(renderer_backend* backend)
         }
 
         kzero_memory(&context.graphics_command_buffers[i], sizeof(vulkan_command_buffer));
+
         vulkan_command_buffer_allocate(
             &context,
             context.device.graphics_command_pool,
@@ -670,6 +673,7 @@ b8 recreate_swapchain(renderer_backend* backend)
         context.surface,
         &context.device.swapchain_support
     );
+    
     vulkan_device_detect_depth_format(&context.device);
 
     vulkan_swapchain_recreate(

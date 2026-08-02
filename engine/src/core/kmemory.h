@@ -23,11 +23,12 @@ typedef enum memory_tag
     MEMORY_TAG_ENTITY,
     MEMORY_TAG_ENTITY_MODE,
     MEMORY_TAG_SCENE,
+
     MEMORY_TAG_MAX_TAGS
 } memory_tag;
 
-KAPI void initialize_memory(u64* memory_requirement, void* state);
-KAPI void shutdown_memory(void* state);
+KAPI void memory_system_initialize(u64* memory_requirement, void* state);
+KAPI void memory_system_shutdown(void* state);
 
 KAPI void* kallocate(u64 size, memory_tag tag);
 

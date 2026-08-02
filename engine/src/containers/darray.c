@@ -67,7 +67,6 @@ void* _darray_push(void* array, const void* value_ptr)
     addr += (length * stride);
 
     kcopy_memory((void*)addr, value_ptr, stride);
-
     _darray_field_set(array, DARRAY_LENGTH, length + 1);
 
     return array;
@@ -80,8 +79,7 @@ void _darray_pop(void* array, void* dest)
     u64 addr = (u64)array;
     addr += ((length - 1) * stride);
 
-    kcopy_memory(dest, (void*)addr, stride);
-    
+    kcopy_memory(dest, (void*)addr, stride);    
     _darray_field_set(array, DARRAY_LENGTH, length - 1);
 }
 

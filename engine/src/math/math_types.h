@@ -25,36 +25,34 @@ typedef union vec2_u
 
 typedef struct vec3_u
 {
-    union
+    // An array of x, y, z.
+    f32 elements[3];
+
+    struct
     {
-        // An array of x, y, z.
-        f32 elements[3];
-
-        struct
+        union
         {
-            union
-            {
-                // The first element.
-                f32 x, r, s, u;
-            };
+            // The first element.
+            f32 x, r, s, u;
+        };
 
-            union
-            {
-                // The second element.
-                f32 y, g, t, v;
-            };
+        union
+        {
+            // The second element.
+            f32 y, g, t, v;
+        };
 
-            union
-            {
-                // The third element.
-                f32 z, b, p, w;
-            };
+        union
+        {
+            // The third element.
+            f32 z, b, p, w;
         };
     };
 } vec3;
 
 typedef union vec4_u
 {
+    // An array of x, y, z, w.
     f32 elements[4];
 
     union

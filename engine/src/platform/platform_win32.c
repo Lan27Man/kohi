@@ -17,37 +17,44 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
 
-typedef struct internal_state
+typedef struct platform_state
 {
     HINSTANCE h_instance;
     HWND hwnd;
     VkSurfaceKHR surface;
-} internal_state;
 
-// Clock.
-static f64 clock_frequency;
-static LARGE_INTEGER start_time;
+    // Clock.
+    f64 clock_frequency;
+    LARGE_INTEGER start_time;
+} platform_state;
+
+static platform_state* state_ptr;
 
 LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARAM l_param);
 
-b8 platform_startup(platform_state* plat_state, const char* application_name, i32 x, i32 y, i32 width, i32 height)
+b8 platform_system_startup(u64* memory_requirement, void* state, const char* application_name, i32 x, i32 y, i32 width, i32 height)
 {
-    plat_state->internal_state = malloc(sizeof(internal_state));
+    *memory_requirement = sizeof(platform_state);
 
-    internal_state* state = (internal_state*)plat_state->internal_state;
-    state->h_instance = GetModuleHandleA(0);
+    if (state == 0)
+    {
+        return true;
+    }
+
+    state_ptr = state;
+    state_ptr->h_instance = GetModuleHandleA(0);
 
     // Setup and register window class.
-    HICON icon = LoadIcon(state->h_instance, IDI_APPLICATION);
+    HICON icon = LoadIcon(state_ptr->h_instance, IDI_APPLICATION);
     WNDCLASSA wc;
 
     memset(&wc, 0, sizeof(wc));
 
-    wc.style = CS_DBLCLKS; // Get double-clicks.
+    wc.style = CS_DBLCLKS;                      // Get double-clicks.
     wc.lpfnWndProc = win32_process_message;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
-    wc.hInstance = state->h_instance;
+    wc.hInstance = state_ptr->h_instance;
     wc.hIcon = icon;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);   // NULL; // Manage the cursor manually.
     wc.hbrBackground = NULL;                    // Transparent
@@ -93,7 +100,7 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
     HWND handle = CreateWindowExA(
         window_ex_style, "kohi_window_class", application_name,
         window_style, window_x, window_y, window_width, window_height,
-        0, 0, state->h_instance, 0
+        0, 0, state_ptr->h_instance, 0
     );
 
     if (handle == 0)
@@ -104,7 +111,7 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
     }
     else
     {
-        state->hwnd = handle;
+        state_ptr->hwnd = handle;
     }
 
     // Show the window.
@@ -112,41 +119,41 @@ b8 platform_startup(platform_state* plat_state, const char* application_name, i3
     i32 show_window_command_flags = should_activate ? SW_SHOW : SW_SHOWNOACTIVATE;
     // If initially minimized, use SW_MINIMIZE : SW_SHOWMINNOACTIVE.
     // If initially maximized, use SW_SHOWMAXIMIZED : SW_MAXIMIZE.
-    ShowWindow(state->hwnd, show_window_command_flags);
+    ShowWindow(state_ptr->hwnd, show_window_command_flags);
 
     // Clock setup.
     LARGE_INTEGER frequency;
 
     QueryPerformanceFrequency(&frequency);
 
-    clock_frequency = 1.0 / (f64)frequency.QuadPart;
+    state_ptr->clock_frequency = 1.0 / (f64)frequency.QuadPart;
 
-    QueryPerformanceCounter(&start_time);
+    QueryPerformanceCounter(&state_ptr->start_time);
 
     return true;
 }
 
-void platform_shutdown(platform_state* plat_state)
+void platform_system_shutdown(void* state)
 {
-    // Simply cold-cast to the known type.
-    internal_state* state = (internal_state*)plat_state->internal_state;
-
-    if (state->hwnd)
+    if (state_ptr && state_ptr->hwnd)
     {
-        DestroyWindow(state->hwnd);
+        DestroyWindow(state_ptr->hwnd);
 
-        state->hwnd = 0;
+        state_ptr->hwnd = 0;
     }
 }
 
-b8 platform_pump_messages(platform_state* plat_state)
+b8 platform_pump_messages()
 {
-    MSG message;
-
-    while (PeekMessageA(&message, NULL, 0, 0, PM_REMOVE))
+    if (state_ptr)
     {
-        TranslateMessage(&message);
-        DispatchMessageA(&message);
+        MSG message;
+
+        while (PeekMessageA(&message, NULL, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&message);
+            DispatchMessageA(&message);
+        }
     }
 
     return true;
@@ -190,7 +197,7 @@ void platform_console_write(const char* message, u8 colour)
     u64 length = strlen(message);
     LPDWORD number_written = 0;
 
-    WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), message, (DWORD)length, number_written, 0);
+    WriteConsoleA(console_handle, message, (DWORD)length, number_written, 0);
 }
 
 void platform_console_write_error(const char* message, u8 colour)
@@ -206,16 +213,21 @@ void platform_console_write_error(const char* message, u8 colour)
     u64 length = strlen(message);
     LPDWORD number_written = 0;
 
-    WriteConsoleA(GetStdHandle(STD_ERROR_HANDLE), message, (DWORD)length, number_written, 0);
+    WriteConsoleA(console_handle, message, (DWORD)length, number_written, 0);
 }
 
 f64 platform_get_absolute_time()
 {
-    LARGE_INTEGER now_time;
+    if (state_ptr)
+    {
+        LARGE_INTEGER now_time;
 
-    QueryPerformanceCounter(&now_time);
-    
-    return (f64)now_time.QuadPart * clock_frequency;
+        QueryPerformanceCounter(&now_time);
+        
+        return (f64)now_time.QuadPart * state_ptr->clock_frequency;
+    }
+
+    return 0;
 }
 
 void platform_sleep(u64 ms)
@@ -229,16 +241,18 @@ void platform_get_required_extension_names(const char*** names_darray)
 }
 
 // Surface creation for Vulkan.
-b8 platform_create_vulkan_surface(platform_state* plat_state, vulkan_context* context)
+b8 platform_create_vulkan_surface(vulkan_context* context)
 {
-    // Simply cold-cast to the known type.
-    internal_state* state = (internal_state*)plat_state->internal_state;
+    if (!state_ptr)
+    {
+        return false;
+    }
 
     VkWin32SurfaceCreateInfoKHR create_info = {VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR};
-    create_info.hinstance = state->h_instance;
-    create_info.hwnd = state->hwnd;
+    create_info.hinstance = state_ptr->h_instance;
+    create_info.hwnd = state_ptr->hwnd;
 
-    VkResult result = vkCreateWin32SurfaceKHR(context->instance, &create_info, context->allocator, &state->surface);
+    VkResult result = vkCreateWin32SurfaceKHR(context->instance, &create_info, context->allocator, &state_ptr->surface);
 
     if (result != VK_SUCCESS)
     {
@@ -246,7 +260,7 @@ b8 platform_create_vulkan_surface(platform_state* plat_state, vulkan_context* co
         return false;
     }
 
-    context->surface = state->surface;
+    context->surface = state_ptr->surface;
 
     return true;
 }

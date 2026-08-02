@@ -11,7 +11,10 @@ typedef struct vulkan_physical_device_requirements
     b8 present;
     b8 compute;
     b8 transfer;
-    const char** device_extension_names;    // darray
+
+    // darray.
+    const char** device_extension_names;
+    
     b8 sampler_anisotropy;
     b8 discrete_gpu;
 } vulkan_physical_device_requirements;
@@ -82,11 +85,10 @@ b8 vulkan_device_create(vulkan_context* context)
         queue_create_infos[i].queueFamilyIndex = indices[i];
         queue_create_infos[i].queueCount = 1;
 
-        // TODO: Enable this for a future enhancement.
-        // if (indices[i] == context->device.graphics_queue_index)
-        // {
-        //     queue_create_infos[i].queueCount = 2;
-        // }
+        if (indices[i] == context->device.graphics_queue_index)
+        {
+            queue_create_infos[i].queueCount = 2;
+        }
 
         queue_create_infos[i].flags = 0;
         queue_create_infos[i].pNext = 0;
@@ -100,14 +102,43 @@ b8 vulkan_device_create(vulkan_context* context)
     VkPhysicalDeviceFeatures device_features = {};
     device_features.samplerAnisotropy = VK_TRUE; // Request anisotropy.
 
+    b8 portability_required = false;
+    u32 available_extension_count = 0;
+    VkExtensionProperties* available_extensions = 0;
+
+    VK_CHECK(vkEnumerateDeviceExtensionProperties(context->device.physical_device, 0, &available_extension_count, 0));
+
+    if (available_extension_count != 0)
+    {
+        available_extensions = kallocate(sizeof(VkExtensionProperties) * available_extension_count, MEMORY_TAG_RENDERER);
+
+        VK_CHECK(vkEnumerateDeviceExtensionProperties(context->device.physical_device, 0, &available_extension_count, available_extensions));
+
+        for (u32 i = 0; i < available_extension_count; ++i)
+        {
+            if (strings_equal(available_extensions[i].extensionName, "VK_KHR_portability_subset"))
+            {
+                KINFO("Adding required extension 'VK_KHR_portability_subset'.");
+
+                portability_required = true;
+                break;
+            }
+        }
+    }
+
+    kfree(available_extensions, sizeof(VkExtensionProperties) * available_extension_count, MEMORY_TAG_RENDERER);
+
+    u32 extension_count = portability_required ? 2 : 1;
+    const char** extension_names = portability_required
+            ? (const char* [2]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME, "VK_KHR_portability_subset" }
+            : (const char* [1]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    
     VkDeviceCreateInfo device_create_info = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
     device_create_info.queueCreateInfoCount = index_count;
     device_create_info.pQueueCreateInfos = queue_create_infos;
     device_create_info.pEnabledFeatures = &device_features;
-    device_create_info.enabledExtensionCount = 1;
-
-    const char* extension_names = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
-    device_create_info.ppEnabledExtensionNames = &extension_names;
+    device_create_info.enabledExtensionCount = extension_count;
+    device_create_info.ppEnabledExtensionNames = extension_names;
 
     // Deprecated and ignored, so pass nothing.
     device_create_info.enabledLayerCount = 0;
@@ -173,6 +204,7 @@ void vulkan_device_destroy(vulkan_context* context)
 
     // Destroy command pools.
     KINFO("Destroying command pools...");
+
     vkDestroyCommandPool(
         context->device.logical_device,
         context->device.graphics_command_pool,
@@ -254,7 +286,8 @@ void vulkan_device_query_swapchain_support(
         if (!out_support_info->formats)
         {
             out_support_info->formats = kallocate(
-                sizeof(VkSurfaceFormatKHR) * out_support_info->format_count, MEMORY_TAG_RENDERER
+                sizeof(VkSurfaceFormatKHR) * out_support_info->format_count,
+                MEMORY_TAG_RENDERER
             );
         }
 
@@ -279,7 +312,8 @@ void vulkan_device_query_swapchain_support(
         if (!out_support_info->present_modes)
         {
             out_support_info->present_modes = kallocate(
-                sizeof(VkPresentModeKHR) * out_support_info->present_mode_count, MEMORY_TAG_RENDERER
+                sizeof(VkPresentModeKHR) * out_support_info->present_mode_count,
+                MEMORY_TAG_RENDERER
             );
         }
 
@@ -344,12 +378,15 @@ b8 select_physical_device(vulkan_context* context)
     for (u32 i = 0; i < physical_device_count; ++i)
     {
         VkPhysicalDeviceProperties properties;
+
         vkGetPhysicalDeviceProperties(physical_devices[i], &properties);
 
         VkPhysicalDeviceFeatures features;
+
         vkGetPhysicalDeviceFeatures(physical_devices[i], &features);
 
         VkPhysicalDeviceMemoryProperties memory;
+
         vkGetPhysicalDeviceMemoryProperties(physical_devices[i], &memory);
 
         // TODO: These requirements should probably be driven by engine configuration.
@@ -357,10 +394,16 @@ b8 select_physical_device(vulkan_context* context)
         requirements.graphics = true;
         requirements.present = true;
         requirements.transfer = true;
+
         // NOTE: Enable this if compute will be required.
         // requirements.compute = true;
+
         requirements.sampler_anisotropy = true;
+#if KPLATFORM_APPLE
+        requirements.discrete_gpu = false;
+#else
         requirements.discrete_gpu = true;
+#endif
         requirements.device_extension_names = darray_create(const char*);
 
         darray_push(requirements.device_extension_names, &VK_KHR_SWAPCHAIN_EXTENSION_NAME);
@@ -484,9 +527,11 @@ b8 physical_device_meets_requirements(
     }
 
     u32 queue_family_count = 0;
+
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, 0);
 
     VkQueueFamilyProperties queue_families[32];
+
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queue_family_count, queue_families);
 
     // Look at each queue and see what queues it supports.
@@ -526,6 +571,7 @@ b8 physical_device_meets_requirements(
 
         // Present queue?
         VkBool32 supports_present = VK_FALSE;
+        
         VK_CHECK(vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &supports_present));
 
         if (supports_present)

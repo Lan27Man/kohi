@@ -55,7 +55,6 @@ void log_output(log_level level, const char* message, ...)
     // Technically imposes a 32k character limit on a single log entry, but...
     // DON'T DO THAT!
     char out_message[32000];
-    char out_message2[32000];
 
     memset(out_message, 0, sizeof(out_message));
 
@@ -68,6 +67,8 @@ void log_output(log_level level, const char* message, ...)
     va_start(arg_ptr, message);
     vsnprintf(out_message, 32000, message, arg_ptr);
     va_end(arg_ptr);
+    
+    char out_message2[32000];
     
     sprintf(out_message2, "%s%s\n", level_strings[level], out_message);
 
@@ -84,5 +85,5 @@ void log_output(log_level level, const char* message, ...)
 
 void report_assertion_failure(const char* expression, const char* message, const char* file, i32 line)
 {
-    log_output(LOG_LEVEL_FATAL, "Assertion failure: %s, message: %s in file: %s line: %d\n", expression, message, file, line);
+    log_output(LOG_LEVEL_FATAL, "Assertion failure: %s, message: '%s' in file: %s line: %d\n", expression, message, file, line);
 }

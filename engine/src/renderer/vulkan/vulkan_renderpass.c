@@ -72,11 +72,11 @@ void vulkan_renderpass_create(
     VkAttachmentReference depth_attachment_reference;
     depth_attachment_reference.attachment = 1;
     depth_attachment_reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    
+    // TODO: Other attachment types (input, resolve, preserve).
 
     // Depth stencil data.
     subpass.pDepthStencilAttachment = &depth_attachment_reference;
-
-    // TODO: Other attachment types (input, resolve, preserve).
 
     // Input from a shader.
     subpass.inputAttachmentCount = 0;
