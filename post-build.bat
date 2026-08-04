@@ -21,7 +21,7 @@ IF %ERRORLEVEL% NEQ 0 (
 
 ECHO "Copying assets..."
 
-ECHO xcopy "assets" "bin\assets" /h /i /c /k /e /r /y
-xcopy "assets" "bin\assets" /h /i /c /k /e /r /y
+ECHO xcopy "assets" "bin\assets" /h /i /c /k /e /r /y /d
+xcopy "assets" "bin\assets" /h /i /c /k /e /r /y /d
 
 ECHO "Done."

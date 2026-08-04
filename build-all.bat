@@ -23,8 +23,8 @@ IF %ERRORLEVEL% NEQ 0 (
 
 ECHO "All assemblies built successfully."
 
-@REM ECHO "Post Build Tasks"
+@REM Post Build Tasks
 
-@REM CALL "post-build.bat"
+CALL "post-build.bat"
 
-@REM ECHO "Post Build Tasks completed successfully."
+ECHO "Post Build Tasks completed successfully."
