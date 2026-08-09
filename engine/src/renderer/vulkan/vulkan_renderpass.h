@@ -8,7 +8,7 @@ void vulkan_renderpass_create(
     f32 x, f32 y, f32 w, f32 h,
     f32 r, f32 g, f32 b, f32 a,
     f32 depth,
-    f32 stencil
+    u32 stencil
 );
 
 void vulkan_renderpass_destroy(vulkan_context* context, vulkan_renderpass* renderpass);

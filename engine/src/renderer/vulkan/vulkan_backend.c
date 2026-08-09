@@ -32,14 +32,29 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vk_debug_callback(
 );
 
 i32 find_memory_index(u32 type_filter, u32 property_flags);
-
 b8 create_buffers(vulkan_context* context);
 
 void create_command_buffers(renderer_backend* backend);
-
 void regenerate_framebuffers(renderer_backend* backend, vulkan_swapchain* swapchain, vulkan_renderpass* renderpass);
-
 b8 recreate_swapchain(renderer_backend* backend);
+
+void upload_data_range(vulkan_context* context, VkCommandPool pool, VkFence fence, VkQueue queue, vulkan_buffer* buffer, u64 offset, u64 size, void* data)
+{
+    // Create a host-visible staging buffer to upload to. Mark it as the source of the transfer.
+    VkBufferUsageFlags flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    vulkan_buffer staging;
+
+    vulkan_buffer_create(context, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, flags, true, &staging);
+
+    // Load the data into the staging buffer.
+    vulkan_buffer_load_data(context, &staging, 0, size, 0, data);
+
+    // Perform the copy from staging to the device local buffer.
+    vulkan_buffer_copy_to(context, pool, fence, queue, staging.handle, 0, buffer->handle, offset, size);
+
+    // Clean up the staging buffer.
+    vulkan_buffer_destroy(context, &staging);
+}
 
 b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* application_name)
 {
@@ -250,6 +265,33 @@ b8 vulkan_renderer_backend_initialize(renderer_backend* backend, const char* app
 
     create_buffers(&context);
 
+    // TODO: Begin Temporary Test Code.
+
+    const u32 vert_count = 4;
+    vertex_3d verts[4];
+
+    kzero_memory(verts, sizeof(vertex_3d) * vert_count);
+
+    verts[0].position.x = 0.0;
+    verts[0].position.y = -0.5;
+
+    verts[1].position.x = 0.5;
+    verts[1].position.y = 0.5;
+
+    verts[2].position.x = 0;
+    verts[2].position.y = 0.5;
+
+    verts[3].position.x = 0.5;
+    verts[3].position.y = -0.5;
+
+    const u32 index_count = 6;
+    u32 indices[6] = {0, 1, 2, 0, 3, 1};
+
+    upload_data_range(&context, context.device.graphics_command_pool, 0, context.device.graphics_queue, &context.object_vertex_buffer, 0, sizeof(vertex_3d) * vert_count, verts);
+    upload_data_range(&context, context.device.graphics_command_pool, 0, context.device.graphics_queue, &context.object_index_buffer, 0, sizeof(u32) * index_count, indices);
+
+    // TODO: End Temporary Test Code.
+
     KINFO("Vulkan renderer initialized successfully!");
     return true;
 }
@@ -372,7 +414,7 @@ void vulkan_renderer_backend_on_resized(renderer_backend* backend, u16 width, u1
     cached_framebuffer_height = height;
     context.framebuffer_size_generation++;
 
-    KINFO("Vulkan renderer backend->resized: w/h/gen: %i%i%llu", width, height, context.framebuffer_size_generation);
+    KINFO("Vulkan renderer backend->resized: w/h/gen: %i/%i/%llu", width, height, context.framebuffer_size_generation);
 }
 
 b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time)
@@ -458,8 +500,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
 
     // Scissor.
     VkRect2D scissor;
-    scissor.offset.x = 0;
-    scissor.offset.y = 0;
+    scissor.offset.x = scissor.offset.y = 0;
     scissor.extent.width = context.framebuffer_width;
     scissor.extent.height = context.framebuffer_height;
 
@@ -475,6 +516,23 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
         &context.main_renderpass,
         context.swapchain.framebuffers[context.image_index].handle
     );
+
+    // TODO: Begin Temporary Test Code.
+
+    vulkan_object_shader_use(&context, &context.object_shader);
+
+    // Bind vertex buffer at offset.
+    VkDeviceSize offsets[1] = {0};
+
+    vkCmdBindVertexBuffers(command_buffer->handle, 0, 1, &context.object_vertex_buffer.handle, (VkDeviceSize*)offsets);
+
+    // Bind index buffer at offset.
+    vkCmdBindIndexBuffer(command_buffer->handle, context.object_index_buffer.handle, 0, VK_INDEX_TYPE_UINT32);
+
+    // Issue the draw.
+    vkCmdDrawIndexed(command_buffer->handle, 6, 1, 0, 0, 0);
+
+    // TODO: End Temporary Test Code.
 
     return true;
 }
@@ -634,7 +692,7 @@ void create_command_buffers(renderer_backend* backend)
         );
     }
 
-    KINFO("Vulkan command buffers created!");
+    KDEBUG("Vulkan command buffers created!");
 }
 
 void regenerate_framebuffers(renderer_backend* backend, vulkan_swapchain* swapchain, vulkan_renderpass* renderpass)
@@ -682,7 +740,7 @@ b8 recreate_swapchain(renderer_backend* backend)
     // Wait for any operations to complete.
     vkDeviceWaitIdle(context.device.logical_device);
 
-    // Clear out these just in case.
+    // Clear these out just in case.
     for (u32 i = 0; i < context.swapchain.image_count; ++i)
     {
         context.images_in_flight[i] = 0;

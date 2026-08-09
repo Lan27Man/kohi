@@ -31,7 +31,7 @@ typedef struct vulkan_swapchain_support_info
 
     u32 format_count;
     VkSurfaceFormatKHR* formats;
-    
+
     u32 present_mode_count;
     VkPresentModeKHR* present_modes;
 } vulkan_swapchain_support_info;
@@ -177,7 +177,7 @@ typedef struct vulkan_context
     VkInstance instance;
     VkAllocationCallbacks* allocator;
     VkSurfaceKHR surface;
-    
+
 #if defined(_DEBUG)
     VkDebugUtilsMessengerEXT debug_messenger;
 #endif

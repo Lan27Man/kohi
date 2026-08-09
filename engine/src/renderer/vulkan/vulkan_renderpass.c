@@ -8,7 +8,7 @@ void vulkan_renderpass_create(
     f32 x, f32 y, f32 w, f32 h,
     f32 r, f32 g, f32 b, f32 a,
     f32 depth,
-    f32 stencil
+    u32 stencil
 )
 {
     out_renderpass->x = x;
@@ -144,7 +144,7 @@ void vulkan_renderpass_begin(
     begin_info.renderArea.extent.height = renderpass->h;
 
     VkClearValue clear_values[2];
-    
+
     kzero_memory(clear_values, sizeof(VkClearValue) * 2);
 
     clear_values[0].color.float32[0] = renderpass->r;
@@ -165,6 +165,6 @@ void vulkan_renderpass_begin(
 void vulkan_renderpass_end(vulkan_command_buffer* command_buffer, vulkan_renderpass* renderpass)
 {
     vkCmdEndRenderPass(command_buffer->handle);
-    
+
     command_buffer->state = COMMAND_BUFFER_STATE_RECORDING;
 }

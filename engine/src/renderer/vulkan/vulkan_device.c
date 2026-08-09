@@ -14,7 +14,7 @@ typedef struct vulkan_physical_device_requirements
 
     // darray.
     const char** device_extension_names;
-    
+
     b8 sampler_anisotropy;
     b8 discrete_gpu;
 } vulkan_physical_device_requirements;
@@ -132,7 +132,7 @@ b8 vulkan_device_create(vulkan_context* context)
     const char** extension_names = portability_required
             ? (const char* [2]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME, "VK_KHR_portability_subset" }
             : (const char* [1]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
-    
+
     VkDeviceCreateInfo device_create_info = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
     device_create_info.queueCreateInfoCount = index_count;
     device_create_info.pQueueCreateInfos = queue_create_infos;
@@ -202,7 +202,6 @@ void vulkan_device_destroy(vulkan_context* context)
     context->device.present_queue = 0;
     context->device.transfer_queue = 0;
 
-    // Destroy command pools.
     KINFO("Destroying command pools...");
 
     vkDestroyCommandPool(
@@ -285,9 +284,7 @@ void vulkan_device_query_swapchain_support(
     {
         if (!out_support_info->formats)
         {
-            out_support_info->formats = kallocate(
-                sizeof(VkSurfaceFormatKHR) * out_support_info->format_count,
-                MEMORY_TAG_RENDERER
+            out_support_info->formats = kallocate(sizeof(VkSurfaceFormatKHR) * out_support_info->format_count, MEMORY_TAG_RENDERER
             );
         }
 
@@ -311,9 +308,7 @@ void vulkan_device_query_swapchain_support(
     {
         if (!out_support_info->present_modes)
         {
-            out_support_info->present_modes = kallocate(
-                sizeof(VkPresentModeKHR) * out_support_info->present_mode_count,
-                MEMORY_TAG_RENDERER
+            out_support_info->present_modes = kallocate(sizeof(VkPresentModeKHR) * out_support_info->present_mode_count, MEMORY_TAG_RENDERER
             );
         }
 
@@ -362,7 +357,7 @@ b8 vulkan_device_detect_depth_format(vulkan_device* device)
 b8 select_physical_device(vulkan_context* context)
 {
     u32 physical_device_count = 0;
-    
+
     VK_CHECK(vkEnumeratePhysicalDevices(context->instance, &physical_device_count, 0));
 
     if (physical_device_count == 0)
@@ -444,7 +439,6 @@ b8 select_physical_device(vulkan_context* context)
                     break;
             }
 
-            // GPU Driver version.
             KINFO(
                 "GPU Driver version: %d.%d.%d",
                 VK_VERSION_MAJOR(properties.driverVersion),
@@ -571,7 +565,7 @@ b8 physical_device_meets_requirements(
 
         // Present queue?
         VkBool32 supports_present = VK_FALSE;
-        
+
         VK_CHECK(vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &supports_present));
 
         if (supports_present)
@@ -609,20 +603,12 @@ b8 physical_device_meets_requirements(
         {
             if (out_swapchain_support->formats)
             {
-                kfree(
-                    out_swapchain_support->formats,
-                    sizeof(VkSurfaceFormatKHR) * out_swapchain_support->format_count,
-                    MEMORY_TAG_RENDERER
-                );
+                kfree(out_swapchain_support->formats, sizeof(VkSurfaceFormatKHR) * out_swapchain_support->format_count, MEMORY_TAG_RENDERER);
             }
 
             if (out_swapchain_support->present_modes)
             {
-                kfree(
-                    out_swapchain_support->present_modes,
-                    sizeof(VkPresentModeKHR) * out_swapchain_support->present_mode_count,
-                    MEMORY_TAG_RENDERER
-                );
+                kfree(out_swapchain_support->present_modes, sizeof(VkPresentModeKHR) * out_swapchain_support->present_mode_count, MEMORY_TAG_RENDERER);
             }
 
             KINFO("Required swapchain support not present, skipping device.");

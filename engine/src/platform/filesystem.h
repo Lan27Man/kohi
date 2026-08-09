@@ -64,7 +64,7 @@ KAPI b8 filesystem_write_line(file_handle* handle, const char* text);
  * @param out_bytes_read A pointer to a number which will be populated with the number of bytes actually read from the file.
  * @returns true if successful; otherwise false.
  */
-KAPI b8 filesystem_read(file_handle* file_handle, u64 data_size, void* out_data, u64* out_bytes_read);
+KAPI b8 filesystem_read(file_handle* handle, u64 data_size, void* out_data, u64* out_bytes_read);
 
 /**
  * Reads up to data_size bytes of data into out_bytes_read.

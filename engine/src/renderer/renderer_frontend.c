@@ -28,7 +28,7 @@ b8 renderer_system_initialize(u64* memory_requirement, void* state, const char* 
 
     if (!state_ptr->backend.initialize(&state_ptr->backend, application_name))
     {
-        KFATAL("Renderer backend failed to initialize, shutting down.");
+        KFATAL("Renderer backend failed to initialize, shutting down!");
         return false;
     }
 
@@ -90,7 +90,7 @@ b8 renderer_draw_frame(render_packet* packet)
 
         if (!result)
         {
-            KERROR("renderer_end_frame() failed. Application shutting down...");
+            KERROR("renderer_end_frame() failed. Application shutting down!");
             return false;
         }
     }
