@@ -1,7 +1,7 @@
 #include "vulkan_shader_utils.h"
 
-#include "core/logger.h"
 #include "core/kstring.h"
+#include "core/logger.h"
 #include "core/kmemory.h"
 #include "platform/filesystem.h"
 

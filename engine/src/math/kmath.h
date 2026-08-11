@@ -69,7 +69,11 @@ KAPI f32 fkrandom_in_range(f32 min, f32 max);
  */
 KINLINE vec2 vec2_create(f32 x, f32 y)
 {
-    return (vec2){x, y};
+    vec2 out_vector;
+    out_vector.x = x;
+    out_vector.y = y;
+
+    return out_vector;
 }
 
 /**
@@ -640,12 +644,14 @@ KINLINE vec4 vec4_one()
  */
 KINLINE vec4 vec4_add(vec4 vector_0, vec4 vector_1)
 {
-    return (vec4){
-        vector_0.x + vector_1.x,
-        vector_0.y + vector_1.y,
-        vector_0.z + vector_1.z,
-        vector_0.w + vector_1.w
-    };
+    vec4 result;
+
+    for (u64 i = 0; i < 4; ++i)
+    {
+        result.elements[i] = vector_0.elements[i] + vector_1.elements[i];
+    }
+
+    return result;
 }
 
 /**
@@ -656,12 +662,14 @@ KINLINE vec4 vec4_add(vec4 vector_0, vec4 vector_1)
  */
 KINLINE vec4 vec4_sub(vec4 vector_0, vec4 vector_1)
 {
-    return (vec4){
-        vector_0.x - vector_1.x,
-        vector_0.y - vector_1.y,
-        vector_0.z - vector_1.z,
-        vector_0.w - vector_1.w
-    };
+    vec4 result;
+    
+    for (u64 i = 0; i < 4; ++i)
+    {
+        result.elements[i] = vector_0.elements[i] - vector_1.elements[i];
+    }
+
+    return result;
 }
 
 /**
@@ -672,12 +680,14 @@ KINLINE vec4 vec4_sub(vec4 vector_0, vec4 vector_1)
  */
 KINLINE vec4 vec4_mul(vec4 vector_0, vec4 vector_1)
 {
-    return (vec4){
-        vector_0.x * vector_1.x,
-        vector_0.y * vector_1.y,
-        vector_0.z * vector_1.z,
-        vector_0.w * vector_1.w
-    };
+    vec4 result;
+
+    for (u64 i = 0; i < 4; ++i)
+    {
+        result.elements[i] = vector_0.elements[i] * vector_1.elements[i];
+    }
+
+    return result;
 }
 
 /**
@@ -688,12 +698,14 @@ KINLINE vec4 vec4_mul(vec4 vector_0, vec4 vector_1)
  */
 KINLINE vec4 vec4_div(vec4 vector_0, vec4 vector_1)
 {
-    return (vec4){
-        vector_0.x / vector_1.x,
-        vector_0.y / vector_1.y,
-        vector_0.z / vector_1.z,
-        vector_0.w / vector_1.w
-    };
+    vec4 result;
+
+    for (u64 i = 0; i < 4; ++i)
+    {
+        result.elements[i] = vector_0.elements[i] / vector_1.elements[i];
+    }
+
+    return result;
 }
 
 /**
@@ -862,7 +874,7 @@ KINLINE mat4 mat4_perspective(f32 fov_radians, f32 aspect_ratio, f32 near_clip, 
 
     out_matrix.data[0] = 1.0f / (aspect_ratio * half_tan_fov);
     out_matrix.data[5] = 1.0f / half_tan_fov;
-    out_matrix.data[10] = -((far_clip - near_clip) / (far_clip - near_clip));
+    out_matrix.data[10] = -((far_clip + near_clip) / (far_clip - near_clip));
     out_matrix.data[11] = -1.0f;
     out_matrix.data[14] = -((2.0f * far_clip * near_clip) / (far_clip - near_clip));
 

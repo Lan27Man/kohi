@@ -9,9 +9,9 @@
 
 b8 filesystem_exists(const char* path)
 {
-    struct _stat64 buffer;
+    struct stat buffer;
 
-    return _stat64(path, &buffer) == 0;
+    return stat(path, &buffer) == 0;
 }
 
 b8 filesystem_open(const char* path, file_modes mode, b8 binary, file_handle* out_handle)

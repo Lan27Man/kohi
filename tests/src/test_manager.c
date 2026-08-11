@@ -55,6 +55,7 @@ void test_manager_run_tests()
         else if (result == BYPASS)
         {
             KWARN("[SKIPPED]: %s", tests[i].desc);
+            ++skipped;
         }
         else
         {

@@ -50,7 +50,7 @@ b8 vulkan_fence_wait(vulkan_context* context, vulkan_fence* fence, u64 timeout_n
             context->device.logical_device,
             1,
             &fence->handle,
-            VK_TRUE,
+            true,
             timeout_ns
         );
 

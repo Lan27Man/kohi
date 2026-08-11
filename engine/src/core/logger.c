@@ -73,7 +73,7 @@ void log_output(log_level level, const char* message, ...)
     // moved to another thread eventually, along with the file writes, to
     // avoid slowing things down while the engine is trying to run.
     const char* level_strings[6] = {"[FATAL]: ", "[ERROR]: ", "[WARN]: ", "[INFO]: ", "[DEBUG]: ", "[TRACE]: "};
-    b8 is_error = level < 2;
+    b8 is_error = level < LOG_LEVEL_WARN;
 
     // Technically imposes a 32k character limit on a single log entry, but...
     // DONT'T DO THAT!
@@ -110,5 +110,5 @@ void log_output(log_level level, const char* message, ...)
 
 void report_assertion_failure(const char* expression, const char* message, const char* file, i32 line)
 {
-    log_output(LOG_LEVEL_FATAL, "Assertion failure: %s, message: '%s' in file: %s line: %d\n", expression, message, file, line);
+    log_output(LOG_LEVEL_FATAL, "Assertion Failure: %s, message: '%s', in file: %s, line: %d\n", expression, message, file, line);
 }

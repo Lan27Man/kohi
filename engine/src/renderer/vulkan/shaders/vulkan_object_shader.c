@@ -82,8 +82,8 @@ b8 vulkan_object_shader_create(vulkan_context* context, vulkan_object_shader* ou
 
     for (u32 i = 0; i < attribute_count; ++i)
     {
-        attribute_descriptions[i].binding = 0;          // Binding index - should match binding descriptor.
-        attribute_descriptions[i].location = i;         // Attribute location.
+        attribute_descriptions[i].binding = 0;   // Binding index - should match binding descriptor.
+        attribute_descriptions[i].location = i;  // Attribute location.
         attribute_descriptions[i].format = formats[i];
         attribute_descriptions[i].offset = offset;
         offset += sizes[i];
@@ -220,4 +220,12 @@ void vulkan_object_shader_update_global_state(vulkan_context* context, struct vu
     descriptor_write.pBufferInfo = &buffer_info;
 
     vkUpdateDescriptorSets(context->device.logical_device, 1, &descriptor_write, 0, 0);
+}
+
+void vulkan_object_shader_update_object(vulkan_context* context, struct vulkan_object_shader* shader, mat4 model)
+{
+    u32 image_index = context->image_index;
+    VkCommandBuffer command_buffer = context->graphics_command_buffers[image_index].handle;
+
+    vkCmdPushConstants(command_buffer, shader->pipeline.pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(mat4), &model);
 }
