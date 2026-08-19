@@ -6,8 +6,7 @@ mkdir -p /bin/assets/shaders
 
 echo "Compiling shaders..."
 
-echo "assets/shaders/BuiltIn.ObjectShader.vert.glsl -> bin/assets/shaders/BuiltIn.ObjectShader.vert.spv"
-$VULKAN_SDK/bin/glslc -fshader-stage=vert assets/shaders/BuiltIn.ObjectShader.vert.glsl -o bin/assets/shaders/BuiltIn.ObjectShader.vert.spv
+$VULKAN_SDK/bin/glslc -fshader-stage=vert assets/shaders/BuiltIn.MaterialShader.vert.glsl -o bin/assets/shaders/BuiltIn.MaterialShader.vert.spv
 
 ERRORLEVEL=$?
 if [ $ERRORLEVEL -ne 0 ]
@@ -15,8 +14,7 @@ then
 echo "Error: " $ERRORLEVEL && exit
 fi
 
-echo "assets/shaders/BuiltIn.ObjectShader.frag.glsl -> bin/assets/shaders/BuiltIn.ObjectShader.frag.spv"
-$VULKAN_SDK/bin/glslc -fshader-stage=frag assets/shaders/BuiltIn.ObjectShader.frag.glsl -o bin/assets/shaders/BuiltIn.ObjectShader.frag.spv
+$VULKAN_SDK/bin/glslc -fshader-stage=frag assets/shaders/BuiltIn.MaterialShader.frag.glsl -o bin/assets/shaders/BuiltIn.MaterialShader.frag.spv
 
 ERRORLEVEL=$?
 if [ $ERRORLEVEL -ne 0 ]

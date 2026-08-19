@@ -26,6 +26,7 @@ typedef enum log_level
 /**
  * @brief Initializes logging system. Call twice; once with state = 0 to get required memory size,
  * then a second time passing allocated memory to state.
+ * 
  * @param memory_requirement A pointer to hold the required memory size of internal state.
  * @param state 0 if just requesting memory requirement, otherwise allocated block of memory.
  * @returns true on success; otherwise false.

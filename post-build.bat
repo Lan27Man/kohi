@@ -5,13 +5,13 @@ IF NOT EXIST "%cd%\bin\assets\shaders\" MKDIR "%cd%\bin\assets\shaders"
 
 ECHO "Compiling shaders..."
 
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=vert assets/shaders/BuiltIn.ObjectShader.vert.glsl -o bin/assets/shaders/BuiltIn.ObjectShader.vert.spv
+%VULKAN_SDK%\bin\glslc.exe -fshader-stage=vert assets/shaders/BuiltIn.MaterialShader.vert.glsl -o bin/assets/shaders/BuiltIn.MaterialShader.vert.spv
 
 IF %ERRORLEVEL% NEQ 0 (
     ECHO Error: %ERRORLEVEL% && EXIT
 )
 
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=frag assets/shaders/BuiltIn.ObjectShader.frag.glsl -o bin/assets/shaders/BuiltIn.ObjectShader.frag.spv
+%VULKAN_SDK%\bin\glslc.exe -fshader-stage=frag assets/shaders/BuiltIn.MaterialShader.frag.glsl -o bin/assets/shaders/BuiltIn.MaterialShader.frag.spv
 
 IF %ERRORLEVEL% NEQ 0 (
     ECHO Error: %ERRORLEVEL% && EXIT

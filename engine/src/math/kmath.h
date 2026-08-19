@@ -43,6 +43,7 @@ KAPI f32 kabs(f32 x);
 
 /**
  * Indicates if the value is a power of 2. 0 is considered _not_ a power of 2.
+ * 
  * @param value The value to be interpreted.
  * @returns true if a power of 2, otherwise false.
  */
@@ -63,6 +64,7 @@ KAPI f32 fkrandom_in_range(f32 min, f32 max);
 
 /**
  * @brief Creates and returns a new 2-component vector using the supplied values.
+ * 
  * @param x The x value.
  * @param y The y value.
  * @returns A new 2-component vector.
@@ -126,6 +128,7 @@ KINLINE vec2 vec2_right()
 
 /**
  * @brief Adds vector_0 to vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -140,6 +143,7 @@ KINLINE vec2 vec2_add(vec2 vector_0, vec2 vector_1)
 
 /**
  * @brief Subtracts vector_0 from vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -154,6 +158,7 @@ KINLINE vec2 vec2_sub(vec2 vector_0, vec2 vector_1)
 
 /**
  * @brief Multiplies vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -168,6 +173,7 @@ KINLINE vec2 vec2_mul(vec2 vector_0, vec2 vector_1)
 
 /**
  * @brief Divides vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -182,6 +188,7 @@ KINLINE vec2 vec2_div(vec2 vector_0, vec2 vector_1)
 
 /**
  * @brief Returns the squared length of the provided vector.
+ * 
  * @param vector The vector to retrieve the squared length of.
  * @returns The squared length.
  */
@@ -192,6 +199,7 @@ KINLINE f32 vec2_length_squared(vec2 vector)
 
 /**
  * @brief Returns the length of the provided vector.
+ * 
  * @param vector The vector to retrieve the length of.
  * @returns The length.
  */
@@ -202,6 +210,7 @@ KINLINE f32 vec2_length(vec2 vector)
 
 /**
  * @brief Normalizes the provided vector in place to a unit vector.
+ * 
  * @param vector A pointer to the vector to be normalized.
  */
 KINLINE void vec2_normalize(vec2* vector)
@@ -214,6 +223,7 @@ KINLINE void vec2_normalize(vec2* vector)
 
 /**
  * @brief Returns a normalized copy of the supplied vector.
+ * 
  * @param vector The vector to be normalized.
  * @returns A normalized copy of the supplied vector.
  */
@@ -227,6 +237,7 @@ KINLINE vec2 vec2_normalized(vec2 vector)
 /**
  * @brief Compares all elements of vector_0 and vector_1 and ensures the difference
  * is less than tolerance.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
@@ -249,6 +260,7 @@ KINLINE b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
 
 /**
  * @brief Returns the distance between vector_0 and vector_1.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The distance between vector_0 and vector_1.
@@ -269,6 +281,7 @@ KINLINE f32 vec2_distance(vec2 vector_0, vec2 vector_1)
 
 /**
  * @brief Creates and returns a new 3-component vector using the supplied values.
+ * 
  * @param x The x value.
  * @param y The y value.
  * @param z The z value.
@@ -282,6 +295,7 @@ KINLINE vec3 vec3_create(f32 x, f32 y, f32 z)
 /**
  * @brief Returns a new vec3 containing the x, y and z components of the
  * supplied vec4, essentially dropping the w component.
+ * 
  * @param vector The 4-component vector to extract from.
  * @returns A new vec3.
  */
@@ -292,6 +306,7 @@ KINLINE vec3 vec3_from_vec4(vec4 vector)
 
 /**
  * @brief Returns a new vec4 using vector as the x, y and z components and w for w.
+ * 
  * @param vector The 3-component vector.
  * @param w The w component.
  * @returns A new vec4.
@@ -367,6 +382,7 @@ KINLINE vec3 vec3_backward()
 
 /**
  * @brief Adds vector_0 to vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -382,6 +398,7 @@ KINLINE vec3 vec3_add(vec3 vector_0, vec3 vector_1)
 
 /**
  * @brief Subtracts vector_0 from vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -397,6 +414,7 @@ KINLINE vec3 vec3_sub(vec3 vector_0, vec3 vector_1)
 
 /**
  * @brief Multiplies vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -412,6 +430,7 @@ KINLINE vec3 vec3_mul(vec3 vector_0, vec3 vector_1)
 
 /**
  * @brief Multiplies all components of vector_0 by scalar and returns a copy of the result.
+ * 
  * @param vector The vector to be multiplied.
  * @param scalar The scalar value.
  * @returns The resulting vector.
@@ -427,6 +446,7 @@ KINLINE vec3 vec3_mul_scalar(vec3 vector, f32 scalar)
 
 /**
  * @brief Divides vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -442,6 +462,7 @@ KINLINE vec3 vec3_div(vec3 vector_0, vec3 vector_1)
 
 /**
  * @brief Returns the squared length of the provided vector.
+ * 
  * @param vector The vector to retrieve the squared length of.
  * @returns The squared length.
  */
@@ -452,6 +473,7 @@ KINLINE f32 vec3_length_squared(vec3 vector)
 
 /**
  * @brief Returns the length of the provided vector.
+ * 
  * @param vector The vector to retrieve the length of.
  * @returns The length.
  */
@@ -462,6 +484,7 @@ KINLINE f32 vec3_length(vec3 vector)
 
 /**
  * @brief Normalizes the provided vector in place to a unit vector.
+ * 
  * @param vector A pointer to the vector to be normalized.
  */
 KINLINE void vec3_normalize(vec3* vector)
@@ -475,6 +498,7 @@ KINLINE void vec3_normalize(vec3* vector)
 
 /**
  * @brief Returns a normalized copy of the supplied vector.
+ * 
  * @param vector The vector to be normalized.
  * @returns A normalized copy of the supplied vector.
  */
@@ -488,6 +512,7 @@ KINLINE vec3 vec3_normalized(vec3 vector)
 /**
  * @brief Returns the dot product between the provided vectors. Typically used
  * to calculate the difference in direction.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The dot product.
@@ -505,6 +530,7 @@ KINLINE f32 vec3_dot(vec3 vector_0, vec3 vector_1)
 /**
  * @brief Calculates and returns the cross product of the supplied vectors.
  * The cross product is a new vector which is orthogonal to both provided vectors.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The cross product.
@@ -521,6 +547,7 @@ KINLINE vec3 vec3_cross(vec3 vector_0, vec3 vector_1)
 /**
  * @brief Compares all components of vector_0 and vector_1 and ensures the difference
  * is less than tolerance.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
@@ -548,6 +575,7 @@ KINLINE b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
 
 /**
  * @brief Returns the distance between vector_0 and vector_1.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The distance between vector_0 and vector_1.
@@ -569,6 +597,7 @@ KINLINE f32 vec3_distance(vec3 vector_0, vec3 vector_1)
 
 /**
  * @brief Creates and returns a new 4-component vector using the supplied values.
+ * 
  * @param x The x value.
  * @param y The y value.
  * @param z The z value.
@@ -594,6 +623,7 @@ KINLINE vec4 vec4_create(f32 x, f32 y, f32 z, f32 w)
 /**
  * @brief Returns a new vec3 containing the x, y and z components of the
  * supplied vec4, essentially dropping the w component.
+ * 
  * @param vector The 4-component vector to extract from.
  * @returns A new vec3.
  */
@@ -604,6 +634,7 @@ KINLINE vec3 vec4_to_vec3(vec4 vector)
 
 /**
  * @brief Returns a new vec4 using vector as the x, y and z components and w for w.
+ * 
  * @param vector The 3-component vector.
  * @param w The w component.
  * @returns A new vec4.
@@ -638,6 +669,7 @@ KINLINE vec4 vec4_one()
 
 /**
  * @brief Adds vector_0 to vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -656,6 +688,7 @@ KINLINE vec4 vec4_add(vec4 vector_0, vec4 vector_1)
 
 /**
  * @brief Subtracts vector_0 from vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -674,6 +707,7 @@ KINLINE vec4 vec4_sub(vec4 vector_0, vec4 vector_1)
 
 /**
  * @brief Multiplies vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -692,6 +726,7 @@ KINLINE vec4 vec4_mul(vec4 vector_0, vec4 vector_1)
 
 /**
  * @brief Divides vector_0 by vector_1 and returns a copy of the result.
+ * 
  * @param vector_0 The first vector.
  * @param vector_1 The second vector.
  * @returns The resulting vector.
@@ -710,6 +745,7 @@ KINLINE vec4 vec4_div(vec4 vector_0, vec4 vector_1)
 
 /**
  * @brief Returns the squared length of the provided vector.
+ * 
  * @param vector The vector to retrieve the squared length of.
  * @returns The squared length.
  */
@@ -720,6 +756,7 @@ KINLINE f32 vec4_length_squared(vec4 vector)
 
 /**
  * @brief Returns the length of the provided vector.
+ * 
  * @param vector The vector to retrieve the length of.
  * @returns The length.
  */
@@ -730,6 +767,7 @@ KINLINE f32 vec4_length(vec4 vector)
 
 /**
  * @brief Normalizes the provided vector in place to a unit vector.
+ * 
  * @param vector A pointer to the vector to be normalized.
  */
 KINLINE void vec4_normalize(vec4* vector)
@@ -744,6 +782,7 @@ KINLINE void vec4_normalize(vec4* vector)
 
 /**
  * @brief Returns a normalized copy of the supplied vector.
+ * 
  * @param vector The vector to be normalized.
  * @returns A normalized copy of the supplied vector.
  */
@@ -779,6 +818,7 @@ KINLINE f32 vec4_dot_f32(
  *      {0, 1, 0, 0},
  *      {0, 0, 1, 0},
  *      {0, 0, 0, 1}
+ * 
  * @returns A new identity matrix.
  */
 KINLINE mat4 mat4_identity()
@@ -797,6 +837,7 @@ KINLINE mat4 mat4_identity()
 
 /**
  * @brief Returns the result of multiplying matrix_0 and matrix_1.
+ * 
  * @param matrix_0 The first matrix to be multiplied.
  * @param matrix_1 The second matrix to be multiplied.
  * @returns The result of the matrix multiplication.
@@ -830,6 +871,7 @@ KINLINE mat4 mat4_mul(mat4 matrix_0, mat4 matrix_1)
 /**
  * @brief Creates and returns an orthographic projection matrix. Typically used to
  * render flat or 2D scenes.
+ * 
  * @param left The left side of the view frustum.
  * @param right The right side of the view frustum.
  * @param bottom The bottom side of the view frustum.
@@ -859,6 +901,7 @@ KINLINE mat4 mat4_orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 nea
 
 /**
  * @brief Creates and returns a perspective matrix. Typically used to render 3D scenes.
+ * 
  * @param fov_radians The field of view in radians.
  * @param aspect_ratio The aspect ratio.
  * @param near_clip The near clipping plane distance.
@@ -884,6 +927,7 @@ KINLINE mat4 mat4_perspective(f32 fov_radians, f32 aspect_ratio, f32 near_clip, 
 /**
  * @brief Creates and returns a look-at matrix, or a matrix looking
  * at target from the perspective of position.
+ * 
  * @param position The position of the matrix.
  * @param target The position to "look at".
  * @param up The up vector.
@@ -924,6 +968,7 @@ KINLINE mat4 mat4_look_at(vec3 position, vec3 target, vec3 up)
 
 /**
  * @brief Returns a transposed copy of the provided matrix (rows->columns).
+ * 
  * @param matrix The matrix to be transposed.
  * @returns A transposed copy of the provided matrix.
  */
@@ -953,6 +998,7 @@ KINLINE mat4 mat4_transposed(mat4 matrix)
 
 /**
  * @brief Creates and returns an inverse of the provided matrix.
+ * 
  * @param matrix The matrix to be inverted.
  * @returns An inverted copy of the provided matrix.
  */
@@ -1027,6 +1073,7 @@ KINLINE mat4 mat4_translation(vec3 position)
 
 /**
  * @brief Returns a scale matrix using the provided scale.
+ * 
  * @param scale The 3-component scale.
  * @returns A scale matrix.
  */
@@ -1096,6 +1143,7 @@ KINLINE mat4 mat4_euler_xyz(f32 x_radians, f32 y_radians, f32 z_radians)
 
 /**
  * @brief Returns a forward vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1113,6 +1161,7 @@ KINLINE vec3 mat4_forward(mat4 matrix)
 
 /**
  * @brief Returns a backward vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1130,6 +1179,7 @@ KINLINE vec3 mat4_backward(mat4 matrix)
 
 /**
  * @brief Returns an upward vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1147,6 +1197,7 @@ KINLINE vec3 mat4_up(mat4 matrix)
 
 /**
  * @brief Returns a downward vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1164,6 +1215,7 @@ KINLINE vec3 mat4_down(mat4 matrix)
 
 /**
  * @brief Returns a left vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1181,6 +1233,7 @@ KINLINE vec3 mat4_left(mat4 matrix)
 
 /**
  * @brief Returns a right vector relative to the provided matrix.
+ * 
  * @param matrix The matrix from which to base the vector.
  * @returns A 3-component directional vector.
  */
@@ -1407,6 +1460,7 @@ KINLINE quat quat_slerp(quat q_0, quat q_1, f32 percentage)
 
 /**
  * @brief Converts provided degrees to radians.
+ * 
  * @param degrees The degrees to be converted.
  * @returns The amount in radians.
  */
@@ -1417,6 +1471,7 @@ KINLINE f32 deg_to_rad(f32 degrees)
 
 /**
  * @brief Converts provided radians to degrees.
+ * 
  * @param radians The radians to be converted.
  * @returns The amount in degrees.
  */
