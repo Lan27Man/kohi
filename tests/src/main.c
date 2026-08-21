@@ -10,7 +10,7 @@ int main()
     // Always initialize the test manager first.
     test_manager_init();
 
-    // TODO: Add test registrations here.
+    // NOTE: Add test registrations here.
     linear_allocator_register_tests();
     hashtable_register_tests();
 

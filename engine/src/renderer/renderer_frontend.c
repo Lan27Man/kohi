@@ -5,13 +5,11 @@
 #include "math/kmath.h"
 #include "resources/resource_types.h"
 #include "systems/texture_system.h"
+#include "systems/material_system.h"
 
 // TODO: Temporary.
-
 #include "core/kstring.h"
 #include "core/event.h"
-
-// TODO: End Temporary.
 
 typedef struct renderer_system_state
 {
@@ -23,7 +21,7 @@ typedef struct renderer_system_state
 
     // TODO: Temporary.
 
-    texture* test_diffuse;
+    material* test_material;
 
     // TODO: End Temporary.
 } renderer_system_state;
@@ -49,7 +47,14 @@ b8 event_on_debug_event(u16 code, void* sender, void* listener_inst, event_conte
     choice %= 3;
 
     // Acquire the new texture.
-    state_ptr->test_diffuse = texture_system_acquire(names[choice], true);
+    state_ptr->test_material->diffuse_map.texture = texture_system_acquire(names[choice], true);
+
+    if (!state_ptr->test_material->diffuse_map.texture)
+    {
+        KWARN("event_on_debug_event() has no texture! Using default.");
+
+        state_ptr->test_material->diffuse_map.texture = texture_system_get_default_texture();
+    }
 
     // Release the old texture.
     texture_system_release(old_name);
@@ -164,17 +169,34 @@ b8 renderer_draw_frame(render_packet* packet)
         // mat4 model = quat_to_rotation_matrix(rotation, vec3_zero());
 
         geometry_render_data data = {};
-        data.object_id = 0; // TODO: Actual object id.
         data.model = model;
 
         // TODO: Temporary.
-        // Grab the default if it does not exist.
-        if (!state_ptr->test_diffuse)
+        // Create a default material if it does not exist.
+        if (!state_ptr->test_material)
         {
-            state_ptr->test_diffuse = texture_system_get_default_texture();
+            // Automatic config.
+            state_ptr->test_material = material_system_acquire("test_material");
+
+            if (!state_ptr->test_material)
+            {
+                KWARN("Automatic material load failed, falling back to manual default material.");
+
+                // Manual config.
+                material_config config;
+
+                string_ncopy(config.name, "test_material", MATERIAL_NAME_MAX_LENGTH);
+
+                config.auto_release = false;
+                config.diffuse_colour = vec4_one();     // White.
+
+                string_ncopy(config.diffuse_map_name, DEFAULT_TEXTURE_NAME, TEXTURE_NAME_MAX_LENGTH);
+
+                state_ptr->test_material = material_system_acquire_from_config(config);
+            }
         }
 
-        data.textures[0] = state_ptr->test_diffuse;
+        data.material = state_ptr->test_material;
 
         state_ptr->backend.update_object(data);
 
@@ -196,12 +218,22 @@ void renderer_set_view(mat4 view)
     state_ptr->view = view;
 }
 
-void renderer_create_texture(const char* name, i32 width, i32 height, i32 channel_count, const u8* pixels, b8 has_transparency, struct texture* out_texture)
+void renderer_create_texture(const u8* pixels, struct texture* texture)
 {
-    state_ptr->backend.create_texture(name, width, height, channel_count, pixels, has_transparency, out_texture);
+    state_ptr->backend.create_texture(pixels, texture);
 }
 
 void renderer_destroy_texture(struct texture* texture)
 {
     state_ptr->backend.destroy_texture(texture);
+}
+
+b8 renderer_create_material(struct material* material)
+{
+    return state_ptr->backend.create_material(material);
+}
+
+void renderer_destroy_material(struct material* material)
+{
+    state_ptr->backend.destroy_material(material);
 }
