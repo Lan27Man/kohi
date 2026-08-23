@@ -74,6 +74,16 @@ i32 string_format_v(char* dest, const char* format, void* va_list)
     return -1;
 }
 
+char* string_empty(char* str)
+{
+    if (str)
+    {
+        str[0] = 0;
+    }
+
+    return str;
+}
+
 char* string_copy(char* dest, const char* source)
 {
     return strcpy(dest, source);

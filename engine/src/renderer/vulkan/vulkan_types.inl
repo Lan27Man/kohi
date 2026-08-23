@@ -19,7 +19,13 @@
 
 #define VULKAN_MATERIAL_SHADER_SAMPLER_COUNT 1
 
+// Max number of material instances.
+// TODO: Make configurable.
 #define VULKAN_MAX_MATERIAL_COUNT 1024
+
+// Max number of simultaneously uploaded geometries.
+// TODO: Make configurable.
+#define VULKAN_MAX_GEOMETRY_COUNT 4096
 
 typedef struct vulkan_buffer
 {
@@ -173,6 +179,21 @@ typedef struct vulkan_material_shader_instance_state
     vulkan_descriptor_state descriptor_states[VULKAN_MATERIAL_SHADER_DESCRIPTOR_COUNT];
 } vulkan_material_shader_instance_state;
 
+/**
+ * @brief Internal buffer data for geometry.
+ */
+typedef struct vulkan_geometry_data
+{
+    u32 id;
+    u32 generation;
+    u32 vertex_count;
+    u32 vertex_size;
+    u32 vertex_buffer_offset;
+    u32 index_count;
+    u32 index_size;
+    u32 index_buffer_offset;
+} vulkan_geometry_data;
+
 typedef struct vulkan_material_shader
 {
     // Vertex, Fragment.
@@ -265,6 +286,9 @@ typedef struct vulkan_context
 
     u64 geometry_vertex_offset;
     u64 geometry_index_offset;
+
+    // TODO: Make dynamic.
+    vulkan_geometry_data geometries[VULKAN_MAX_GEOMETRY_COUNT];
 
     i32 (*find_memory_index)(u32 type_filter, u32 property_flags);
 } vulkan_context;
