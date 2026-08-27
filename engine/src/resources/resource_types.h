@@ -3,9 +3,7 @@
 #include "math/math_types.h"
 
 #define TEXTURE_NAME_MAX_LENGTH 512
-
 #define MATERIAL_NAME_MAX_LENGTH 256
-
 #define GEOMETRY_NAME_MAX_LENGTH 256
 
 // Pre-defined resource types.

@@ -4,6 +4,7 @@
 #include "core/kmemory.h"
 #include "core/kstring.h"
 #include "resources/resource_types.h"
+#include "systems/resource_system.h"
 #include "math/kmath.h"
 #include "platform/filesystem.h"
 

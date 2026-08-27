@@ -4,7 +4,7 @@
 #include "core/kmemory.h"
 #include "core/kstring.h"
 #include "resources/resource_types.h"
-#include "math/kmath.h"
+#include "systems/resource_system.h"
 #include "platform/filesystem.h"
 
 b8 text_loader_load(struct resource_loader* self, const char* name, resource* out_resource)

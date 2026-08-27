@@ -28,7 +28,7 @@ typedef struct texture_reference
 
 static texture_system_state* state_ptr;
 
-void create_default_textures(texture_system_state* state);
+b8 create_default_textures(texture_system_state* state);
 
 void destroy_default_textures(texture_system_state* state);
 
@@ -251,7 +251,7 @@ texture* texture_system_get_default_texture()
     return 0;
 }
 
-void create_default_textures(texture_system_state* state)
+b8 create_default_textures(texture_system_state* state)
 {
     // NOTE: Create default texture, a 256x256 blue/white checkerboard pattern.
     // This is done in code to eliminate asset dependencies.
@@ -303,6 +303,8 @@ void create_default_textures(texture_system_state* state)
 
     // Manually set the texture generation to invalid since this is a default texture.
     state->default_texture.generation = INVALID_ID;
+
+    return true;
 }
 
 void destroy_default_textures(texture_system_state* state)

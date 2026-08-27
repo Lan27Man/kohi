@@ -4,6 +4,7 @@
 #include "core/kmemory.h"
 #include "core/kstring.h"
 #include "resources/resource_types.h"
+#include "systems/resource_system.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "vendor/stb_image.h"

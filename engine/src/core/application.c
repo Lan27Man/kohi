@@ -357,6 +357,9 @@ b8 application_run()
             packet.geometry_count = 1;
             packet.geometries = &test_render;
 
+            packet.ui_geometry_count = 0;
+            packet.ui_geometries = 0;
+
             // TODO: End Temporary.
 
             renderer_draw_frame(&packet);
