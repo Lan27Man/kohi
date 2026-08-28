@@ -67,6 +67,7 @@ typedef struct application_state
     // TODO: Temporary.
 
     geometry* test_geometry;
+    geometry* test_ui_geometry;
 
     // TODO: End Temporary.
 } application_state;
@@ -271,13 +272,56 @@ b8 application_create(game* game_inst)
     // TODO: Temporary.
 
     // Load up a plane configuration, and load geometry from it.
-    geometry_config g_config = geometry_system_generate_plane_config(10.0f, 5.0f, 5, 5, 5.0f, 2.0f, "test geometry", "test_material");
+    geometry_config world_config = geometry_system_generate_plane_config(10.0f, 5.0f, 5, 5, 5.0f, 2.0f, "test geometry", "test_material");
 
-    app_state->test_geometry = geometry_system_acquire_from_config(g_config, true);
+    app_state->test_geometry = geometry_system_acquire_from_config(world_config, true);
 
     // Clean up the allocations for the geometry config.
-    kfree(g_config.vertices, sizeof(vertex_3d) * g_config.vertex_count, MEMORY_TAG_ARRAY);
-    kfree(g_config.indices, sizeof(u32) * g_config.index_count, MEMORY_TAG_ARRAY);
+    kfree(world_config.vertices, sizeof(vertex_3d) * world_config.vertex_count, MEMORY_TAG_ARRAY);
+    kfree(world_config.indices, sizeof(u32) * world_config.index_count, MEMORY_TAG_ARRAY);
+
+    // Load up some test UI geometry.
+    geometry_config ui_config;
+    ui_config.vertex_size = sizeof(vertex_2d);
+    ui_config.vertex_count = 4;
+    ui_config.index_size = sizeof(u32);
+    ui_config.index_count = 6;
+
+    string_ncopy(ui_config.material_name, "test_ui_material", MATERIAL_NAME_MAX_LENGTH);
+    string_ncopy(ui_config.name, "test_ui_geometry", GEOMETRY_NAME_MAX_LENGTH);
+
+    const f32 f = 512.0f;
+
+    vertex_2d ui_verts[4];
+    ui_verts[0].position.x = 0.0f;  // 0    3
+    ui_verts[0].position.y = 0.0f;  //
+    ui_verts[0].texcoord.x = 0.0f;  //
+    ui_verts[0].texcoord.y = 0.0f;  // 2    1
+
+    ui_verts[1].position.x = f;
+    ui_verts[1].position.y = f;
+    ui_verts[1].texcoord.x = 1.0f;
+    ui_verts[1].texcoord.y = 1.0f;
+
+    ui_verts[2].position.x = 0.0f;
+    ui_verts[2].position.y = f;
+    ui_verts[2].texcoord.x = 0.0f;
+    ui_verts[2].texcoord.y = 1.0f;
+
+    ui_verts[3].position.x = f;
+    ui_verts[3].position.y = 0.0f;
+    ui_verts[3].texcoord.x = 1.0f;
+    ui_verts[3].texcoord.y = 0.0f;
+
+    ui_config.vertices = ui_verts;
+
+    // Indices - Counter-clockwise.
+    u32 ui_indices[6] = {2, 1, 0, 3, 0, 1};
+
+    ui_config.indices = ui_indices;
+
+    // Get UI geometry from config.
+    app_state->test_ui_geometry = geometry_system_acquire_from_config(ui_config, true);
 
     // Load up default geometry.
     //app_state->test_geometry = geometry_system_get_default_geometry();
@@ -357,8 +401,12 @@ b8 application_run()
             packet.geometry_count = 1;
             packet.geometries = &test_render;
 
-            packet.ui_geometry_count = 0;
-            packet.ui_geometries = 0;
+            geometry_render_data test_ui_render;
+            test_ui_render.geometry = app_state->test_ui_geometry;
+            test_ui_render.model = mat4_translation((vec3){0, 0, 0});
+
+            packet.ui_geometry_count = 1;
+            packet.ui_geometries = &test_ui_render;
 
             // TODO: End Temporary.
 
