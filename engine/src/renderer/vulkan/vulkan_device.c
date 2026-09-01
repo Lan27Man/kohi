@@ -385,6 +385,8 @@ b8 select_physical_device(vulkan_context* context)
 
         vkGetPhysicalDeviceMemoryProperties(physical_devices[i], &memory);
 
+        KINFO("Evaluating device: '%s', index %u.", properties.deviceName, i);
+
         // TODO: These requirements should probably be driven by engine configuration.
         vulkan_physical_device_requirements requirements = {};
         requirements.graphics = true;

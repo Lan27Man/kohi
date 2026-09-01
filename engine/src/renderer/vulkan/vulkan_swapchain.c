@@ -83,6 +83,8 @@ void vulkan_swapchain_present(
     {
         // Swapchain is out of date, suboptimal or a framebuffer resize has occurred. Trigger swapchain recreation.
         vulkan_swapchain_recreate(context, context->framebuffer_width, context->framebuffer_height, swapchain);
+
+        KDEBUG("Swapchain recreated because swapchain returned out of date or suboptimal.");
     }
     else if (result != VK_SUCCESS)
     {
@@ -139,7 +141,7 @@ void create(vulkan_context* context, u32 width, u32 height, vulkan_swapchain* sw
     );
 
     // Swapchain extent.
-    if (context->device.swapchain_support.capabilities.currentExtent.width != UINT32_MAX)
+    if (context->device.swapchain_support.capabilities.currentExtent.width != 0xffffffffu)
     {
         swapchain_extent = context->device.swapchain_support.capabilities.currentExtent;
     }

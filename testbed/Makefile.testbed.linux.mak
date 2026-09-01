@@ -4,8 +4,8 @@ OBJ_DIR := obj
 ASSEMBLY := testbed
 EXTENSION :=
 COMPILER_FLAGS := -g -MD -Werror=vla -fdeclspec -fPIC
-INCLUDE_FLAGS := -Iengine/src -I$(VULKAN_SDK)\include
-LINKER_FLAGS := -L ./$(BUILD_DIR)/ -lengine -Wl, -rpath,.
+INCLUDE_FLAGS := -Iengine/src
+LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -Wl, -rpath,.
 DEFINES := -D_DEBUG -DKIMPORT
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -26,7 +26,7 @@ scaffold: # Create build directory.
 .PHONY: link
 link: scaffold $(OBJ_FILES) # Link.
 	@echo Linking $(ASSEMBLY)...
-	@clang $(OBJ_FILES) -o $(BUILD_DIR)/$(ASSEMBLY)$(EXTENSION) $(LINKER_FLAGS)
+	clang $(OBJ_FILES) -o $(BUILD_DIR)/$(ASSEMBLY)$(EXTENSION) $(LINKER_FLAGS)
 
 .PHONY: compile
 compile: # Compile .c files.
@@ -34,8 +34,8 @@ compile: # Compile .c files.
 
 .PHONY: clean
 clean: # Clean build directory.
-	rm -rf $(BUILD_DIR)\$(ASSEMBLY)
-	rm -rf $(OBJ_DIR)\$(ASSEMBLY)
+	rm -rf $(BUILD_DIR)/$(ASSEMBLY)
+	rm -rf $(OBJ_DIR)/$(ASSEMBLY)
 
 $(OBJ_DIR)/%.c.o: %.c # Compile .c to .o object.
 	@echo	$<...

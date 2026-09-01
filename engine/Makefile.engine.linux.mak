@@ -20,6 +20,7 @@ all: scaffold compile link
 .PHONY: scaffold
 scaffold: # Create build directory.
 	@echo Scaffolding folder structure...
+	@mkdir -p bin
 	@mkdir -p $(addprefix $(OBJ_DIR)/,$(DIRECTORIES))
 	@echo Done.
 
@@ -31,11 +32,12 @@ link: scaffold $(OBJ_FILES) # Link.
 .PHONY: compile
 compile: # Compile .c files.
 	@echo Compiling...
+	-include $(OBJ_FILES:.o=.d)
 
 .PHONY: clean
 clean: # Clean build directory.
-	rm -rf $(BUILD_DIR)\$(ASSEMBLY)
-	rm -rf $(OBJ_DIR)\$(ASSEMBLY)
+	rm -rf $(BUILD_DIR)/lib$(ASSEMBLY)$(EXTENSION)
+	rm -rf $(OBJ_DIR)/$(ASSEMBLY)
 
 $(OBJ_DIR)/%.c.o: %.c # Compile .c to .o object.
 	@echo	$<...
