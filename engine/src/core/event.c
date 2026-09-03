@@ -25,7 +25,7 @@ typedef struct event_system_state
 
 /**
  * Event system internal state pointer.
- */
+*/
 static event_system_state* state_ptr;
 
 void event_system_initialize(u64* memory_requirement, void* state)

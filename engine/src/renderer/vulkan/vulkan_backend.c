@@ -1158,10 +1158,10 @@ b8 vulkan_renderer_backend_create_geometry(geometry* geometry, u32 vertex_size, 
         // Take a copy of the old range.
         old_range.index_buffer_offset = internal_data->index_buffer_offset;
         old_range.index_count = internal_data->index_count;
-        old_range.index_size = internal_data->index_size;
+        old_range.index_element_size = internal_data->index_element_size;
         old_range.vertex_buffer_offset = internal_data->vertex_buffer_offset;
         old_range.vertex_count = internal_data->vertex_count;
-        old_range.vertex_size = internal_data->vertex_size;
+        old_range.vertex_element_size = internal_data->vertex_element_size;
     }
     else
     {
@@ -1190,7 +1190,7 @@ b8 vulkan_renderer_backend_create_geometry(geometry* geometry, u32 vertex_size, 
     // Vertex data.
     internal_data->vertex_buffer_offset = context.geometry_vertex_offset;
     internal_data->vertex_count = vertex_count;
-    internal_data->vertex_size = sizeof(vertex_3d);
+    internal_data->vertex_element_size = sizeof(vertex_3d);
 
     u32 total_size = vertex_count * vertex_size;
 
@@ -1213,7 +1213,7 @@ b8 vulkan_renderer_backend_create_geometry(geometry* geometry, u32 vertex_size, 
     {
         internal_data->index_buffer_offset = context.geometry_index_offset;
         internal_data->index_count = index_count;
-        internal_data->index_size = sizeof(u32);
+        internal_data->index_element_size = sizeof(u32);
 
         total_size = index_count * index_size;
 
@@ -1244,12 +1244,12 @@ b8 vulkan_renderer_backend_create_geometry(geometry* geometry, u32 vertex_size, 
     if (is_reupload)
     {
         // Free vertex data.
-        free_data_range(&context.object_vertex_buffer, old_range.vertex_buffer_offset, old_range.vertex_size * old_range.vertex_count);
+        free_data_range(&context.object_vertex_buffer, old_range.vertex_buffer_offset, old_range.vertex_element_size * old_range.vertex_count);
 
         // Free index data, if applicable.
-        if (old_range.index_size > 0)
+        if (old_range.index_element_size > 0)
         {
-            free_data_range(&context.object_index_buffer, old_range.index_buffer_offset, old_range.index_size * old_range.index_count);
+            free_data_range(&context.object_index_buffer, old_range.index_buffer_offset, old_range.index_element_size * old_range.index_count);
         }
     }
 
@@ -1265,12 +1265,12 @@ void vulkan_renderer_backend_destroy_geometry(geometry* geometry)
         vulkan_geometry_data* internal_data = &context.geometries[geometry->internal_id];
 
         // Free vertex data.
-        free_data_range(&context.object_vertex_buffer, internal_data->vertex_buffer_offset, internal_data->vertex_size * internal_data->vertex_count);
+        free_data_range(&context.object_vertex_buffer, internal_data->vertex_buffer_offset, internal_data->vertex_element_size * internal_data->vertex_count);
 
         // Free index data, if applicable.
-        if (internal_data->index_size > 0)
+        if (internal_data->index_element_size > 0)
         {
-            free_data_range(&context.object_index_buffer, internal_data->index_buffer_offset, internal_data->index_size * internal_data->index_count);
+            free_data_range(&context.object_index_buffer, internal_data->index_buffer_offset, internal_data->index_element_size * internal_data->index_count);
         }
 
         // Clean up data.

@@ -1,3 +1,13 @@
+/**
+ * @file hashtable.h
+ * @author Travis Vroman (travis@kohiengine.com)
+ * @brief This file contains the hashtable implementation.
+ * @version 1.0
+ * @date 2022-01-10
+ * 
+ * @copyright Kohi Game Engine is Copyright (c) Travis Vroman 2021-2022
+*/
+
 #pragma once
 
 #include "defines.h"
@@ -10,7 +20,7 @@
  * pointer types, make sure to use the _ptr setter and getter. Table
  * does not take ownership of pointers or associated memory allocations,
  * and should be managed externally.
- */
+*/
 typedef struct hashtable
 {
     u64 element_size;
@@ -27,14 +37,14 @@ typedef struct hashtable
  * @param memory A block of memory to be used. Should be equal in size to element_size * element_count.
  * @param is_pointer_type Indicates if this hashtable will hold pointer types.
  * @param out_hashtable A pointer to a hashtable in which to hold relevant data.
- */
+*/
 KAPI void hashtable_create(u64 element_size, u32 element_count, void* memory, b8 is_pointer_type, hashtable* out_hashtable);
 
 /**
  * @brief Destroys the provided hashtable. Does not release memory for pointer types.
  * 
  * @param table A pointer to the table to be destroyed.
- */
+*/
 KAPI void hashtable_destroy(hashtable* table);
 
 /**
@@ -45,7 +55,7 @@ KAPI void hashtable_destroy(hashtable* table);
  * @param name The name of the entry to set. Required.
  * @param value The value to be set. Required.
  * @returns true; or false if a null pointer is passed.
- */
+*/
 KAPI b8 hashtable_set(hashtable* table, const char* name, void* value);
 
 /**
@@ -56,7 +66,7 @@ KAPI b8 hashtable_set(hashtable* table, const char* name, void* value);
  * @param name The name of the entry to set. Required.
  * @param value A pointer value to be set. Can pass 0 to 'unset' an entry.
  * @returns true; or false if a null pointer is passed or if the entry is 0.
- */
+*/
 KAPI b8 hashtable_set_ptr(hashtable* table, const char* name, void** value);
 
 /**
@@ -67,7 +77,7 @@ KAPI b8 hashtable_set_ptr(hashtable* table, const char* name, void** value);
  * @param name The name of the entry to retrieve. Required.
  * @param value A pointer to store the retrieved value. Required.
  * @returns true; or false if a null pointer is passed.
- */
+*/
 KAPI b8 hashtable_get(hashtable* table, const char* name, void* out_value);
 
 /**
@@ -78,7 +88,7 @@ KAPI b8 hashtable_get(hashtable* table, const char* name, void* out_value);
  * @param name The name of the enty to retrieve. Required.
  * @param value A pointer to store the retrieved value. Required.
  * @returns true if retrieved successfully; false if a null pointer is passed or the retrieved value is 0.
- */
+*/
 KAPI b8 hashtable_get_ptr(hashtable* table, const char* name, void** out_value);
 
 /**
@@ -89,5 +99,5 @@ KAPI b8 hashtable_get_ptr(hashtable* table, const char* name, void** out_value);
  * @param table A pointer to the table to be filled. Required.
  * @param value The value to be filled with. Required.
  * @returns true if successful; otherwise false.
- */
+*/
 KAPI b8 hashtable_fill(hashtable* table, void* value);
