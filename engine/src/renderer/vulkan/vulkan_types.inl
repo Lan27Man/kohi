@@ -15,6 +15,7 @@
 
 #include "core/asserts.h"
 #include "renderer/renderer_types.inl"
+#include "containers/freelist.h"
 
 #include <vulkan/vulkan.h>
 
@@ -116,6 +117,21 @@ typedef struct vulkan_buffer
      * @brief The property flags for the memory used by the buffer.
     */
     u32 memory_property_flags;
+
+    /**
+     * @brief The amount of memory required for the freelist.
+    */
+    u64 freelist_memory_requirement;
+
+    /**
+     * @brief The memory block used by the internal freelist.
+    */
+    void* freelist_block;
+
+    /**
+     * @brief A freelist to track allocations.
+    */
+    freelist buffer_freelist;
 } vulkan_buffer;
 
 /**
@@ -556,7 +572,7 @@ typedef struct vulkan_geometry_data
     /**
      * @brief The offset in bytes in the vertex buffer.
     */
-    u32 vertex_buffer_offset;
+    u64 vertex_buffer_offset;
 
     /**
      * @brief The index count.
@@ -571,7 +587,7 @@ typedef struct vulkan_geometry_data
     /**
      * @brief The offset in bytes in the index buffer.
     */
-    u32 index_buffer_offset;
+    u64 index_buffer_offset;
 } vulkan_geometry_data;
 
 /**
@@ -587,13 +603,13 @@ typedef struct vulkan_material_shader_global_ubo
      * @brief The projection matrix.
      * @note 64 bytes.
     */
-    mat4 projection;    // 64 bytes.
+    mat4 projection;
 
     /**
      * The view matrix.
      * @note 64 bytes.
     */
-    mat4 view;          // 64 bytes.
+    mat4 view;
 
     /**
      * @brief Reserved for future use.
@@ -1060,18 +1076,6 @@ typedef struct vulkan_context
      * @brief The UI shader.
     */
     vulkan_ui_shader ui_shader;
-
-    /**
-     * @brief The geometry vertex buffer offset.
-     * @todo TODO: Use free lists.
-    */
-    u64 geometry_vertex_offset;
-
-    /**
-     * @brief The geometry index buffer offset.
-     * @todo TODO: Use free lists.
-    */
-    u64 geometry_index_offset;
 
     /**
      * @brief A collection of loaded geometries.
