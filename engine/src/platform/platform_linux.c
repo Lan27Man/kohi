@@ -13,7 +13,7 @@
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>     // sudo apt-get install libx11-dev
 #include <X11/Xlib.h>
-#include <X11/Xlib-xcb.h>   // sudo apt-get install libx11-xcb-dev
+#include <X11/Xlib-xcb.h>   // sudo apt-get install libxkbcommon-x11-dev libx11-xcb-dev
 #include <sys/time.h>
 
 #if _POSIX_C_SOURCE >= 199309L
@@ -105,7 +105,7 @@ b8 platform_system_startup(u64* memory_requirement, void* state, const char* app
     u32 value_list[] = {state_ptr->screen->black_pixel, event_values};
 
     // Create the window.
-    xcb_void_cookie_t cookie = xcb_create_window(
+    xcb_create_window(
         state_ptr->connection,
         XCB_COPY_FROM_PARENT,           // depth
         state_ptr->window,
@@ -211,15 +211,8 @@ b8 platform_pump_messages()
         b8 quit_flagged = false;
 
         // Poll for events until NULL is returned.
-        while (event != 0)
+        while ((event = xcb_poll_for_event(state_ptr->connection)))
         {
-            event = xcb_poll_for_event(state_ptr->connection);
-        
-            if (event == 0)
-            {
-                break;
-            }
-        
             // Input events.
             switch (event->response_type & ~0x80)
             {

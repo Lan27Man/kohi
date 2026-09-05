@@ -48,21 +48,28 @@ typedef enum memory_tag
 } memory_tag;
 
 /**
- * @brief Initializes the memory system. Should be called twice, once to obtain
- * the memory requirement (passing state=0), and a second time with state recieving 
- * an allocated block of memory.
- * 
- * @param memory_requirement A pointer to hold the memory requirement in bytes, used for allocation.
- * @param state A block of memory to hold the state for this system. Can be 0 when just obtaining requirement. 
+ * @brief The configuration for the memory system.
 */
-KAPI void memory_system_initialize(u64* memory_requirement, void* state);
+typedef struct memory_system_configuration
+{
+    /**
+     * @brief The total memory size in bytes used by the internal allocator for this system.
+    */
+    u64 total_alloc_size;
+} memory_system_configuration;
+
+/**
+ * @brief Initializes the memory system.
+ * 
+ * @param config The configuration for this system.
+ * @returns true if successful; otherwise false.
+*/
+KAPI b8 memory_system_initialize(memory_system_configuration config);
 
 /**
  * @brief Shuts down the memory system.
- * 
- * @param state A pointer to the state block of memory used by this system.
 */
-KAPI void memory_system_shutdown(void* state);
+KAPI void memory_system_shutdown();
 
 /**
  * @brief Performs a memory allocation from the host of the given size. The allocation
@@ -88,7 +95,7 @@ KAPI void kfree(void* block, u64 size, memory_tag tag);
  * 
  * @param block A pointer to the block of memory to be zeroed out.
  * @param size The size in bytes to zero out.
- * @param A pointer to the zeroed out block of memory.
+ * @returns A pointer to the zeroed out block of memory.
 */
 KAPI void* kzero_memory(void* block, u64 size);
 

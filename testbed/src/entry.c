@@ -1,7 +1,6 @@
 #include "game.h"
 
 #include <entry.h>
-#include <core/kmemory.h>
 
 // Define the function to create a game.
 b8 create_game(game* out_game)
@@ -18,7 +17,8 @@ b8 create_game(game* out_game)
     out_game->on_resize = game_on_resize;
 
     // Create the game state.
-    out_game->state = kallocate(sizeof(game_state), MEMORY_TAG_GAME);
+    out_game->state_memory_requirement = sizeof(game_state);
+    out_game->state = 0;
     out_game->application_state = 0;
 
     return true;

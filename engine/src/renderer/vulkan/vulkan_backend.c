@@ -449,7 +449,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
             return false;
         }
 
-        KINFO("Recreating swapchain, exiting.");
+        KINFO("Recreating swapchain, booting.");
         return false;
     }
 
@@ -471,7 +471,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
             return false;
         }
 
-        KINFO("Resized, exiting.");
+        KINFO("Resized, booting.");
         return false;
     }
 
@@ -495,7 +495,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
         &context.image_index
     ))
     {
-        KERROR("Failed to acquire next image index, exiting.");
+        KERROR("Failed to acquire next image index, booting.");
         return false;
     }
 
@@ -531,7 +531,7 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
 
 void vulkan_renderer_backend_update_global_world_state(mat4 projection, mat4 view, vec3 view_position, vec4 ambient_colour, i32 mode)
 {
-    vulkan_command_buffer*  command_buffer = &context.graphics_command_buffers[context.image_index];
+    // vulkan_command_buffer*  command_buffer = &context.graphics_command_buffers[context.image_index];
 
     vulkan_material_shader_use(&context, &context.material_shader);
 
@@ -545,7 +545,7 @@ void vulkan_renderer_backend_update_global_world_state(mat4 projection, mat4 vie
 
 void vulkan_renderer_backend_update_global_ui_state(mat4 projection, mat4 view, i32 mode)
 {
-    vulkan_command_buffer* command_buffer = &context.graphics_command_buffers[context.image_index];
+    // vulkan_command_buffer* command_buffer = &context.graphics_command_buffers[context.image_index];
 
     vulkan_ui_shader_use(&context, &context.ui_shader);
 
@@ -833,14 +833,14 @@ b8 recreate_swapchain(renderer_backend* backend)
     // If already being recreated, do not try again.
     if (context.recreating_swapchain)
     {
-        KDEBUG("recreate_swapchain() called when already recreating, exiting.")
+        KDEBUG("recreate_swapchain() called when already recreating, booting.")
         return false;
     }
 
     // Detect if the window is too small to be drawn to.
     if (context.framebuffer_width == 0 || context.framebuffer_height == 0)
     {
-        KDEBUG("recreate_swapchain() called when window is < 1 in a dimension, exiting.");
+        KDEBUG("recreate_swapchain() called when window is < 1 in a dimension, booting.");
         return false;
     }
 
