@@ -534,8 +534,13 @@ b8 vulkan_renderer_backend_begin_frame(renderer_backend* backend, f32 delta_time
     vkCmdSetViewport(command_buffer->handle, 0, 1, &viewport);
     vkCmdSetScissor(command_buffer->handle, 0, 1, &scissor);
 
+    // Update the main/world renderpass dimensions.
     context.main_renderpass.render_area.z = context.framebuffer_width;
     context.main_renderpass.render_area.w = context.framebuffer_height;
+
+    // Also update the UI renderpass dimensions.
+    context.ui_renderpass.render_area.z = context.framebuffer_width;
+    context.ui_renderpass.render_area.w = context.framebuffer_height;
 
     return true;
 }
@@ -577,7 +582,7 @@ b8 vulkan_renderer_backend_end_frame(renderer_backend* backend, f32 delta_time)
     // Make sure the previous frame is not using this image (i.e. its fence is being waited on).
     if (context.images_in_flight[context.image_index] != VK_NULL_HANDLE)
     {
-        VkResult result = vkWaitForFences(context.device.logical_device, 1, context.images_in_flight[context.image_index], true, 0xffffffffffffffffu);
+        VkResult result = vkWaitForFences(context.device.logical_device, 1, &context.images_in_flight[context.image_index], true, 0xffffffffffffffffu);
 
         if (!vulkan_result_is_success(result))
         {
@@ -586,7 +591,7 @@ b8 vulkan_renderer_backend_end_frame(renderer_backend* backend, f32 delta_time)
     }
 
     // Mark the image fence as in-use by this frame.
-    context.images_in_flight[context.image_index] = &context.in_flight_fences[context.current_frame];
+    context.images_in_flight[context.image_index] = context.in_flight_fences[context.current_frame];
 
     // Reset the fence for use on the next frame.
     VK_CHECK(vkResetFences(
@@ -907,10 +912,17 @@ b8 recreate_swapchain(renderer_backend* backend)
         vkDestroyFramebuffer(context.device.logical_device, context.swapchain.framebuffers[i], context.allocator);
     }
 
+    // Update the main/world renderpass dimensions.
     context.main_renderpass.render_area.x = 0;
     context.main_renderpass.render_area.y = 0;
     context.main_renderpass.render_area.z = context.framebuffer_width;
     context.main_renderpass.render_area.w = context.framebuffer_height;
+
+    // Also update the UI renderpass dimensions.
+    context.ui_renderpass.render_area.x = 0;
+    context.ui_renderpass.render_area.y = 0;
+    context.ui_renderpass.render_area.z = context.framebuffer_width;
+    context.ui_renderpass.render_area.w = context.framebuffer_height;
 
     // Regenerate swapchain and world framebuffers.
     regenerate_framebuffers();
