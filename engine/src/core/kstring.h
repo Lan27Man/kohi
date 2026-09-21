@@ -14,7 +14,7 @@
 
 #include "math/math_types.h"
 
-/** 
+/**
  * @brief Gets the length of the given string.
  * 
  * @param str The string whose length to obtain.
@@ -31,8 +31,8 @@ KAPI u64 string_length(const char* str);
 */
 KAPI char* string_duplicate(const char* str);
 
-/** 
- * @brief Case-sensitive string comparison. 
+/**
+ * @brief Case-sensitive string comparison.
  * 
  * @param str0 The first string to be compared.
  * @param str1 The second string to be compared.
@@ -40,7 +40,7 @@ KAPI char* string_duplicate(const char* str);
 */
 KAPI b8 strings_equal(const char* str0, const char* str1);
 
-/** 
+/**
  * @brief Case-insensitive string comparison.
  * 
  * @param str0 The first string to be compared.
@@ -49,7 +49,7 @@ KAPI b8 strings_equal(const char* str0, const char* str1);
 */
 KAPI b8 strings_equali(const char* str0, const char* str1);
 
-/** 
+/**
  * @brief Performs string formatting to dest given format string and parameters.
  * 
  * @param dest The destination for the formatted string.
@@ -73,7 +73,7 @@ KAPI i32 string_format_v(char* dest, const char* format, void* va_list);
  * @brief Empties the provided string by setting the first character to 0.
  * 
  * @param str The string to be emptied.
- * @returns A pointer to str. 
+ * @returns A pointer to str.
 */
 KAPI char* string_empty(char* str);
 
@@ -120,7 +120,7 @@ KAPI void string_mid(char* dest, const char* source, i32 start, i32 length);
  * 
  * @param str The string to be scanned.
  * @param c The character to search for.
- * @returns The index of the first occurance of c; otherwise -1 if not found. 
+ * @returns The index of the first occurance of c; otherwise -1 if not found.
 */
 KAPI i32 string_index_of(char* str, char c);
 
@@ -250,3 +250,25 @@ KAPI b8 string_to_u64(char* str, u64* u);
  * @returns true if parsed successfully; otherwise false.
 */
 KAPI b8 string_to_bool(char* str, b8* b);
+
+/**
+ * @brief Splits the given string by the delimiter and stores in the
+ * provided darray. Optionally trims each entry. NOTE: A string allocation
+ * occurs for each entry, and must be freed by the caller.
+ * 
+ * @param str The string to be split.
+ * @param delimiter The character to split by.
+ * @param str_darray A pointer to a darray of char arrays to hold the entries. NOTE: Must be a darray.
+ * @param trim_entries Trims each entry if true.
+ * @param include_empty Indicates if empty entries should be included.
+ * @returns The number of entries yielded by the split operation.
+*/
+KAPI u32 string_split(const char* str, char delimiter, char*** str_darray, b8 trim_entries, b8 include_empty);
+
+/**
+ * @brief Cleans up string allocations in str_darray, but does not
+ * free the darray itself.
+ * 
+ * @param str_darray The darray to be cleaned up.
+*/
+KAPI void string_cleanup_split_array(char** str_darray);
