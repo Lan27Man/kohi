@@ -326,7 +326,8 @@ b8 vulkan_device_detect_depth_format(vulkan_device* device)
 {
     // Format candidates.
     const u64 candidate_count = 3;
-    VkFormat candidates[3] = {
+    VkFormat candidates[3] =
+    {
         VK_FORMAT_D32_SFLOAT,
         VK_FORMAT_D32_SFLOAT_S8_UINT,
         VK_FORMAT_D24_UNORM_S8_UINT

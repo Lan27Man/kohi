@@ -802,7 +802,8 @@ void regenerate_framebuffers()
 
     for (u32 i = 0; i < image_count; ++i)
     {
-        VkImageView world_attachments[2] = {
+        VkImageView world_attachments[2] =
+        {
             context.swapchain.views[i],
             context.swapchain.depth_attachment.view
         };
@@ -823,7 +824,8 @@ void regenerate_framebuffers()
         ));
 
         // Swapchain framebuffers (UI pass). Outputs to swapchain images.
-        VkImageView ui_attachments[1] = {
+        VkImageView ui_attachments[1] =
+        {
             context.swapchain.views[i]
         };
 

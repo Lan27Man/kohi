@@ -111,7 +111,10 @@ KAPI char* string_trim(char* str);
  * If length is negative or 0, goes to the end of the string.
  * Done by placing zeroes in the string at relevant points.
  * 
- * @param str The string to be trimmed.
+ * @param dest The destination string.
+ * @param source The source string.
+ * @param start The starting index.
+ * @param length The length of the string.
 */
 KAPI void string_mid(char* dest, const char* source, i32 start, i32 length);
 

@@ -5,6 +5,12 @@
 #include "math/math_types.h"
 #include "resources/resource_types.h"
 
+#define BUILTIN_SHADER_NAME_MATERIAL "Shader.Builtin.Material"
+#define BUILTIN_SHADER_NAME_UI "Shader.Builtin.UI"
+
+struct shader;
+struct shader_uniform;
+
 typedef enum renderer_backend_type
 {
     RENDERER_BACKEND_TYPE_VULKAN,
@@ -63,37 +69,15 @@ typedef struct renderer_backend
     /**
      * @brief Performs setup routines required at the start of a frame.
      * @note A false result does not necessarily indicate failure. It can also specify that
-     * the backend is simply not in a state capable of drawing a frame at the moment, and 
+     * the backend is simply not in a state capable of drawing a frame at the moment, and
      * that it should be attempted again on the next loop. End frame does not need to (and
      * should not) be called if this is the case.
      * 
      * @param backend A pointer to the generic backend interface.
      * @param delta_time The time in seconds since the last frame.
-     * @returns true if successful; otherwise false. 
+     * @returns true if successful; otherwise false.
     */
     b8 (*begin_frame)(struct renderer_backend* backend, f32 delta_time);
-
-    /**
-     * @brief Updates global state items, such as view and projection. Should only be called
-     * while in the world renderpass.
-     * 
-     * @param projection The projection matrix to be set.
-     * @param view The view matrix to be set.
-     * @param view_position The view position (camera position) to be set.
-     * @param ambient_colour THe ambient world colour.
-     * @param mode The render mode.
-    */
-    void (*update_global_world_state)(mat4 projection, mat4 view, vec3 view_position, vec4 ambient_colour, i32 mode);
-
-    /**
-     * @brief Updates global state items for the UI, such as view and projection. Should only be
-     * called while in the UI renderpass.
-     * 
-     * @param projection The projection matrix to be set.
-     * @param view The view matrix to be set.
-     * @param mode The render mode.
-    */
-    void (*update_global_ui_state)(mat4 projection, mat4 view, i32 mode);
 
     /**
      * @brief Performs routines required to draw a frame, such as presentation. Should only be called
@@ -146,21 +130,6 @@ typedef struct renderer_backend
     void (*destroy_texture)(struct texture* texture);
 
     /**
-     * @brief Creates a material, acquiring required internal resources.
-     * 
-     * @param material A pointer to the material to hold the resources.
-     * @returns true on success; otherwise false.
-    */
-    b8 (*create_material)(struct material* material);
-
-    /**
-     * @brief Destroys a texture, releasing required internal resouces.
-     * 
-     * @param material A pointer to the material whose resources should be released.
-    */
-    void (*destroy_material)(struct material* material);
-
-    /**
      * @brief Creates Vulkan-specific internal resources for the given geometry using
      * the data provided.
      * 
@@ -181,6 +150,104 @@ typedef struct renderer_backend
      * @param geometry A pointer to the geometry to be destroyed.
     */
     void (*destroy_geometry)(geometry* geometry);
+
+    /**
+     * @brief Creates internal shader resources using the provided parameters.
+     * 
+     * @param s A pointer to the shader.
+     * @param renderpass_id The identifier of the renderpass to be associated with the shader.
+     * @param stage_count The total number of stages.
+     * @param stage_filenames An array of shader stage filenames to be loaded. Should align with stages array.
+     * @param stages An array of shader_stages indicating what render stages (vertex, fragment, etc.) are used in this shader.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_create)(struct shader* s, u8 renderpass_id, u8 stage_count, const char** stage_filenames, shader_stage* stages);
+
+    /**
+     * @brief Destroys the given shader and releases any resources held by it.
+     * 
+     * @param s A pointer to the shader to be destroyed.
+    */
+    void (*shader_destroy)(struct shader* s);
+
+    /**
+     * @brief Initializes a configured shader. Will be automatically destroyed if this step fails.
+     * Must be done after shader_create().
+     * 
+     * @param s A pointer to the shader to be initialized.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_initialize)(struct shader* s);
+
+    /**
+     * @brief Uses the given shader, activating it for updates to attributes, uniforms and such,
+     * and for use in draw calls.
+     * 
+     * @param s A pointer to the shader to be used.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_use)(struct shader* s);
+
+    /**
+     * @brief Binds global resources for use and updating.
+     * 
+     * @param s A pointer to the shader whose globals are to be bound.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_bind_globals)(struct shader* s);
+
+    /**
+     * @brief Binds instance resources for use and updating.
+     * 
+     * @param s A pointer to the shader whose instance resources are to be bound.
+     * @param instance_id The identifier of the instance to be bound.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_bind_instance)(struct shader* s, u32 instance_id);
+
+    /**
+     * @brief Applies global data to the uniform buffer.
+     * 
+     * @param s A pointer to the shader to apply the global data for.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_apply_globals)(struct shader* s);
+
+    /**
+     * @brief Applies data for the currently bound instance.
+     * 
+     * @param s A pointer to the shader to apply the instance data for.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_apply_instance)(struct shader* s);
+
+    /**
+     * @brief Acquires internal instance-level resources and provides an instance id.
+     * 
+     * @param s A pointer to the shader to acquire resources from.
+     * @param out_instance_id A pointer to hold the new instance identifier.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_acquire_instance_resources)(struct shader* s, u32* out_instance_id);
+
+    /**
+     * @brief Releases internal instance-level resources for the given instance id.
+     * 
+     * @param s A pointer to the shader to release resources from.
+     * @param instance_id The instance identifier whose resources are to be released.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_release_instance_resources)(struct shader* s, u32 instance_id);
+
+    /**
+     * @brief Sets the uniform of the given shader to the provided value.
+     * 
+     * @param s A pointer to the shader.
+     * @param uniform A constant pointer to the uniform.
+     * @param value A pointer to the value to be set.
+     * @returns true on success; otherwise false.
+    */
+    b8 (*shader_set_uniform)(struct shader* s, struct shader_uniform* uniform, const void* value);
 } renderer_backend;
 
 typedef struct render_packet

@@ -19,6 +19,8 @@ b8 vulkan_graphics_pipeline_create(
     VkRect2D scissor,
     b8 is_wireframe,
     b8 depth_test_enabled,
+    u32 push_constant_range_count,
+    range* push_constant_ranges,
     vulkan_pipeline* out_pipeline
 )
 {
@@ -76,8 +78,7 @@ b8 vulkan_graphics_pipeline_create(
     color_blend_attachment_state.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     color_blend_attachment_state.alphaBlendOp = VK_BLEND_OP_ADD;
 
-    color_blend_attachment_state.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
-                                                  VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    color_blend_attachment_state.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 
     VkPipelineColorBlendStateCreateInfo color_blend_state_create_info = {VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};
     color_blend_state_create_info.logicOpEnable = VK_FALSE;
@@ -87,7 +88,8 @@ b8 vulkan_graphics_pipeline_create(
 
     // Dynamic state.
     const u32 dynamic_state_count = 3;
-    VkDynamicState dynamic_states[3] = {
+    VkDynamicState dynamic_states[3] =
+    {
         VK_DYNAMIC_STATE_VIEWPORT,
         VK_DYNAMIC_STATE_SCISSOR,
         VK_DYNAMIC_STATE_LINE_WIDTH
@@ -99,7 +101,7 @@ b8 vulkan_graphics_pipeline_create(
 
     // Vertex input.
     VkVertexInputBindingDescription binding_description;
-    binding_description.binding = 0;                                // Binding index.
+    binding_description.binding = 0;    // Binding index.
     binding_description.stride = stride;
     binding_description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;    // Move to next data entry for each vertex.
 
@@ -119,12 +121,34 @@ b8 vulkan_graphics_pipeline_create(
     VkPipelineLayoutCreateInfo pipeline_layout_create_info = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
 
     // Push constants.
-    VkPushConstantRange push_constant;
-    push_constant.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    push_constant.offset = sizeof(mat4) * 0;
-    push_constant.size = sizeof(mat4) * 2;
-    pipeline_layout_create_info.pushConstantRangeCount = 1;
-    pipeline_layout_create_info.pPushConstantRanges = &push_constant;
+    if (push_constant_range_count > 0)
+    {
+        if (push_constant_range_count > 32)
+        {
+            KERROR("vulkan_graphics_pipeline_create(): Cannot have more than 32 push constant ranges! Passed count: %i", push_constant_range_count);
+            return false;
+        }
+
+        // NOTE: 32 is the max number of ranges we can ever have, since Vulkan spec only guarantees 128 bytes with 4-byte alignment.
+        VkPushConstantRange ranges[32];
+
+        kzero_memory(ranges, sizeof(VkPushConstantRange) * 32);
+
+        for (u32 i = 0; i < push_constant_range_count; ++i)
+        {
+            ranges[i].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+            ranges[i].offset = push_constant_ranges[i].offset;
+            ranges[i].size = push_constant_ranges[i].size;
+        }
+
+        pipeline_layout_create_info.pushConstantRangeCount = push_constant_range_count;
+        pipeline_layout_create_info.pPushConstantRanges = ranges;
+    }
+    else
+    {
+        pipeline_layout_create_info.pushConstantRangeCount = 0;
+        pipeline_layout_create_info.pPushConstantRanges = 0;
+    }
 
     // Descriptor set layouts.
     pipeline_layout_create_info.setLayoutCount = descriptor_set_layout_count;

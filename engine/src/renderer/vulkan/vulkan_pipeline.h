@@ -29,7 +29,9 @@
  * @param viewport The viewport configuration.
  * @param scissor The scissor configuration.
  * @param is_wireframe Indicates if this pipeline should use wireframe mode.
- * @param depth_test_enabled Indicates if depth testing is enabled for this pipeline/
+ * @param depth_test_enabled Indicates if depth testing is enabled for this pipeline.
+ * @param push_constant_range_count The number of push constants. Should align with push_constant_ranges array.
+ * @param push_constant_ranges An array of push constants.
  * @param out_pipeline A pointer to hold the newly-created pipeline.
  * @returns true on success; otherwise false.
 */
@@ -47,6 +49,8 @@ b8 vulkan_graphics_pipeline_create(
     VkRect2D scissor,
     b8 is_wireframe,
     b8 depth_test_enabled,
+    u32 push_constant_range_count,
+    range* push_constant_ranges,
     vulkan_pipeline* out_pipeline
 );
 

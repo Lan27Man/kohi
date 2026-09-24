@@ -175,7 +175,8 @@ void create(vulkan_context* context, u32 width, u32 height, vulkan_swapchain* sw
     // Setup the queue family indices.
     if (context->device.graphics_queue_index != context->device.present_queue_index)
     {
-        u32 queueFamilyIndices[] = {
+        u32 queueFamilyIndices[] =
+        {
             (u32)context->device.graphics_queue_index,
             (u32)context->device.present_queue_index
         };
