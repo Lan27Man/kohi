@@ -151,3 +151,19 @@ geometry* geometry_system_get_default_2d();
  * @returns A geometry configuration which can then be fed into geometry_system_acquire_from_config().
 */
 geometry_config geometry_system_generate_plane_config(f32 width, f32 height, u32 x_segment_count, u32 y_segment_count, f32 tile_x, f32 tile_y, const char* name, const char* material_name);
+
+/**
+ * @brief Generates configuration for plane geometries given the provided parameters.
+ * NOTE: vertex and index arrays are dynamically allocated and should be freed upon object disposal.
+ * Thus, this should not be considered production code.
+ * 
+ * @param width The overall width of the cube. Must be non-zero.
+ * @param height The overall height of the cube. Must be non-zero.
+ * @param depth The overall depth of the cube. Must be non-zero.
+ * @param tile_x The number of times the texture should tile across the cube on the x-axis. Must be non-zero.
+ * @param tile_y The number of times the texture should tile across the cube on the y-axis. Must be non-zero.
+ * @param name The name of the generated geometry.
+ * @param material_name The name of the material to be used.
+ * @returns A geometry configuration which can then be fed into geometry_system_acquire_from_config().
+*/
+geometry_config geometry_system_generate_cube_config(f32 width, f32 height, f32 depth, f32 tile_x, f32 tile_y, const char* name, const char* material_name);

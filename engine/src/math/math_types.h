@@ -154,6 +154,11 @@ typedef struct vertex_3d
     vec3 position;
 
     /**
+     * @brief The normal of the vertex.
+    */
+    vec3 normal;
+
+    /**
      * @brief The texture coordinate of the vertex.
     */
     vec2 texcoord;

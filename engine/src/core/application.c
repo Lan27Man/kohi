@@ -298,7 +298,7 @@ b8 application_create(game* game_inst)
     // TODO: Temporary.
 
     // Load up a plane configuration, and load geometry from it.
-    geometry_config world_config = geometry_system_generate_plane_config(10.0f, 5.0f, 5, 5, 5.0f, 2.0f, "test geometry", "test_material");
+    geometry_config world_config = geometry_system_generate_cube_config(10.0f, 10.0f, 10.0f, 1.0f, 1.0f, "test_cube", "test_material");
 
     app_state->test_geometry = geometry_system_acquire_from_config(world_config, true);
 
@@ -316,7 +316,8 @@ b8 application_create(game* game_inst)
     string_ncopy(ui_config.material_name, "test_ui_material", MATERIAL_NAME_MAX_LENGTH);
     string_ncopy(ui_config.name, "test_ui_geometry", GEOMETRY_NAME_MAX_LENGTH);
 
-    const f32 f = 512.0f;
+    const f32 w = 128.0f;
+    const f32 h = 32.0f;
 
     vertex_2d ui_verts[4];
     ui_verts[0].position.x = 0.0f;  // 0    3
@@ -324,17 +325,17 @@ b8 application_create(game* game_inst)
     ui_verts[0].texcoord.x = 0.0f;  //
     ui_verts[0].texcoord.y = 0.0f;  // 2    1
 
-    ui_verts[1].position.x = f;
-    ui_verts[1].position.y = f;
+    ui_verts[1].position.x = w;
+    ui_verts[1].position.y = h;
     ui_verts[1].texcoord.x = 1.0f;
     ui_verts[1].texcoord.y = 1.0f;
 
     ui_verts[2].position.x = 0.0f;
-    ui_verts[2].position.y = f;
+    ui_verts[2].position.y = h;
     ui_verts[2].texcoord.x = 0.0f;
     ui_verts[2].texcoord.y = 1.0f;
 
-    ui_verts[3].position.x = f;
+    ui_verts[3].position.x = w;
     ui_verts[3].position.y = 0.0f;
     ui_verts[3].texcoord.x = 1.0f;
     ui_verts[3].texcoord.y = 0.0f;
@@ -422,7 +423,14 @@ b8 application_run()
 
             geometry_render_data test_render;
             test_render.geometry = app_state->test_geometry;
-            test_render.model = mat4_identity();
+            // test_render.model = mat4_identity();
+
+            static f32 angle = 0;
+            angle += (1.0f * delta);
+
+            quat rotation = quat_from_axis_angle((vec3){0, 1, 0}, angle, true);
+
+            test_render.model = quat_to_mat4(rotation);
 
             packet.geometry_count = 1;
             packet.geometries = &test_render;
