@@ -36,9 +36,9 @@ b8 material_loader_load(struct resource_loader* self, const char* name, resource
     material_config* resource_data = kallocate(sizeof(material_config), MEMORY_TAG_MATERIAL_INSTANCE);
 
     // Set some defaults.
-    resource_data->type = MATERIAL_TYPE_WORLD;
+    resource_data->shader_name = "Builtin.Material";    // Default material.
     resource_data->auto_release = true;
-    resource_data->diffuse_colour = vec4_one();     // White.
+    resource_data->diffuse_colour = vec4_one(); // White.
     resource_data->diffuse_map_name[0] = 0;
 
     string_ncopy(resource_data->name, name, MATERIAL_NAME_MAX_LENGTH);
@@ -112,14 +112,10 @@ b8 material_loader_load(struct resource_loader* self, const char* name, resource
                 // NOTE: Already assigned above, no need to have it here.
             }
         }
-        else if (strings_equali(trimmed_var_name, "type"))
+        else if (strings_equali(trimmed_var_name, "shader"))
         {
-            // TODO: Other material types.
-
-            if (strings_equali(trimmed_value, "ui"))
-            {
-                resource_data->type = MATERIAL_TYPE_UI;
-            }
+            // Take a copy of the material name.
+            resource_data->shader_name = string_duplicate(trimmed_value);
         }
 
         // TODO: More fields.

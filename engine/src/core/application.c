@@ -16,6 +16,7 @@
 #include "systems/material_system.h"
 #include "systems/geometry_system.h"
 #include "systems/resource_system.h"
+#include "systems/shader_system.h"
 
 // TODO: Temporary.
 
@@ -48,6 +49,9 @@ typedef struct application_state
 
     u64 resource_system_memory_requirement;
     void* resource_system_state;
+
+    u64 shader_system_memory_requirement;
+    void* shader_system_state;
 
     u64 renderer_system_memory_requirement;
     void* renderer_system_state;
@@ -151,14 +155,14 @@ b8 application_create(game* game_inst)
 
     // Initialize other subsystems.
 
-    // Events.
+    // Event System.
     event_system_initialize(&app_state->event_system_memory_requirement, 0);
 
     app_state->event_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->event_system_memory_requirement);
 
     event_system_initialize(&app_state->event_system_memory_requirement, app_state->event_system_state);
 
-    // Logging.
+    // Logging System.
     initialize_logging(&app_state->logging_system_memory_requirement, 0);
 
     app_state->logging_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->logging_system_memory_requirement);
@@ -169,7 +173,7 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Input.
+    // Input System.
     input_system_initialize(&app_state->input_system_memory_requirement, 0);
 
     app_state->input_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->input_system_memory_requirement);
@@ -188,7 +192,7 @@ b8 application_create(game* game_inst)
 
     // TODO: End Temporary.
 
-    // Platform.
+    // Platform System.
     platform_system_startup(&app_state->platform_system_memory_requirement, 0, 0, 0, 0, 0, 0);
 
     app_state->platform_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->platform_system_memory_requirement);
@@ -206,7 +210,7 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Resource system.
+    // Resource System.
     resource_system_config resource_sys_config;
     resource_sys_config.asset_base_path = "../assets";
     resource_sys_config.max_loader_count = 32;
@@ -221,7 +225,24 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Renderer.
+    // Shader System.
+    shader_system_config shader_sys_config;
+    shader_sys_config.max_shader_count = 1024;
+    shader_sys_config.max_uniform_count = 128;
+    shader_sys_config.max_global_textures = 31;
+    shader_sys_config.max_instance_textures = 31;
+
+    shader_system_initialize(&app_state->shader_system_memory_requirement, 0, shader_sys_config);
+
+    app_state->shader_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->shader_system_memory_requirement);
+
+    if (!shader_system_initialize(&app_state->shader_system_memory_requirement, app_state->shader_system_state, shader_sys_config))
+    {
+        KFATAL("Failed to initialize shader system! Aborting application.");
+        return false;
+    }
+
+    // Renderer System.
     renderer_system_initialize(&app_state->renderer_system_memory_requirement, 0, 0);
 
     app_state->renderer_system_state = linear_allocator_allocate(&app_state->systems_allocator, app_state->renderer_system_memory_requirement);
@@ -232,7 +253,7 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Texture system.
+    // Texture System.
     texture_system_config texture_sys_config;
     texture_sys_config.max_texture_count = 65536;
 
@@ -246,7 +267,7 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Material system.
+    // Material System.
     material_system_config material_sys_config;
     material_sys_config.max_material_count = 4096;
 
@@ -260,7 +281,7 @@ b8 application_create(game* game_inst)
         return false;
     }
 
-    // Geometry system.
+    // Geometry System.
     geometry_system_config geometry_sys_config;
     geometry_sys_config.max_geometry_count = 4096;
 
@@ -469,6 +490,8 @@ b8 application_run()
     material_system_shutdown(app_state->material_system_state);
 
     texture_system_shutdown(app_state->texture_system_state);
+
+    shader_system_shutdown(app_state->shader_system_state);
 
     renderer_system_shutdown(app_state->renderer_system_state);
 
