@@ -18,7 +18,9 @@
 */
 typedef struct freelist
 {
-    // The internal state of the freelist.
+    /**
+     * @brief The internal state of the freelist.
+    */ 
     void* memory;
 } freelist;
 

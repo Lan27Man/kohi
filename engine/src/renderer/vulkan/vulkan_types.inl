@@ -78,7 +78,7 @@
 /**
  * @brief The maximum number of bindings per descriptor set.
 */
-#define VULKAN_SHADER_MAX_BINDINGS 32
+#define VULKAN_SHADER_MAX_BINDINGS 2
 
 /**
  * @brief The maximum number of push constant ranges for a shader.

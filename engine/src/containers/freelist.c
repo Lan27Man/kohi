@@ -214,6 +214,18 @@ b8 freelist_free_block(freelist* list, u64 size, u64 offset)
                     return_node(list, rubbish);
                 }
 
+                // Double-check previous node to see if the new node can be joined to it.
+                if (previous && previous->offset + previous->size == new_node->offset)
+                {
+                    previous->size += new_node->size;
+
+                    freelist_node* rubbish = new_node;
+
+                    previous->next = rubbish->next;
+
+                    return_node(list, rubbish);
+                }
+
                 return true;
             }
 

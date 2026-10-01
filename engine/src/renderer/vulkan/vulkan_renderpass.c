@@ -18,11 +18,11 @@ void vulkan_renderpass_create(
     out_renderpass->render_area = render_area;
     out_renderpass->clear_colour = clear_colour;
 
-    out_renderpass->depth = depth;
-    out_renderpass->stencil = stencil;
-
     out_renderpass->has_prev_pass = has_prev_pass;
     out_renderpass->has_next_pass = has_next_pass;
+
+    out_renderpass->depth = depth;
+    out_renderpass->stencil = stencil;
 
     // Main subpass.
     VkSubpassDescription subpass = {};
@@ -45,10 +45,10 @@ void vulkan_renderpass_create(
     color_attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
     // If coming from a previous pass, should already be VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL. Otherwise undefined.
-    color_attachment.initialLayout = has_prev_pass ? VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED;
+    color_attachment.initialLayout = has_prev_pass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED;
 
     // If going to another pass, use VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL. Otherwise VK_IMAGE_LAYOUT_PRESENT_SRC_KHR.
-    color_attachment.finalLayout = has_next_pass ? VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.finalLayout = has_next_pass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     color_attachment.flags = 0;
 

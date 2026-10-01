@@ -91,27 +91,47 @@ b8 event_on_debug_event(u16 code, void* sender, void* listener_inst, event_conte
         "paving2"
     };
 
+    const char* spec_names[3] =
+    {
+        "cobblestone_SPEC",
+        "paving_SPEC",
+        "paving2_SPEC"
+    };
+
     static i8 choice = 2;
 
-    // Save off the old name.
+    // Save off the old names.
     const char* old_name = names[choice];
+    const char* old_spec_name = names[choice];
 
     choice++;
     choice %= 3;
 
-    // Acquire the new texture.
     if (app_state->test_geometry)
     {
+        // Acquire the new diffuse texture.
         app_state->test_geometry->material->diffuse_map.texture = texture_system_acquire(names[choice], true);
 
         if (!app_state->test_geometry->material->diffuse_map.texture)
         {
-            KWARN("event_on_debug_event() has no texture! Using default.");
+            KWARN("event_on_debug_event() has no diffuse texture! Using default.");
             app_state->test_geometry->material->diffuse_map.texture = texture_system_get_default_texture();
         }
 
-        // Release the old texture.
+        // Release the old diffuse texture.
         texture_system_release(old_name);
+
+        // Acquire the new spec texture.
+        app_state->test_geometry->material->specular_map.texture = texture_system_acquire(spec_names[choice], true);
+
+        if (!app_state->test_geometry->material->specular_map.texture)
+        {
+            KWARN("event_on_debug_event() has no spec texture! Using default.");
+            app_state->test_geometry->material->specular_map.texture = texture_system_get_default_specular_texture();
+        }
+
+        // Release the old spec texture.
+        texture_system_release(old_spec_name);
     }
 
     return true;
@@ -297,14 +317,14 @@ b8 application_create(game* game_inst)
 
     // TODO: Temporary.
 
-    // Load up a plane configuration, and load geometry from it.
-    geometry_config world_config = geometry_system_generate_cube_config(10.0f, 10.0f, 10.0f, 1.0f, 1.0f, "test_cube", "test_material");
+    // Load up a cube configuration, and load geometry from it.
+    geometry_config g_config = geometry_system_generate_cube_config(10.0f, 10.0f, 10.0f, 1.0f, 1.0f, "test_cube", "test_material");
 
-    app_state->test_geometry = geometry_system_acquire_from_config(world_config, true);
+    app_state->test_geometry = geometry_system_acquire_from_config(g_config, true);
 
     // Clean up the allocations for the geometry config.
-    kfree(world_config.vertices, sizeof(vertex_3d) * world_config.vertex_count, MEMORY_TAG_ARRAY);
-    kfree(world_config.indices, sizeof(u32) * world_config.index_count, MEMORY_TAG_ARRAY);
+    kfree(g_config.vertices, sizeof(vertex_3d) * g_config.vertex_count, MEMORY_TAG_ARRAY);
+    kfree(g_config.indices, sizeof(u32) * g_config.index_count, MEMORY_TAG_ARRAY);
 
     // Load up some test UI geometry.
     geometry_config ui_config;
@@ -426,7 +446,7 @@ b8 application_run()
             // test_render.model = mat4_identity();
 
             static f32 angle = 0;
-            angle += (1.0f * delta);
+            angle += (0.5f * delta);
 
             quat rotation = quat_from_axis_angle((vec3){0, 1, 0}, angle, true);
 

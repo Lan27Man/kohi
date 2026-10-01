@@ -64,10 +64,10 @@ KAPI i32 string_format(char* dest, const char* format, ...);
  * 
  * @param dest The destination for the formatted string.
  * @param format The string to be formatted.
- * @param va_list The variadic argument list.
+ * @param va_listp The variadic argument list.
  * @returns The size of the data written.
 */
-KAPI i32 string_format_v(char* dest, const char* format, void* va_list);
+KAPI i32 string_format_v(char* dest, const char* format, void* va_listp);
 
 /**
  * @brief Empties the provided string by setting the first character to 0.

@@ -32,7 +32,7 @@ b8 text_loader_load(struct resource_loader* self, const char* name, resource* ou
 
     if (!filesystem_size(&f, &file_size))
     {
-        KERROR("Unable to read text file: %s!", full_file_path);
+        KERROR("Unable to text read file: %s!", full_file_path);
         filesystem_close(&f);
         return false;
     }

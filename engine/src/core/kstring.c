@@ -60,13 +60,13 @@ i32 string_format(char* dest, const char* format, ...)
     return -1;
 }
 
-i32 string_format_v(char* dest, const char* format, void* va_list)
+i32 string_format_v(char* dest, const char* format, void* va_listp)
 {
     if (dest)
     {
         // Big, but can fit on the stack.
         char buffer[32000];
-        i32 written = vsnprintf(buffer, 32000, format, va_list);
+        i32 written = vsnprintf(buffer, 32000, format, va_listp);
         buffer[written] = 0;
 
         kcopy_memory(dest, buffer, written + 1);
@@ -373,7 +373,7 @@ b8 string_to_bool(char* str, b8* b)
 
     *b = strings_equal(str, "1") || strings_equali(str, "true");
 
-    return b;
+    return *b;
 }
 
 u32 string_split(const char* str, char delimiter, char*** str_darray, b8 trim_entries, b8 include_empty)

@@ -244,7 +244,7 @@ b8 shader_loader_load(struct resource_loader* self, const char* name, resource* 
                 }
                 else
                 {
-                    KERROR("shader_loader_load(): Invalid file layout! Attribute type must f32, vec2, vec3, vec4, u8, u16, u32, i8, i16 or i32.");
+                    KERROR("shader_loader_load(): Invalid file layout! Attribute type must be f32, vec2, vec3, vec4, u8, u16, u32, i8, i16 or i32.");
                     KWARN("Defaulting to f32.");
                     attribute.type = SHADER_ATTRIB_TYPE_FLOAT32;
                     attribute.size = 4;
@@ -434,6 +434,11 @@ void shader_loader_unload(struct resource_loader* self, resource* resource)
     kfree(data->renderpass_name, sizeof(char) * (string_length(data->renderpass_name) + 1), MEMORY_TAG_STRING);
     kfree(data->name, sizeof(char) * (string_length(data->name) + 1), MEMORY_TAG_STRING);
     kzero_memory(data, sizeof(shader_config));
+
+    if (!resource_unload(self, resource, MEMORY_TAG_RESOURCE))
+    {
+        KWARN("shader_loader_unload() called with nullptr for self or resource.");
+    }
 }
 
 resource_loader shader_resource_loader_create()

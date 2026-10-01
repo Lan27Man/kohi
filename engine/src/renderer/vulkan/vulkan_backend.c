@@ -111,7 +111,7 @@ b8 vulkan_renderer_initialize(renderer_backend* backend, const char* application
 
     // Setup Vulkan instance.
     VkApplicationInfo app_info = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
-    app_info.apiVersion = VK_API_VERSION_1_4;
+    app_info.apiVersion = VK_API_VERSION_1_2;
     app_info.pApplicationName = application_name;
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName = "Kohi Engine";
@@ -1421,7 +1421,7 @@ b8 vulkan_renderer_shader_initialize(shader* shader)
 {
     VkDevice logical_device = context.device.logical_device;
     VkAllocationCallbacks* vk_allocator = context.allocator;
-    vulkan_shader* s = shader->internal_data;
+    vulkan_shader* s = (vulkan_shader*)shader->internal_data;
 
     // Create a module for each stage.
     kzero_memory(s->stages, sizeof(vulkan_shader_stage) * VULKAN_SHADER_MAX_STAGES);
@@ -1793,7 +1793,7 @@ b8 vulkan_renderer_shader_apply_instance(shader* shader)
         {
             // TODO: Only update in the list if actually needing an update.
             texture* t = s->instance_states[shader->bound_instance_id].instance_textures[i];
-            vulkan_texture_data* internal_data = t->internal_data;
+            vulkan_texture_data* internal_data = (vulkan_texture_data*)t->internal_data;
 
             image_infos[i].imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             image_infos[i].imageView = internal_data->image.view;

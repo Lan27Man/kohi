@@ -86,22 +86,22 @@ b8 game_update(game* game_inst, f32 delta_time)
     // HACK: Temporary hack to move camera around.
     if (input_is_key_down('A') || input_is_key_down(KEY_LEFT))
     {
-        camera_yaw(state, -1.0f * delta_time);
+        camera_yaw(state, 1.0f * delta_time);
     }
 
     if (input_is_key_down('D') || input_is_key_down(KEY_RIGHT))
     {
-        camera_yaw(state, 1.0f * delta_time);
+        camera_yaw(state, -1.0f * delta_time);
     }
 
     if (input_is_key_down(KEY_UP))
     {
-        camera_pitch(state, -1.0f * delta_time);
+        camera_pitch(state, 1.0f * delta_time);
     }
 
     if (input_is_key_down(KEY_DOWN))
     {
-        camera_pitch(state, 1.0f * delta_time);
+        camera_pitch(state, -1.0f * delta_time);
     }
 
     f32 temp_move_speed = 50.0f;
@@ -122,13 +122,13 @@ b8 game_update(game* game_inst, f32 delta_time)
     if (input_is_key_down('Q'))
     {
         vec3 left = mat4_left(state->view);
-        velocity = vec3_sub(velocity, left);
+        velocity = vec3_add(velocity, left);
     }
 
     if (input_is_key_down('E'))
     {
         vec3 right = mat4_right(state->view);
-        velocity = vec3_sub(velocity, right);
+        velocity = vec3_add(velocity, right);
     }
 
     if (input_is_key_down(KEY_SPACE))
@@ -157,7 +157,21 @@ b8 game_update(game* game_inst, f32 delta_time)
     recalculate_view_matrix(state);
 
     // HACK: This should not be available outside the engine.
-    renderer_set_view(state->view);
+    renderer_set_view(state->view, state->camera_position);
+
+    // TODO: Temporary
+
+    if (input_is_key_up('P') && input_was_key_down('P'))
+    {
+        KDEBUG(
+            "Pos: [%.2f, %.2f, %.2f]",
+            state->camera_position.x,
+            state->camera_position.y,
+            state->camera_position.z
+        );
+    }
+
+    // TODO: End Temporary
 
     return true;
 }

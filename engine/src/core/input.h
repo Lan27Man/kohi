@@ -92,11 +92,11 @@ typedef enum keys
     */
     KEY_SPACE = 0x20,
 
-    KEYPRIOR = 0x21,
+    KEY_PRIOR = 0x21,
     KEY_NEXT = 0x22,
 
     /**
-     * The End key.
+     * @brief The End key.
     */
     KEY_END = 0x23,
 

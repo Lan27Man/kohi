@@ -7,7 +7,6 @@
 #include "core/input.h"
 #include "core/event.h"
 #include "containers/darray.h"
-#include "renderer/vulkan/vulkan_types.inl"
 
 #include <windows.h>
 #include <windowsx.h>   // Param input extraction.
@@ -16,6 +15,8 @@
 // For surface creation.
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
+
+#include "renderer/vulkan/vulkan_types.inl"
 
 typedef struct platform_state
 {

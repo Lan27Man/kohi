@@ -17,7 +17,9 @@
 */
 typedef union vec2_u
 {
-    // An array of x, y.
+    /**
+     * @brief An array of x, y.
+    */ 
     f32 elements[2];
 
     struct

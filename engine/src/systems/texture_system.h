@@ -21,6 +21,11 @@
 #define DEFAULT_TEXTURE_NAME "default"
 
 /**
+ * @brief The default specular texture name.
+*/
+#define DEFAULT_SPECULAR_TEXTURE_NAME "default_SPEC"
+
+/**
  * @brief The texture system configuration.
 */
 typedef struct texture_system_config
@@ -78,3 +83,9 @@ void texture_system_release(const char* name);
  * @returns A pointer to the default texture.
 */
 texture* texture_system_get_default_texture();
+
+/**
+ * @brief Gets a pointer to the default specular texture. No reference counting is
+ * done for default textures.
+*/
+texture* texture_system_get_default_specular_texture();
