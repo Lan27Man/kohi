@@ -5,7 +5,7 @@ ASSEMBLY := testbed
 EXTENSION :=
 COMPILER_FLAGS := -g -MD -Wvla -fdeclspec -fPIC
 INCLUDE_FLAGS := -Iengine/src
-LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -Wl, -rpath,.
+LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -Wl,-rpath,.
 DEFINES := -D_DEBUG -DKIMPORT
 
 # Make does not offer a recursive wildcard function, so here's one:

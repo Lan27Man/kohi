@@ -32,7 +32,6 @@ link: scaffold $(OBJ_FILES) # Link.
 .PHONY: compile
 compile: # Compile .c files.
 	@echo Compiling...
-	-include $(OBJ_FILES:.o=.d)
 
 .PHONY: clean
 clean: # Clean build directory.
