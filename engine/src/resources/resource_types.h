@@ -318,6 +318,11 @@ typedef struct material
      * @brief The shader identifier.
     */
     u32 shader_id;
+
+    /**
+     * @brief Synced to the renderer's current frame number when the material has been applied that frame.
+    */
+    u32 render_frame_number;
 } material;
 
 /**
@@ -351,6 +356,13 @@ typedef struct geometry
     */
     material* material;   
 } geometry;
+
+typedef struct mesh
+{
+    u16 geometry_count;
+    geometry** geometries;
+    mat4 model;
+} mesh;
 
 /**
  * @brief Shader stages available in the system.

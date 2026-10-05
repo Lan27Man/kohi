@@ -167,6 +167,8 @@ void renderer_on_resized(u16 width, u16 height)
 
 b8 renderer_draw_frame(render_packet* packet)
 {
+    state_ptr->backend.frame_number++;
+
     // If the begin frame returned successfully, mid-frame operations may continue.
     if (state_ptr->backend.begin_frame(&state_ptr->backend, packet->delta_time))
     {
@@ -207,11 +209,20 @@ b8 renderer_draw_frame(render_packet* packet)
                 m = material_system_get_default_material();
             }
 
-            // Apply the material.
-            if (!material_system_apply_instance(m))
+            // Apply the material if it hasn't already been this frame. This keeps the
+            // same material from being updated multiple times.
+            if (m->render_frame_number != state_ptr->backend.frame_number)
             {
-                KWARN("Failed to apply material '%s'. Skipping draw.", m->name);
-                continue;
+                if (!material_system_apply_instance(m))
+                {
+                    KWARN("Failed to apply material '%s'. Skipping draw.", m->name);
+                    continue;
+                }
+                else
+                {
+                    // Sync the frame number.
+                    m->render_frame_number = state_ptr->backend.frame_number;
+                }
             }
 
             // Apply the locals.
