@@ -636,3 +636,28 @@ geometry_config geometry_system_generate_cube_config(f32 width, f32 height, f32 
 
     return config;
 }
+
+b8 vertex_3d_equal(vertex_3d vert_0, vertex_3d vert_1)
+{
+    return vec3_compare(vert_0.position, vert_1.position, K_FLOAT_EPSILON) &&
+            vec3_compare(vert_0.normal, vert_1.normal, K_FLOAT_EPSILON) &&
+            vec2_compare(vert_0.texcoord, vert_1.texcoord, K_FLOAT_EPSILON) &&
+            vec4_compare(vert_0.colour, vert_1.colour, K_FLOAT_EPSILON) &&
+            vec4_compare(vert_0.tangent, vert_1.tangent, K_FLOAT_EPSILON);
+}
+
+void reassign_index(u32 index_count, u32* indices, u32 from, u32 to)
+{
+    for (u32 i = 0; i < index_count; ++i)
+    {
+        if (indices[i] == from)
+        {
+            indices[i] = to;
+        }
+        else if (indices[i] > from)
+        {
+            // Pull in all indices higher than 'from' by 1.
+            indices[i]--;
+        }
+    }
+}

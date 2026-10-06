@@ -268,7 +268,8 @@ KINLINE vec2 vec2_right()
 */
 KINLINE vec2 vec2_add(vec2 vector_0, vec2 vector_1)
 {
-    return (vec2){
+    return (vec2)
+    {
         vector_0.x + vector_1.x,
         vector_0.y + vector_1.y
     };
@@ -283,7 +284,8 @@ KINLINE vec2 vec2_add(vec2 vector_0, vec2 vector_1)
 */
 KINLINE vec2 vec2_sub(vec2 vector_0, vec2 vector_1)
 {
-    return (vec2){
+    return (vec2)
+    {
         vector_0.x - vector_1.x,
         vector_0.y - vector_1.y
     };
@@ -298,7 +300,8 @@ KINLINE vec2 vec2_sub(vec2 vector_0, vec2 vector_1)
 */
 KINLINE vec2 vec2_mul(vec2 vector_0, vec2 vector_1)
 {
-    return (vec2){
+    return (vec2)
+    {
         vector_0.x * vector_1.x,
         vector_0.y * vector_1.y
     };
@@ -313,7 +316,8 @@ KINLINE vec2 vec2_mul(vec2 vector_0, vec2 vector_1)
 */
 KINLINE vec2 vec2_div(vec2 vector_0, vec2 vector_1)
 {
-    return (vec2){
+    return (vec2)
+    {
         vector_0.x / vector_1.x,
         vector_0.y / vector_1.y
     };
@@ -376,7 +380,7 @@ KINLINE vec2 vec2_normalized(vec2 vector)
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
  * @returns true if within tolerance; otherwise false.
 */
-KINLINE b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
+KINLINE const b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {
@@ -400,7 +404,8 @@ KINLINE b8 vec2_compare(vec2 vector_0, vec2 vector_1, f32 tolerance)
 */
 KINLINE f32 vec2_distance(vec2 vector_0, vec2 vector_1)
 {
-    vec2 d = (vec2){
+    vec2 d = (vec2)
+    {
         vector_0.x - vector_1.x,
         vector_0.y - vector_1.y
     };
@@ -522,7 +527,8 @@ KINLINE vec3 vec3_backward()
 */
 KINLINE vec3 vec3_add(vec3 vector_0, vec3 vector_1)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector_0.x + vector_1.x,
         vector_0.y + vector_1.y,
         vector_0.z + vector_1.z
@@ -538,7 +544,8 @@ KINLINE vec3 vec3_add(vec3 vector_0, vec3 vector_1)
 */
 KINLINE vec3 vec3_sub(vec3 vector_0, vec3 vector_1)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector_0.x - vector_1.x,
         vector_0.y - vector_1.y,
         vector_0.z - vector_1.z
@@ -554,7 +561,8 @@ KINLINE vec3 vec3_sub(vec3 vector_0, vec3 vector_1)
 */
 KINLINE vec3 vec3_mul(vec3 vector_0, vec3 vector_1)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector_0.x * vector_1.x,
         vector_0.y * vector_1.y,
         vector_0.z * vector_1.z
@@ -570,7 +578,8 @@ KINLINE vec3 vec3_mul(vec3 vector_0, vec3 vector_1)
 */
 KINLINE vec3 vec3_mul_scalar(vec3 vector, f32 scalar)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector.x * scalar,
         vector.y * scalar,
         vector.z * scalar
@@ -586,7 +595,8 @@ KINLINE vec3 vec3_mul_scalar(vec3 vector, f32 scalar)
 */
 KINLINE vec3 vec3_div(vec3 vector_0, vec3 vector_1)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector_0.x / vector_1.x,
         vector_0.y / vector_1.y,
         vector_0.z / vector_1.z
@@ -670,7 +680,8 @@ KINLINE f32 vec3_dot(vec3 vector_0, vec3 vector_1)
 */
 KINLINE vec3 vec3_cross(vec3 vector_0, vec3 vector_1)
 {
-    return (vec3){
+    return (vec3)
+    {
         vector_0.y * vector_1.z - vector_0.z * vector_1.y,
         vector_0.z * vector_1.x - vector_0.x * vector_1.z,
         vector_0.x * vector_1.y - vector_0.y * vector_1.x
@@ -686,7 +697,7 @@ KINLINE vec3 vec3_cross(vec3 vector_0, vec3 vector_1)
  * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
  * @returns true if within tolerance; otherwise false.
 */
-KINLINE b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
+KINLINE const b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
 {
     if (kabs(vector_0.x - vector_1.x) > tolerance)
     {
@@ -715,7 +726,8 @@ KINLINE b8 vec3_compare(vec3 vector_0, vec3 vector_1, f32 tolerance)
 */
 KINLINE f32 vec3_distance(vec3 vector_0, vec3 vector_1)
 {
-    vec3 d = (vec3){
+    vec3 d = (vec3)
+    {
         vector_0.x - vector_1.x,
         vector_0.y - vector_1.y,
         vector_0.z - vector_1.z
@@ -952,6 +964,40 @@ KINLINE f32 vec4_dot_f32(
         a3 * b3;
 
     return p;
+}
+
+/**
+ * @brief Compares all elements of vector_0 and vector_1 and ensures the difference
+ * is less than tolerance.
+ * 
+ * @param vector_0 The first vector.
+ * @param vector_1 The second vector.
+ * @param tolerance The difference tolerance. Typically K_FLOAT_EPSILON or similar.
+ * @returns true if within tolerance; otherwise false.
+*/
+KINLINE const b8 vec4_compare(vec4 vector_0, vec4 vector_1, f32 tolerance)
+{
+    if (kabs(vector_0.x - vector_1.x) > tolerance)
+    {
+        return false;
+    }
+
+    if (kabs(vector_0.y - vector_1.y) > tolerance)
+    {
+        return false;
+    }
+
+    if (kabs(vector_0.z - vector_1.z) > tolerance)
+    {
+        return false;
+    }
+
+    if (kabs(vector_0.w - vector_1.w) > tolerance)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 // ------------------------------------------
@@ -1467,7 +1513,8 @@ KINLINE quat quat_normalize(quat q)
 {
     f32 normal = quat_normal(q);
 
-    return (quat){
+    return (quat)
+    {
         q.x / normal,
         q.y / normal,
         q.z / normal,
@@ -1484,7 +1531,8 @@ KINLINE quat quat_normalize(quat q)
 */
 KINLINE quat quat_conjugate(quat q)
 {
-    return (quat){
+    return (quat)
+    {
         -q.x,
         -q.y,
         -q.z,
@@ -1680,7 +1728,8 @@ KINLINE quat quat_slerp(quat q_0, quat q_1, f32 percentage)
     {
         // If the inputs are too close for comfort, linearly interpolate
         // and normalize the result.
-        out_quaternion = (quat){
+        out_quaternion = (quat)
+        {
             v0.x + ((v1.x - v0.x) * percentage),
             v0.y + ((v1.y - v0.y) * percentage),
             v0.z + ((v1.z - v0.z) * percentage),
@@ -1699,7 +1748,8 @@ KINLINE quat quat_slerp(quat q_0, quat q_1, f32 percentage)
     f32 s0 = kcos(theta) - dot * sin_theta / sin_theta_0;
     f32 s1 = sin_theta / sin_theta_0;
 
-    return (quat){
+    return (quat)
+    {
         (v0.x * s0) + (v1.x * s1),
         (v0.y * s0) + (v1.y * s1),
         (v0.z * s0) + (v1.z * s1),

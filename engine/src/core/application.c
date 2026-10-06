@@ -364,6 +364,36 @@ b8 application_create(game* game_inst)
     // Clean up the allocations for the geometry config.
     geometry_system_config_dispose(&g_config_3);
 
+    // Test mesh loaded from file.
+    mesh* car_mesh = &app_state->meshes[app_state->mesh_count];
+    resource car_mesh_resource = {};
+
+    if (!resource_system_load("falcon", RESOURCE_TYPE_MESH, &car_mesh_resource))
+    {
+        KERROR("Failed to load car test mesh!");
+    }
+    else
+    {
+        geometry_config* configs = (geometry_config*)car_mesh_resource.data;
+        car_mesh->geometry_count = car_mesh_resource.data_size;
+        car_mesh->geometries = kallocate(sizeof(geometry*) * car_mesh->geometry_count, MEMORY_TAG_ARRAY);
+
+        for (u32 i = 0; i < car_mesh->geometry_count; ++i)
+        {
+            geometry_config* c = &configs[i];
+
+            geometry_generate_tangents(c->vertex_count, c->vertices, c->index_count, c->indices);
+
+            car_mesh->geometries[i] = geometry_system_acquire_from_config(configs[i], true);
+        }
+
+        car_mesh->transform = transform_from_position((vec3){15.0f, 0.0f, 1.0f});
+
+        resource_system_unload(&car_mesh_resource);
+
+        app_state->mesh_count++;
+    }
+
     // Load up some test UI geometry.
     geometry_config ui_config;
     ui_config.vertex_size = sizeof(vertex_2d);

@@ -46,7 +46,7 @@ void main()
     // Copy the normal over.
     mat3 m3_model = mat3(u_push_constants.model);
 
-    out_dto.normal = m3_model * in_normal;
+    out_dto.normal = normalize(m3_model * in_normal);
     out_dto.tangent = vec4(normalize(m3_model * in_tangent.xyz), in_tangent.w);
     
     out_dto.ambient = global_ubo.ambient_colour;

@@ -53,9 +53,9 @@ typedef enum resource_type
     RESOURCE_TYPE_MATERIAL,
 
     /**
-     * @brief Static Mesh resource type.
+     * @brief Mesh resource type.
     */
-    RESOURCE_TYPE_STATIC_MESH,
+    RESOURCE_TYPE_MESH,
 
     /**
      * @brief Shader resource type (or more accurately shader config).

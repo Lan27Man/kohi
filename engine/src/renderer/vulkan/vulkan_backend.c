@@ -1729,7 +1729,7 @@ b8 vulkan_renderer_shader_apply_globals(shader* shader)
     return true;
 }
 
-b8 vulkan_renderer_shader_apply_instance(shader* shader)
+b8 vulkan_renderer_shader_apply_instance(shader* shader, b8 needs_update)
 {
     if (!shader->use_instances)
     {
