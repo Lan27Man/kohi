@@ -361,7 +361,7 @@ typedef struct mesh
 {
     u16 geometry_count;
     geometry** geometries;
-    mat4 model;
+    transform transform;
 } mesh;
 
 /**
