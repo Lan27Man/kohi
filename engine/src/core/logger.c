@@ -82,8 +82,8 @@ void log_output(log_level level, const char* message, ...)
     kzero_memory(out_message, sizeof(out_message));
 
     // Format original message.
-    // NOTE: Oddly enough, Microsoft's headers override the GCC/Clang va_list type with a "typedef char* va_list"
-    // in some cases, and as a result throws a strange error here. The workaround for now is to just use __builtin_va_list,
+    // NOTE: Oddly enough, Microsoft's headers override the GCC/Clang va_list type with a "typedef char* va_list" in some
+    // cases, and as a result throws a strange error here. The workaround for now is to just use __builtin_va_list,
     // which is the type GCC/Clang's va_start() expects.
     __builtin_va_list arg_ptr;
 

@@ -30,7 +30,7 @@ const char* vulkan_result_string(VkResult result, b8 get_extended)
         case VK_OPERATION_NOT_DEFERRED_KHR:
             return !get_extended ? "VK_OPERATION_NOT_DEFERRED_KHR" : "VK_OPERATION_NOT_DEFERRED_KHR A deferred operation was requested and no operations were deferred.";
         case VK_PIPELINE_COMPILE_REQUIRED_EXT:
-            return !get_extended ? "VK_PIPELINE_COMPILE_REQUIRED_EXT" : "VK_PIPELINE_COMPILE_REQUIRED_EXT A requested pipeline creation would have required compilation, but the application requested compilation not to be performed.";
+            return !get_extended ? "VK_PIPELINE_COMPILE_REQUIRED_EXT" : "VK_PIPELINE_COMPILE_REQUIRED_EXT A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
         case VK_PIPELINE_BINARY_MISSING_KHR:
             return !get_extended ? "VK_PIPELINE_BINARY_MISSING_KHR" : "VK_PIPELINE_MISSING_KHR The application attempted to create a pipeline binary by querying an internal cache, but the internal entry did not exist.";
         case VK_INCOMPATIBLE_SHADER_BINARY_EXT:

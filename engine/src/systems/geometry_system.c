@@ -17,14 +17,14 @@ typedef struct geometry_system_state
 {
     geometry_system_config config;
 
-    geometry default_3d_geometry;
+    geometry default_geometry;
     geometry default_2d_geometry;
 
     // Array of registered meshes.
     geometry_reference* registered_geometries;
 } geometry_system_state;
 
-static geometry_system_state* state_ptr;
+static geometry_system_state* state_ptr = 0;
 
 b8 create_default_geometries(geometry_system_state* state);
 
@@ -184,14 +184,14 @@ void geometry_system_release(geometry* geometry)
     KWARN("geometry_system_release() cannot release invalid geometry id. Nothing was done.");
 }
 
-geometry* geometry_system_get_default_3d()
+geometry* geometry_system_get_default()
 {
     if (state_ptr)
     {
-        return &state_ptr->default_3d_geometry;
+        return &state_ptr->default_geometry;
     }
 
-    KFATAL("geometry_system_get_default_3d() called before system was initialized! Returning nullptr.");
+    KFATAL("geometry_system_get_default() called before system was initialized! Returning nullptr.");
     return 0;
 }
 
@@ -256,45 +256,45 @@ void destroy_geometry(geometry_system_state* state, geometry* g)
 
 b8 create_default_geometries(geometry_system_state* state)
 {
-    vertex_3d verts3d[4];
+    vertex_3d verts[4];
 
-    kzero_memory(verts3d, sizeof(vertex_3d) * 4);
+    kzero_memory(verts, sizeof(vertex_3d) * 4);
 
     const f32 f = 10.0f;
 
-    verts3d[0].position.x = -0.5 * f;     // 0    3
-    verts3d[0].position.y = -0.5 * f;     //
-    verts3d[0].texcoord.x = 0.0f;         //
-    verts3d[0].texcoord.y = 0.0f;         // 2    1
+    verts[0].position.x = -0.5 * f;     // 0    3
+    verts[0].position.y = -0.5 * f;     //
+    verts[0].texcoord.x = 0.0f;         //
+    verts[0].texcoord.y = 0.0f;         // 2    1
 
-    verts3d[1].position.x = 0.5 * f;
-    verts3d[1].position.y = 0.5 * f;
-    verts3d[1].texcoord.x = 1.0f;
-    verts3d[1].texcoord.y = 1.0f;
+    verts[1].position.y = 0.5 * f;
+    verts[1].position.x = 0.5 * f;
+    verts[1].texcoord.x = 1.0f;
+    verts[1].texcoord.y = 1.0f;
 
-    verts3d[2].position.x = -0.5 * f;
-    verts3d[2].position.y = 0.5 * f;
-    verts3d[2].texcoord.x = 0.0f;
-    verts3d[2].texcoord.y = 1.0f;
+    verts[2].position.x = -0.5 * f;
+    verts[2].position.y = 0.5 * f;
+    verts[2].texcoord.x = 0.0f;
+    verts[2].texcoord.y = 1.0f;
 
-    verts3d[3].position.x = 0.5 * f;
-    verts3d[3].position.y = -0.5 * f;
-    verts3d[3].texcoord.x = 1.0f;
-    verts3d[3].texcoord.y = 0.0f;
+    verts[3].position.x = 0.5 * f;
+    verts[3].position.y = -0.5 * f;
+    verts[3].texcoord.x = 1.0f;
+    verts[3].texcoord.y = 0.0f;
 
-    u32 indices3d[6] = {0, 1, 2, 0, 3, 1};
+    u32 indices[6] = {0, 1, 2, 0, 3, 1};
 
     // Send the geometry off to the renderer to be uploaded to the GPU.
-    state->default_3d_geometry.internal_id = INVALID_ID;
+    state->default_geometry.internal_id = INVALID_ID;
 
-    if (!renderer_create_geometry(&state->default_3d_geometry, sizeof(vertex_3d), 4, verts3d, sizeof(u32), 6, indices3d))
+    if (!renderer_create_geometry(&state->default_geometry, sizeof(vertex_3d), 4, verts, sizeof(u32), 6, indices))
     {
-        KFATAL("Failed to create default 3d geometry! Application cannot continue.");
+        KFATAL("Failed to create default geometry! Application cannot continue.");
         return false;
     }
 
     // Acquire the default material.
-    state->default_3d_geometry.material = material_system_get_default_material();
+    state->default_geometry.material = material_system_get_default_material();
 
     // Create default 2d geometry.
     vertex_2d verts2d[4];
@@ -306,12 +306,12 @@ b8 create_default_geometries(geometry_system_state* state)
     verts2d[0].texcoord.x = 0.0f;       //
     verts2d[0].texcoord.y = 0.0f;       // 2    1
 
-    verts2d[1].position.x = 0.5 * f;
     verts2d[1].position.y = 0.5 * f;
+    verts2d[1].position.x = 0.5 * f;
     verts2d[1].texcoord.x = 1.0f;
     verts2d[1].texcoord.y = 1.0f;
 
-    verts2d[2].position.x = -0.5f * f;
+    verts2d[2].position.x = -0.5 * f;
     verts2d[2].position.y = 0.5 * f;
     verts2d[2].texcoord.x = 0.0f;
     verts2d[2].texcoord.y = 1.0f;

@@ -152,7 +152,7 @@ typedef struct shader
     /**
      * @brief Indicates if locals are used (typically for model matrices, etc.).
     */
-    b8 use_locals;
+    b8 use_local;
 
     /**
      * @brief The amount of bytes that are required for UBO alignment.
@@ -399,9 +399,10 @@ KAPI b8 shader_system_apply_global();
  * @brief Applies instance-scoped uniforms.
  * NOTE: Operates against the currently-used shader.
  * 
+ * @param needs_update Indicates if shader internals need to be updated or just to be bound.
  * @returns true on success; otherwise false.
 */
-KAPI b8 shader_system_apply_instance();
+KAPI b8 shader_system_apply_instance(b8 needs_update);
 
 /**
  * @brief Binds the instance with the given id for use. Must be done before setting

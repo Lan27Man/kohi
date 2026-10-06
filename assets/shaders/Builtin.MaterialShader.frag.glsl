@@ -33,7 +33,8 @@ struct point_light
 directional_light dir_light =
 {
     vec3(-0.57735, -0.57735, -0.57735),
-    vec4(0.6, 0.6, 0.6, 1.0)
+    //vec4(0.6, 0.6, 0.6, 1.0)
+    vec4(0.4, 0.4, 0.2, 1.0)
 };
 
 // TODO: Feed in from CPU.
@@ -79,7 +80,7 @@ layout(location = 1) in struct dto
 mat3 TBN;
 
 vec4 calculate_directional_light(directional_light light, vec3 normal, vec3 view_direction);
-vec4 calculate_point_light(point_light light, vec3 normal, vec3 frag_position, vec3 view_position);
+vec4 calculate_point_light(point_light light, vec3 normal, vec3 frag_position, vec3 view_direction);
 
 void main()
 {

@@ -27,7 +27,7 @@ typedef struct shader_system_state
 } shader_system_state;
 
 // A pointer to hold the internal system state.
-static shader_system_state* state_ptr;
+static shader_system_state* state_ptr = 0;
 
 b8 add_attribute(shader* shader, const shader_attribute_config* config);
 
@@ -154,7 +154,7 @@ b8 shader_system_create(const shader_config* config)
     out_shader->state = SHADER_STATE_NOT_CREATED;
     out_shader->name = string_duplicate(config->name);
     out_shader->use_instances = config->use_instances;
-    out_shader->use_locals = config->use_locals;
+    out_shader->use_local = config->use_local;
     out_shader->push_constant_range_count = 0;
 
     kzero_memory(out_shader->push_constant_ranges, sizeof(range) * 32);
@@ -422,9 +422,9 @@ b8 shader_system_apply_global()
     return renderer_shader_apply_globals(&state_ptr->shaders[state_ptr->current_shader_id]);
 }
 
-b8 shader_system_apply_instance()
+b8 shader_system_apply_instance(b8 needs_update)
 {
-    return renderer_shader_apply_instance(&state_ptr->shaders[state_ptr->current_shader_id]);
+    return renderer_shader_apply_instance(&state_ptr->shaders[state_ptr->current_shader_id], needs_update);
 }
 
 b8 shader_system_bind_instance(u32 instance_id)
@@ -617,7 +617,7 @@ b8 uniform_add(shader* shader, const char* uniform_name, u32 size, shader_unifor
     }
     else
     {
-        if (entry.scope == SHADER_SCOPE_LOCAL && !shader->use_locals)
+        if (entry.scope == SHADER_SCOPE_LOCAL && !shader->use_local)
         {
             KERROR("Cannot add a locally-scoped uniform for a shader that does not support locals!");
             return false;

@@ -7,7 +7,6 @@
 #include "core/event.h"
 #include "core/input.h"
 #include "containers/darray.h"
-#include "renderer/vulkan/vulkan_types.inl"
 
 #include <xcb/xcb.h>
 #include <X11/keysym.h>
@@ -30,6 +29,7 @@
 #define VK_USE_PLATFORM_XCB_KHR
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_xcb.h>
+#include "renderer/vulkan/vulkan_types.inl"
 
 typedef struct platform_state
 {
@@ -410,6 +410,7 @@ b8 platform_create_vulkan_surface(vulkan_context* context)
     return true;
 }
 
+// Key translation.
 keys translate_keycode(u32 x_keycode)
 {
     switch (x_keycode)

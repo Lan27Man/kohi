@@ -9,6 +9,7 @@
 #include "resources/loaders/image_loader.h"
 #include "resources/loaders/material_loader.h"
 #include "resources/loaders/shader_loader.h"
+#include "resources/loaders/mesh_loader.h"
 
 typedef struct resource_system_state
 {
@@ -16,7 +17,7 @@ typedef struct resource_system_state
     resource_loader* registered_loaders;
 } resource_system_state;
 
-static resource_system_state* state_ptr;
+static resource_system_state* state_ptr = 0;
 
 b8 load(const char* name, resource_loader* loader, resource* out_resource);
 
@@ -56,6 +57,7 @@ b8 resource_system_initialize(u64* memory_requirement, void* state, resource_sys
     resource_system_register_loader(image_resource_loader_create());
     resource_system_register_loader(material_resource_loader_create());
     resource_system_register_loader(shader_resource_loader_create());
+    resource_system_register_loader(mesh_resource_loader_create());
 
     KINFO("Resource system initialized with base path '%s'!", config.asset_base_path);
 

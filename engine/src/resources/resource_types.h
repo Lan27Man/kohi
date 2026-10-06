@@ -63,6 +63,11 @@ typedef enum resource_type
     RESOURCE_TYPE_SHADER,
 
     /**
+     * @brief Mesh resource type (collection of geometry configs).
+    */
+    RESOURCE_TYPE_MESH,
+
+    /**
      * @brief Custom resource type. Used by loaders outside the core engine.
     */
     RESOURCE_TYPE_CUSTOM
@@ -517,7 +522,7 @@ typedef struct shader_config
     /**
      * @brief Indicates if the shader uses local-level uniforms.
     */
-    b8 use_locals;
+    b8 use_local;
 
     /**
      * @brief The count of attributes.

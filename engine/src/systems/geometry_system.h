@@ -67,6 +67,10 @@ typedef struct geometry_config
     */
     void* indices;
 
+    vec3 center;
+    vec3 min_extents;
+    vec3 max_extents;
+
     /**
      * @brief The name of the geometry.
     */
@@ -133,7 +137,7 @@ void geometry_system_release(geometry* geometry);
  * 
  * @returns A pointer to the default geometry.
 */
-geometry* geometry_system_get_default_3d();
+geometry* geometry_system_get_default();
 
 /**
  * @brief Obtains a pointer to the default geometry.

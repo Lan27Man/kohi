@@ -28,6 +28,9 @@ b8 binary_loader_load(struct resource_loader* self, const char* name, resource* 
         return false;
     }
 
+    // TODO: Should be using an allocator here.
+    out_resource->full_path = string_duplicate(full_file_path);
+
     u64 file_size = 0;
 
     if (!filesystem_size(&f, &file_size))
@@ -36,9 +39,6 @@ b8 binary_loader_load(struct resource_loader* self, const char* name, resource* 
         filesystem_close(&f);
         return false;
     }
-
-    // TODO: Should be using an allocator here.
-    out_resource->full_path = string_duplicate(full_file_path);
 
     // TODO: Should be using an allocator here.
     u8* resource_data = kallocate(sizeof(u8) * file_size, MEMORY_TAG_ARRAY);

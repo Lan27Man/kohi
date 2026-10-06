@@ -6,6 +6,7 @@
 #include "core/kmemory.h"
 
 void create(vulkan_context* context, u32 width, u32 height, vulkan_swapchain* swapchain);
+
 void destroy(vulkan_context* context, vulkan_swapchain* swapchain);
 
 void vulkan_swapchain_create(vulkan_context* context, u32 width, u32 height, vulkan_swapchain* out_swapchain)
