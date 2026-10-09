@@ -407,33 +407,36 @@ b8 material_system_apply_global(u32 shader_id, const mat4* projection, const mat
     return true;
 }
 
-b8 material_system_apply_instance(material* material)
+b8 material_system_apply_instance(material* material, b8 needs_update)
 {
     // Apply instance-level uniforms.
     MATERIAL_APPLY_OR_FAIL(shader_system_bind_instance(material->internal_id));
 
-    if (material->shader_id == state_ptr->material_shader_id)
+    if (needs_update)
     {
-        // Material shader.
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.diffuse_colour, &material->diffuse_colour));
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.diffuse_texture, material->diffuse_map.texture));
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.specular_texture, material->specular_map.texture));
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.normal_texture, material->normal_map.texture));
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.shininess, &material->shininess));
-    }
-    else if (material->shader_id == state_ptr->ui_shader_id)
-    {
-        // UI shader.
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->ui_locations.diffuse_colour, &material->diffuse_colour));
-        MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->ui_locations.diffuse_texture, material->diffuse_map.texture));
-    }
-    else
-    {
-        KERROR("material_system_apply_instance(): Unrecognized shader id '%d' on shader '%s'!", material->shader_id, material->name);
-        return false;
+        if (material->shader_id == state_ptr->material_shader_id)
+        {
+            // Material shader.
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.diffuse_colour, &material->diffuse_colour));
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.diffuse_texture, material->diffuse_map.texture));
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.specular_texture, material->specular_map.texture));
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.normal_texture, material->normal_map.texture));
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->material_locations.shininess, &material->shininess));
+        }
+        else if (material->shader_id == state_ptr->ui_shader_id)
+        {
+            // UI shader.
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->ui_locations.diffuse_colour, &material->diffuse_colour));
+            MATERIAL_APPLY_OR_FAIL(shader_system_uniform_set_by_index(state_ptr->ui_locations.diffuse_texture, material->diffuse_map.texture));
+        }
+        else
+        {
+            KERROR("material_system_apply_instance(): Unrecognized shader id '%d' on shader '%s'!", material->shader_id, material->name);
+            return false;
+        }
     }
 
-    MATERIAL_APPLY_OR_FAIL(shader_system_apply_instance());
+    MATERIAL_APPLY_OR_FAIL(shader_system_apply_instance(needs_update));
     return true;
 }
 

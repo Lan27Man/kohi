@@ -11,7 +11,7 @@ u64 hash_name(const char* name, u32 element_count)
     unsigned const char* us;
     u64 hash = 0;
 
-    for (us = (unsigned const char*)name; *us; us++)
+    for (us = (unsigned const char*)name; *us; ++us)
     {
         hash = hash * multiplier + *us;
     }

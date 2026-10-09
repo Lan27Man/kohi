@@ -67,6 +67,10 @@ typedef struct geometry_config
     */
     void* indices;
 
+    vec3 center;
+    vec3 min_extents;
+    vec3 max_extents;
+
     /**
      * @brief The name of the geometry.
     */
