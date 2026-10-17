@@ -48,7 +48,7 @@ void vulkan_renderpass_create(
     color_attachment.initialLayout = has_prev_pass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED;
 
     // If going to another pass, use VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL. Otherwise VK_IMAGE_LAYOUT_PRESENT_SRC_KHR.
-    color_attachment.finalLayout = has_next_pass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    color_attachment.finalLayout = has_next_pass ? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;  // Transitioned to after the render pass.
 
     color_attachment.flags = 0;
 
@@ -63,11 +63,11 @@ void vulkan_renderpass_create(
     subpass.colorAttachmentCount = 1;
     subpass.pColorAttachments = &color_attachment_reference;
 
+    // Depth attachment, if there is one.
     b8 do_clear_depth = (out_renderpass->clear_flags & RENDERPASS_CLEAR_DEPTH_BUFFER_FLAG) != 0;
 
     if (do_clear_depth)
     {
-        // Depth attachment, if there is one.
         VkAttachmentDescription depth_attachment = {};
         depth_attachment.format = context->device.depth_format;
         depth_attachment.samples = VK_SAMPLE_COUNT_1_BIT;

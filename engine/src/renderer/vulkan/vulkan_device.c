@@ -131,8 +131,8 @@ b8 vulkan_device_create(vulkan_context* context)
 
     u32 extension_count = portability_required ? 2 : 1;
     const char** extension_names = portability_required
-            ? (const char* [2]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME, "VK_KHR_portability_subset" }
-            : (const char* [1]) { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+            ? (const char* [2]){ VK_KHR_SWAPCHAIN_EXTENSION_NAME, "VK_KHR_portability_subset" }
+            : (const char* [1]){ VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 
     VkDeviceCreateInfo device_create_info = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
     device_create_info.queueCreateInfoCount = index_count;
@@ -402,7 +402,8 @@ b8 select_physical_device(vulkan_context* context)
             }
         }
 
-        // TODO: These requirements should probably be driven by engine configuration.
+        // TODO: These requirements should probably be driven by engine
+        // configuration.
         vulkan_physical_device_requirements requirements = {};
         requirements.graphics = true;
         requirements.present = true;

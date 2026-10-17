@@ -310,7 +310,6 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
                 b8 pressed = (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN);
                 keys key = (u16)w_param;
 
-                // Alt key.
                 // Check for extended scan code.
                 b8 is_extended = (HIWORD(l_param) & KF_EXTENDED) == KF_EXTENDED;
 
@@ -347,7 +346,7 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
                 input_process_mouse_move(x_position, y_position);
             }
             break;
-        case WM_MOUSEHWHEEL:
+        case WM_MOUSEWHEEL:
             {
                 i32 z_delta = GET_WHEEL_DELTA_WPARAM(w_param);
 
@@ -368,7 +367,7 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
         case WM_MBUTTONUP:
         case WM_RBUTTONUP:
             {
-                b8 pressed = msg == WM_LBUTTONDOWN || msg == WM_MBUTTONDOWN || msg == WM_RBUTTONDOWN;
+                b8 pressed = msg == WM_LBUTTONDOWN || msg == WM_RBUTTONDOWN || msg == WM_MBUTTONDOWN;
                 buttons mouse_button = BUTTON_MAX_BUTTONS;
 
                 switch (msg)

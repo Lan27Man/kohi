@@ -42,7 +42,7 @@ b8 shader_loader_load(struct resource_loader* self, const char* name, resource* 
     resource_data->stage_count = 0;
     resource_data->stages = darray_create(shader_stage);
     resource_data->use_instances = false;
-    resource_data->use_locals = false;
+    resource_data->use_local = false;
     resource_data->stage_count = 0;
     resource_data->stage_names = darray_create(char*);
     resource_data->stage_filenames = darray_create(char*);
@@ -175,7 +175,7 @@ b8 shader_loader_load(struct resource_loader* self, const char* name, resource* 
         }
         else if (strings_equali(trimmed_var_name, "use_local"))
         {
-            string_to_bool(trimmed_value, &resource_data->use_locals);
+            string_to_bool(trimmed_value, &resource_data->use_local);
         }
         else if (strings_equali(trimmed_var_name, "attribute"))
         {
