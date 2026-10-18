@@ -549,6 +549,7 @@ void string_directory_from_path(char* dest, const char* path)
         if (c == '/' || c == '\\')
         {
             strncpy(dest, path, i + 1);
+            dest[i + 1] = '\0';
             return;
         }
     }
