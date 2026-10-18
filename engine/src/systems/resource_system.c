@@ -87,7 +87,7 @@ b8 resource_system_register_loader(resource_loader loader)
             {
                 if (l->type == loader.type)
                 {
-                    KERROR("resource_system_register_loader() - Loader of type %d already exists and will not be registered!", loader.type);
+                    KERROR("resource_system_register_loader() - Loader of type %x already exists and will not be registered!", loader.type);
                     return false;
                 }
                 else if (loader.custom_type && string_length(loader.custom_type) > 0 && strings_equali(l->custom_type, loader.custom_type))
@@ -134,7 +134,7 @@ b8 resource_system_load(const char* name, resource_type type, resource* out_reso
 
     out_resource->loader_id = INVALID_ID;
     
-    KERROR("resource_system_load() - No loader for type %d was found!", type);
+    KERROR("resource_system_load() - No loader for type %x was found!", type);
     return false;
 }
 

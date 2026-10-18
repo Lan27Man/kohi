@@ -201,9 +201,9 @@ typedef struct shader
     u64 push_constant_stride;
 
     /**
-     * @brief An array of global texture pointers. Darray.
+     * @brief An array of global texture map pointers. Darray.
     */
-    texture** global_textures;
+    texture_map** global_texture_maps;
 
     /**
      * @brief The number of instance textures.

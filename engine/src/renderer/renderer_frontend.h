@@ -181,10 +181,11 @@ b8 renderer_shader_apply_instance(struct shader* shader, b8 needs_update);
  * @brief Acquires internal instance-level resources and provides an instance id.
  * 
  * @param shader A pointer to the shader to acquire resources from.
+ * @param maps An array of texture map pointers. Must be one per texture in the instance.
  * @param out_instance_id A pointer to hold the new instance identifier.
  * @returns true on success; otherwise false.
 */
-b8 renderer_shader_acquire_instance_resources(struct shader* shader, u32* out_instance_id);
+b8 renderer_shader_acquire_instance_resources(struct shader* shader, texture_map** maps, u32* out_instance_id);
 
 /**
  * @brief Releases internal instance-level resources for the given instance id.
@@ -204,3 +205,18 @@ b8 renderer_shader_release_instance_resources(struct shader* shader, u32 instanc
  * @returns true on success; otherwise false.
 */
 b8 renderer_set_uniform(struct shader* shader, struct shader_uniform* uniform, const void* value);
+
+/**
+ * @brief Acquires internal resources for the given texture map.
+ * 
+ * @param map A pointer to the texture map to obtain resources for.
+ * @returns true on success; otherwise false.
+*/
+b8 renderer_texture_map_acquire_resources(struct texture_map* map);
+
+/**
+ * @brief Releases internal resources for the given texture map.
+ * 
+ * @param map A pointer to the texture map to release resources from.
+*/
+void renderer_texture_map_release_resources(struct texture_map* map);

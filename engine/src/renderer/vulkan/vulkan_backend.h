@@ -203,10 +203,11 @@ b8 vulkan_renderer_shader_apply_instance(struct shader* shader, b8 needs_update)
  * @brief Acquires internal instance-level resources and provides an instance id.
  * 
  * @param shader A pointer to the shader to acquire resources from.
+ * @param texture_maps A pointer to the texture map to acquire resources from.
  * @param out_instance_id A pointer to hold the new instance identifier.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_shader_acquire_instance_resources(struct shader* shader, u32* out_instance_id);
+b8 vulkan_renderer_shader_acquire_instance_resources(struct shader* shader, texture_map** texture_maps, u32* out_instance_id);
 
 /**
  * @brief Releases internal instance-level resources for the given instance id.
@@ -226,3 +227,18 @@ b8 vulkan_renderer_shader_release_instance_resources(struct shader* shader, u32 
  * @returns true on success; otherwise false.
 */
 b8 vulkan_renderer_set_uniform(struct shader* shader, struct shader_uniform* uniform, const void* value);
+
+/**
+ * @brief Acquires resources using the provided texture map.
+ * 
+ * @param map A pointer to the texture map to acquire resources from.
+ * @returns true on success; otherwise false.
+*/
+b8 vulkan_renderer_texture_map_acquire_resources(texture_map* map);
+
+/**
+ * @brief Releases resources using the provided texture map.
+ * 
+ * @param map The texture map whose resources are to be released.
+*/
+void vulkan_renderer_texture_map_release_resources(texture_map* map);
