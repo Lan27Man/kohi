@@ -131,6 +131,29 @@ typedef struct image_resource_data
     u8* pixels;
 } image_resource_data;
 
+typedef enum texture_flag
+{
+    /**
+     * @brief Indicates if the texture has transparency.
+    */
+    TEXTURE_FLAG_HAS_TRANSPARENCY = 0x1,
+
+    /**
+     * @brief Indicates if the texture can be written (rendered) to.
+    */
+    TEXTURE_FLAG_IS_WRITEABLE = 0x2,
+
+    /**
+     * @brief Indicates if the texture was created via wrapping vs traditional creation.
+    */
+    TEXTURE_FLAG_IS_WRAPPED = 0x4
+} texture_flag;
+
+/**
+ * @brief Holds bit flags for textures.
+*/
+typedef u8 texture_flag_bits;
+
 /**
  * @brief Represents a texture.
 */
@@ -157,14 +180,9 @@ typedef struct texture
     u8 channel_count;
 
     /**
-     * @brief Indicates if the texture has transparency.
+     * @brief Holds various flags for this texture.
     */
-    b8 has_transparency;
-
-    /**
-     * @brief Indicates if the texture can be written (rendered) to.
-    */
-    b8 is_writeable;
+    texture_flag_bits flags;
 
     /**
      * @brief The texture generation. Incremented every time the data is reloaded.

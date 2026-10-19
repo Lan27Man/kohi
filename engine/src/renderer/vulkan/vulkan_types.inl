@@ -410,14 +410,9 @@ typedef struct vulkan_swapchain
     u32 image_count;
 
     /**
-     * @brief An array of swapchain images.
+     * @brief An array of pointers to render targets, which contain swapchain images.
     */
-    VkImage* images;
-
-    /**
-     * @brief An array of swapchain image views for the swapchain images.
-    */
-    VkImageView* views;
+    texture** render_textures;
 
     /**
      * @brief The depth image attachment.
@@ -928,14 +923,3 @@ typedef struct vulkan_context
     */
     i32 (*find_memory_index)(u32 type_filter, u32 property_flags);
 } vulkan_context;
-
-/**
- * @brief Represents Vulkan-specific texture data.
-*/
-typedef struct vulkan_texture_data
-{
-    /**
-     * @brief The internal Vulkan image.
-    */
-    vulkan_image image;
-} vulkan_texture_data;
