@@ -305,11 +305,11 @@ material* material_system_acquire_from_config(material_config config)
             // Also use the handle as the material id.
             m->id = ref.handle;
 
-            KTRACE("Material '%s' does not yet exist. Created, and ref_count is now %i.", config.name, ref.reference_count);
+            KTRACE("Material '%s' does not yet exist. Created, and reference_count is now %i.", config.name, ref.reference_count);
         }
         else
         {
-            KTRACE("Material '%s' already exists, ref_count increased to %i.", config.name, ref.reference_count);
+            KTRACE("Material '%s' already exists, reference_count increased to %i.", config.name, ref.reference_count);
         }
 
         // Update the entry.

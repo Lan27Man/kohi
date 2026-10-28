@@ -25,10 +25,12 @@
  * 
  * @param expr The expression whose result should be checked.
 */
-#define VK_CHECK(expr)               \
-    {                                \
-        KASSERT(expr == VK_SUCCESS); \
-    }
+#define VK_CHECK(expr)           \
+{                                \
+    KASSERT(expr == VK_SUCCESS); \
+}
+
+#define VULKAN_MAX_REGISTERED_RENDERPASSES 31
 
 /** 
  * @brief Max number of material instances 
@@ -261,6 +263,11 @@ typedef struct vulkan_device
      * @brief The chosen supported depth format.
     */
     VkFormat depth_format;
+
+    /**
+     * @brief The chosen depth format's number of channels.
+    */
+    u8 depth_channel_count;
 } vulkan_device;
 
 /**
@@ -343,16 +350,6 @@ typedef struct vulkan_renderpass
     VkRenderPass handle;
 
     /**
-     * @brief The current render area of the renderpass.
-    */
-    vec4 render_area;
-
-    /**
-     * @brief The clear colour used for this renderpass.
-    */
-    vec4 clear_colour;
-
-    /**
      * @brief The depth clear value.
     */
     f32 depth;
@@ -361,11 +358,6 @@ typedef struct vulkan_renderpass
      * @brief The stencil clear value.
     */
     u32 stencil;
-
-    /**
-     * @brief The clear flags for this renderpass.
-    */
-    u8 clear_flags;
     
     /**
      * @brief Indicates if there is a previous renderpass.
@@ -415,14 +407,15 @@ typedef struct vulkan_swapchain
     texture** render_textures;
 
     /**
-     * @brief The depth image attachment.
+     * @brief The depth texture.
     */
-    vulkan_image depth_attachment;
+    texture* depth_texture;
 
     /**
-     * @brief Framebuffers used for on-screen rendering, one per frame.
+     * @brief Render targets used for on-screen rendering, one per frame.
+     * The images contained in these are created and owned by the swapchain.
     */
-    VkFramebuffer framebuffers[3];
+    render_target render_targets[3];
 } vulkan_swapchain;
 
 /**
@@ -835,14 +828,19 @@ typedef struct vulkan_context
     vulkan_swapchain swapchain;
 
     /**
-     * @brief The main world renderpass.
+     * @brief A block of memory to store renderpass information.
     */
-    vulkan_renderpass main_renderpass;
+    void* renderpass_table_block;
 
     /**
-     * @brief The UI renderpass.
+     * @brief The renderpass hashtable for renderpass name lookups.
     */
-    vulkan_renderpass ui_renderpass;
+    hashtable renderpass_table;
+
+    /**
+     * @brief Registered renderpasses.
+    */
+    renderpass registered_passes[VULKAN_MAX_REGISTERED_RENDERPASSES];
 
     /**
      * @brief The object vertex buffer, used to hold geometry vertices.
@@ -909,10 +907,10 @@ typedef struct vulkan_context
     vulkan_geometry_data geometries[VULKAN_MAX_GEOMETRY_COUNT];
 
     /**
-     * @brief Framebuffers used for world rendering.
+     * @brief Render targets used for world rendering.
      * @note One per frame.
     */
-    VkFramebuffer world_framebuffers[3];
+    render_target world_render_targets[3];
 
     /**
      * @brief A function pointer to find a memory index of the given type and with the given properties.
@@ -922,4 +920,10 @@ typedef struct vulkan_context
      * @returns The index of the found memory type. Returns -1 if not found.
     */
     i32 (*find_memory_index)(u32 type_filter, u32 property_flags);
+
+    /**
+     * @brief A pointer to a function to be called when the backend requires
+     * rendertargets to be refreshed/regenerated.
+    */
+    void (*on_rendertarget_refresh_required)();
 } vulkan_context;

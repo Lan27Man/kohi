@@ -557,7 +557,7 @@ b8 process_texture_reference(const char* name, i8 reference_diff, b8 auto_releas
                     else
                     {
                         // Still count this as a success, but warn about it.
-                        KWARN("Tried to release a texture where auto_release = false, but references was already 0.");
+                        KWARN("Tried to release a texture where auto_release = false, but reference_count was already 0.");
                         return true;
                     }
                 }
@@ -591,7 +591,7 @@ b8 process_texture_reference(const char* name, i8 reference_diff, b8 auto_releas
                 }
                 else
                 {
-                    KTRACE("Released texture '%s', reference_count = '%i', auto_release = %s.", name_copy, ref.reference_count, ref.auto_release);
+                    KTRACE("Released texture '%s', now has a reference_count of '%i', (auto_release = %s).", name_copy, ref.reference_count, ref.auto_release ? "true" : "false");
                 }
             }
             else
@@ -640,7 +640,7 @@ b8 process_texture_reference(const char* name, i8 reference_diff, b8 auto_releas
                             t->id = ref.handle;
                         }
 
-                        KTRACE("Texture '%s' does not exist yet. Created, and reference_count is not %i.", name, ref.reference_count);
+                        KTRACE("Texture '%s' does not exist yet. Created, and reference_count is now %i.", name, ref.reference_count);
                     }
                 }
                 else

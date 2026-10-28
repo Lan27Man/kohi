@@ -22,10 +22,11 @@ struct shader_uniform;
  * @brief Initializes the Vulkan backend.
  * 
  * @param backend A pointer to the generic backend interface.
- * @param application_name The name of the application.
+ * @param config A pointer to the configuration to be used when initializing the backend.
+ * @param out_window_render_target_count A pointer to hold how many render targets are needed for renderpasses targeting the window.
  * @returns true if initialized successfully; otherwise false.
 */
-b8 vulkan_renderer_initialize(renderer_backend* backend, const char* application_name);
+b8 vulkan_renderer_initialize(renderer_backend* backend, const renderer_backend_config* config, u8* out_window_render_target_count);
 
 /**
  * @brief Shuts the Vulkan renderer backend down.
@@ -70,19 +71,28 @@ b8 vulkan_renderer_end_frame(renderer_backend* backend, f32 delta_time);
  * @brief Begins a renderpass with the given id.
  * 
  * @param backend A pointer to the generic backend interface.
- * @param renderpass_id The identifier of the renderpass to begin.
+ * @param pass A pointer to the renderpass to begin.
+ * @param target A pointer to the render target to be used.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_begin_renderpass(struct renderer_backend* backend, u8 renderpass_id);
+b8 vulkan_renderer_begin_renderpass(struct renderer_backend* backend, renderpass* pass, render_target* target);
 
 /**
  * @brief Ends a renderpass with the given id.
  * 
  * @param backend A pointer to the generic backend interface.
- * @param renderpass_id The identifier of the renderpass to end.
+ * @param pass A pointer to the renderpass to end.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_end_renderpass(struct renderer_backend* backend, u8 renderpass_id);
+b8 vulkan_renderer_end_renderpass(struct renderer_backend* backend, renderpass* pass);
+
+/**
+ * @brief Obtains a pointer to a renderpass using the provided name.
+ * 
+ * @param name The renderpass name.
+ * @returns A pointer to a renderpass, if found; otherwise 0.
+*/
+renderpass* vulkan_renderer_renderpass_get(const char* name);
 
 /**
  * @brief Draws the given geometry. Should only be called inside a renderpass, within a frame.
@@ -163,13 +173,13 @@ void vulkan_renderer_destroy_geometry(geometry* geometry);
  * @brief Creates internal shader resources using the provided parameters.
  * 
  * @param shader A pointer to the shader.
- * @param renderpass_id The identifier of the renderpass to be associated with the shader.
+ * @param pass A pointer to the renderpass to be associated with the shader.
  * @param stage_count The total number of stages.
  * @param stage_filenames An array of shader stage filenames to be loaded. Should align with stages array.
  * @param stages An array of shader_stages indicating what render stages (vertex, fragment, etc.) are used in this shader.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_shader_create(struct shader* shader, u8 renderpass_id, u8 stage_count, const char** stage_filenames, shader_stage* stages);
+b8 vulkan_renderer_shader_create(struct shader* shader, renderpass* pass, u8 stage_count, const char** stage_filenames, shader_stage* stages);
 
 /**
  * @brief Destroys the given shader and releases any resources held by it.
@@ -273,3 +283,63 @@ b8 vulkan_renderer_texture_map_acquire_resources(texture_map* map);
  * @param map The texture map whose resources are to be released.
 */
 void vulkan_renderer_texture_map_release_resources(texture_map* map);
+
+/**
+ * @brief Creates a new renderpass.
+ * 
+ * @param out_renderpass A pointer to hold the newly-created renderpass.
+ * @param depth The depth clear amount.
+ * @param stencil The stencil clear value.
+ * @param has_prev_pass Indicates if there is a previous renderpass.
+ * @param has_next_pass Indicates if there is a next renderpass.
+*/
+void vulkan_renderer_renderpass_create(renderpass* out_renderpass, f32 depth, u32 stencil, b8 has_prev_pass, b8 has_next_pass);
+
+/**
+ * @brief Destroys the given renderpass.
+ * 
+ * @param pass A pointer to the renderpass to be destroyed.
+*/
+void vulkan_renderer_renderpass_destroy(renderpass* pass);
+
+/**
+ * @brief Creates a new render target using the provided data.
+ * 
+ * @param attachment_count The number of attachments (texture pointers).
+ * @param attachments An array of attachments (texture pointers).
+ * @param pass A pointer to the renderpass the render target is associated with.
+ * @param width The width of the render target in pixels.
+ * @param height The height of the render target in pixels.
+ * @param out_target A pointer to hold the newly created render target.
+*/
+void vulkan_renderer_render_target_create(u8 attachment_count, texture** attachments, renderpass* pass, u32 width, u32 height, render_target* out_target);
+
+/**
+ * @brief Destroys the provided render target.
+ * 
+ * @param target A pointer to the render target to be destroyed.
+ * @param free_internal_memory Indicates if internal memory should be freed.
+*/
+void vulkan_renderer_render_target_destroy(render_target* target, b8 free_internal_memory);
+
+/**
+ * @brief Attempts to get the window render target at the given index.
+ * 
+ * @param index The index of the attachment to get. Must be within the range of window render target count.
+ * @returns A pointer to a texture attachment if successful; otherwise 0.
+*/
+texture* vulkan_renderer_window_attachment_get(u8 index);
+
+/**
+ * @brief Returns a pointer to the main depth texture target.
+ * 
+ * @returns A pointer to the main depth texture target.
+*/
+texture* vulkan_renderer_depth_attachment_get();
+
+/**
+ * @brief Returns the current window attachment index.
+ * 
+ * @returns The current window attachment index.
+*/
+u8 vulkan_renderer_window_attachment_index_get();
