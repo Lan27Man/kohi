@@ -99,7 +99,7 @@ void resource_system_shutdown(void* state);
  * @param loader The loader to be registered.
  * @returns true on success; otherwise false.
 */
-KAPI b8 resource_system_register_loader(resource_loader loader);
+b8 resource_system_register_loader(resource_loader loader);
 
 /**
  * @brief Loads a resource of the given name.
@@ -109,7 +109,7 @@ KAPI b8 resource_system_register_loader(resource_loader loader);
  * @param out_resource A pointer to hold the newly-loaded resource.
  * @returns true on success; otherwise false.
 */
-KAPI b8 resource_system_load(const char* name, resource_type type, resource* out_resource);
+b8 resource_system_load(const char* name, resource_type type, resource* out_resource);
 
 /**
  * @brief Loads a resource of the given name and of a custom type.
@@ -119,18 +119,18 @@ KAPI b8 resource_system_load(const char* name, resource_type type, resource* out
  * @param out_resource A pointer to hold the newly-loaded resource.
  * @returns true on success; otherwise false.
 */
-KAPI b8 resource_system_load_custom(const char* name, const char* custom_type, resource* out_resource);
+b8 resource_system_load_custom(const char* name, const char* custom_type, resource* out_resource);
 
 /**
  * @brief Unloads the given resource.
  * 
  * @param resource A pointer to the resource to be unloaded.
 */
-KAPI void resource_system_unload(resource* resource);
+void resource_system_unload(resource* resource);
 
 /**
  * @brief Gets the base path of the resource system.
  * 
  * @returns The base path of the resource system.
 */
-KAPI const char* resource_system_get_base_path();
+const char* resource_system_get_base_path();
