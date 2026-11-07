@@ -12,38 +12,38 @@ static b8 rand_seeded = false;
  * entire <math.h> everywhere.
 */
 
- f32 ksin(f32 x)
- {
+f32 ksin(f32 x)
+{
     return sinf(x);
- }
+}
 
- f32 kcos(f32 x)
- {
+f32 kcos(f32 x)
+{
     return cosf(x);
- }
+}
 
- f32 ktan(f32 x)
- {
+f32 ktan(f32 x)
+{
     return tanf(x);
- }
+}
 
- f32 kacos(f32 x)
- {
+f32 kacos(f32 x)
+{
     return acosf(x);
- }
+}
 
- f32 ksqrt(f32 x)
- {
+f32 ksqrt(f32 x)
+{
     return sqrtf(x);
- }
+}
 
- f32 kabs(f32 x)
- {
+f32 kabs(f32 x)
+{
     return fabsf(x);
- }
+}
 
- i32 krandom()
- {
+i32 krandom()
+{
     if (!rand_seeded)
     {
         srand((u32)platform_get_absolute_time());
@@ -52,10 +52,10 @@ static b8 rand_seeded = false;
     }
 
     return rand();
- }
+}
 
- i32 krandom_in_range(i32 min, i32 max)
- {
+i32 krandom_in_range(i32 min, i32 max)
+{
     if (!rand_seeded)
     {
         srand((u32)platform_get_absolute_time());
@@ -64,14 +64,14 @@ static b8 rand_seeded = false;
     }
 
     return (rand() % (max - min + 1)) + min;
- }
+}
 
- f32 fkrandom()
- {
+f32 fkrandom()
+{
     return (float)krandom() / (f32)RAND_MAX;
- }
+}
 
- f32 fkrandom_in_range(f32 min, f32 max)
- {
+f32 fkrandom_in_range(f32 min, f32 max)
+{
     return min + ((float)krandom() / ((f32)RAND_MAX / (max - min)));
- }
+}

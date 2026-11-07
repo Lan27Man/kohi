@@ -70,21 +70,19 @@ b8 vulkan_renderer_end_frame(renderer_backend* backend, f32 delta_time);
 /**
  * @brief Begins a renderpass with the given id.
  * 
- * @param backend A pointer to the generic backend interface.
  * @param pass A pointer to the renderpass to begin.
  * @param target A pointer to the render target to be used.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_begin_renderpass(struct renderer_backend* backend, renderpass* pass, render_target* target);
+b8 vulkan_renderer_renderpass_begin(renderpass* pass, render_target* target);
 
 /**
  * @brief Ends a renderpass with the given id.
  * 
- * @param backend A pointer to the generic backend interface.
  * @param pass A pointer to the renderpass to end.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_end_renderpass(struct renderer_backend* backend, renderpass* pass);
+b8 vulkan_renderer_renderpass_end(renderpass* pass);
 
 /**
  * @brief Obtains a pointer to a renderpass using the provided name.
@@ -97,9 +95,9 @@ renderpass* vulkan_renderer_renderpass_get(const char* name);
 /**
  * @brief Draws the given geometry. Should only be called inside a renderpass, within a frame.
  * 
- * @param data The render data of the geometry to be drawn.
+ * @param data A pointer to the render data of the geometry to be drawn.
 */
-void vulkan_renderer_draw_geometry(geometry_render_data data);
+void vulkan_renderer_draw_geometry(geometry_render_data* data);
 
 /**
  * @brief Creates a Vulkan-specific texture, acquiring internal resources as needed.
