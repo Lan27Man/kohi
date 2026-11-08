@@ -736,6 +736,25 @@ KINLINE f32 vec3_distance(vec3 vector_0, vec3 vector_1)
     return vec3_length(d);
 }
 
+/**
+ * @brief Transform a vector by a matrix. NOTE: It is assumed by this function that the
+ * vector is a point, not a direction and is calculated as if a w component with a value
+ * of 1.0f is there.
+ * 
+ * @param vector The vector to transform.
+ * @param matrix The matrix to transform by.
+ * @returns A transformed copy of vector.
+*/
+KINLINE vec3 vec3_transform(vec3 vector, mat4 matrix)
+{
+    vec3 out;
+    out.x = vector.x * matrix.data[0 + 0] + vector.y * matrix.data[4 + 0] + vector.z * matrix.data[8 + 0] + 1.0f * matrix.data[12 + 0];
+    out.y = vector.x * matrix.data[0 + 1] + vector.y * matrix.data[4 + 1] + vector.z * matrix.data[8 + 1] + 1.0f * matrix.data[12 + 1];
+    out.z = vector.x * matrix.data[0 + 2] + vector.y * matrix.data[4 + 2] + vector.z * matrix.data[8 + 2] + 1.0f * matrix.data[12 + 2];
+    
+    return out;
+}
+
 // ------------------------------------------
 // Vector 4
 // ------------------------------------------

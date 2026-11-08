@@ -266,6 +266,11 @@ typedef struct shader
     u16 attribute_stride;
 
     /**
+     * @brief Used to ensure the shader's globals are only updated once per frame.
+    */
+    u64 render_frame_number;
+
+    /**
      * @brief An opaque pointer to hold renderer API specific data. Renderer is responsible for creation and destruction of this.
     */
     void* internal_data;

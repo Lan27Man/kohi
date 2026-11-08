@@ -426,7 +426,17 @@ typedef struct geometry
     /**
      * @brief The geometry generation. Incremented every time the geometry changes.
     */
-    u32 generation;
+    u16 generation;
+
+    /**
+     * @brief The center of the geometry in local coordinates.
+    */
+    vec3 center;
+
+    /**
+     * @brief The extents of the geometry in local coordinates.
+    */
+    extents_3d extents;
 
     /**
      * @brief The geometry name.
