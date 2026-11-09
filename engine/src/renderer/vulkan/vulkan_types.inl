@@ -1,7 +1,7 @@
 /**
  * @file vulkan_types.inl
  * @author Travis Vroman (travis@kohiengine.com)
- * @brief This file contains a collection fo Vulkan-specific types used
+ * @brief This file contains a collection of Vulkan-specific types used
  * for the Vulkan backend.
  * @version 1.0
  * @date 2022-01-11
@@ -587,6 +587,11 @@ typedef struct vulkan_descriptor_set_config
      * @brief An array of binding layouts for this set.
     */
     VkDescriptorSetLayoutBinding bindings[VULKAN_SHADER_MAX_BINDINGS];
+
+    /**
+     * @brief The index of the sampler binding.
+    */
+    u8 sampler_binding_index;
 } vulkan_descriptor_set_config;
 
 /**
@@ -630,6 +635,11 @@ typedef struct vulkan_shader_config
      * @brief An array of attribute descriptions for this shader.
     */
     VkVertexInputAttributeDescription attributes[VULKAN_SHADER_MAX_ATTRIBUTES];
+
+    /**
+     * @brief Face culling mode, provided by the front end.
+    */
+    face_cull_mode cull_mode;
 } vulkan_shader_config;
 
 /**
@@ -762,6 +772,31 @@ typedef struct vulkan_shader
      * @todo TODO: Make dynamic.
     */
     vulkan_shader_instance_state instance_states[VULKAN_MAX_MATERIAL_COUNT];
+
+    /**
+     * @brief The number of global non-sampler uniforms.
+    */
+    u8 global_uniform_count;
+
+    /**
+     * @brief The number of global sampler uniforms.
+    */
+    u8 global_uniform_sampler_count;
+
+    /**
+     * @brief The number of instance non-sampler uniforms.
+    */
+    u8 instance_uniform_count;
+
+    /**
+     * @brief The number of instance sampler uniforms.
+    */
+    u8 instance_uniform_sampler_count;
+
+    /**
+     * @brief The number of local non-sampler uniforms.
+    */
+    u8 local_uniform_count;
 } vulkan_shader;
 
 /**

@@ -60,10 +60,11 @@ typedef struct resource_loader
      * 
      * @param self A pointer to the loader itself.
      * @param name The name of the resource to be loaded.
+     * @param params Parameters to be passed to the loader, or 0.
      * @param out_resource A pointer to hold the loaded resource.
      * @returns true on success; otherwise false.
     */
-    b8 (*load)(struct resource_loader* self, const char* name, resource* out_resource);
+    b8 (*load)(struct resource_loader* self, const char* name, void* params, resource* out_resource);
 
     /**
      * @brief Unloads the given resource. Loader is determined by the resource's assigned loader id.
@@ -99,38 +100,40 @@ void resource_system_shutdown(void* state);
  * @param loader The loader to be registered.
  * @returns true on success; otherwise false.
 */
-b8 resource_system_register_loader(resource_loader loader);
+KAPI b8 resource_system_register_loader(resource_loader loader);
 
 /**
  * @brief Loads a resource of the given name.
  * 
  * @param name The name of the resource to load.
  * @param type The type of resource to load.
+ * @param params Parameters to be passed to the loader, or 0.
  * @param out_resource A pointer to hold the newly-loaded resource.
  * @returns true on success; otherwise false.
 */
-b8 resource_system_load(const char* name, resource_type type, resource* out_resource);
+KAPI b8 resource_system_load(const char* name, resource_type type, void* params, resource* out_resource);
 
 /**
  * @brief Loads a resource of the given name and of a custom type.
  * 
  * @param name The name of the resource to load.
  * @param custom_type The custom resource type.
+ * @param params Parameters to be passed to the loader or 0.
  * @param out_resource A pointer to hold the newly-loaded resource.
  * @returns true on success; otherwise false.
 */
-b8 resource_system_load_custom(const char* name, const char* custom_type, resource* out_resource);
+KAPI b8 resource_system_load_custom(const char* name, const char* custom_type, void* params, resource* out_resource);
 
 /**
  * @brief Unloads the given resource.
  * 
  * @param resource A pointer to the resource to be unloaded.
 */
-void resource_system_unload(resource* resource);
+KAPI void resource_system_unload(resource* resource);
 
 /**
  * @brief Gets the base path of the resource system.
  * 
  * @returns The base path of the resource system.
 */
-const char* resource_system_get_base_path();
+KAPI const char* resource_system_get_base_path();
