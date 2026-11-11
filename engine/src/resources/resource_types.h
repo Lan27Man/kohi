@@ -131,6 +131,43 @@ typedef struct image_resource_data
     u8* pixels;
 } image_resource_data;
 
+/**
+ * @brief Parameters used when loading an image.
+*/
+typedef struct image_resource_params
+{
+    /**
+     * @brief Indicates if the image should be flipped on the y-axis when loaded.
+    */
+    b8 flip_y;
+} image_resource_params;
+
+/**
+ * @brief Determines face culling mode during rendering.
+*/
+typedef enum face_cull_mode
+{
+    /**
+     * @brief No faces are culled.
+    */
+    FACE_CULL_MODE_NONE = 0x0,
+
+    /**
+     * @brief Only front faces are culled.
+    */
+    FACE_CULL_MODE_FRONT = 0x1,
+
+    /**
+     * @brief Only back faces are culled.
+    */
+    FACE_CULL_MODE_BACK = 0x2,
+
+    /**
+     * @brief Both front and back faces are culled.
+    */
+    FACE_CULL_MODE_FRONT_AND_BACK = 0x3
+} face_cull_mode;
+
 typedef enum texture_flag
 {
     /**
@@ -155,6 +192,22 @@ typedef enum texture_flag
 typedef u8 texture_flag_bits;
 
 /**
+ * @brief Represents various types of textures.
+*/
+typedef enum texture_type
+{
+    /**
+     * @brief A standard two-dimensional texture.
+    */
+    TEXTURE_TYPE_2D,
+
+    /**
+     * @brief A cube texture, used for cubemaps.
+    */
+    TEXTURE_TYPE_CUBE
+} texture_type;
+
+/**
  * @brief Represents a texture.
 */
 typedef struct texture
@@ -163,6 +216,11 @@ typedef struct texture
      * @brief The unique texture identifier.
     */
     u32 id;
+
+    /**
+     * @brief The texture type.
+    */
+    texture_type type;
 
     /**
      * @brief The texture width.
@@ -223,7 +281,12 @@ typedef enum texture_use
     /**
      * @brief The texture is used as a normal map.
     */
-    TEXTURE_USE_MAP_NORMAL = 0x03
+    TEXTURE_USE_MAP_NORMAL = 0x03,
+
+    /**
+     * @brief The texture is used as a cube map.
+    */
+    TEXTURE_USE_MAP_CUBEMAP = 0x4
 } texture_use;
 
 /**
@@ -456,6 +519,18 @@ typedef struct mesh
     transform transform;
 } mesh;
 
+typedef struct skybox
+{
+    texture_map cubemap;
+    geometry* geometry;
+    u32 instance_id;
+
+    /**
+     * @brief Synced to the renderer's current frame number when the material has been applied that frame.
+    */
+    u64 render_frame_number;
+} skybox;
+
 /**
  * @brief Shader stages available in the system.
 */
@@ -602,14 +677,9 @@ typedef struct shader_config
     char* name;
 
     /**
-     * @brief Indicates if the shader uses instance-level uniforms.
+     * @brief The face cull mode to be used. Default is BACK if not supplied.
     */
-    b8 use_instances;
-
-    /**
-     * @brief Indicates if the shader uses local-level uniforms.
-    */
-    b8 use_local;
+    face_cull_mode cull_mode;
 
     /**
      * @brief The count of attributes.

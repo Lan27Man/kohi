@@ -171,13 +171,14 @@ void vulkan_renderer_destroy_geometry(geometry* geometry);
  * @brief Creates internal shader resources using the provided parameters.
  * 
  * @param shader A pointer to the shader.
+ * @param config A constant pointer to the shader configuration.
  * @param pass A pointer to the renderpass to be associated with the shader.
  * @param stage_count The total number of stages.
  * @param stage_filenames An array of shader stage filenames to be loaded. Should align with stages array.
  * @param stages An array of shader_stages indicating what render stages (vertex, fragment, etc.) are used in this shader.
  * @returns true on success; otherwise false.
 */
-b8 vulkan_renderer_shader_create(struct shader* shader, renderpass* pass, u8 stage_count, const char** stage_filenames, shader_stage* stages);
+b8 vulkan_renderer_shader_create(struct shader* shader, const shader_config* config, renderpass* pass, u8 stage_count, const char** stage_filenames, shader_stage* stages);
 
 /**
  * @brief Destroys the given shader and releases any resources held by it.

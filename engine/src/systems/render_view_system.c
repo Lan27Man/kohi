@@ -9,6 +9,7 @@
 // TODO: Temporary - Make factory and register instead.
 #include "renderer/views/render_view_world.h"
 #include "renderer/views/render_view_ui.h"
+#include "renderer/views/render_view_skybox.h"
 
 typedef struct render_view_system_state
 {
@@ -160,6 +161,14 @@ b8 render_view_system_create(const render_view_config* config)
         view->on_create = render_view_ui_on_create;
         view->on_destroy = render_view_ui_on_destroy;
         view->on_resize = render_view_ui_on_resize;
+    }
+    else if (config->type == RENDERER_VIEW_KNOWN_TYPE_SKYBOX)
+    {
+        view->on_build_packet = render_view_skybox_on_build_packet; // For building the packet.
+        view->on_render = render_view_skybox_on_render;             // For rendering the packet.
+        view->on_create = render_view_skybox_on_create;
+        view->on_destroy = render_view_skybox_on_destroy;
+        view->on_resize = render_view_skybox_on_resize;
     }
 
     // Call the on_create() function.
