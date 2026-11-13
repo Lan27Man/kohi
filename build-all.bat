@@ -21,6 +21,12 @@ IF %ERRORLEVEL% NEQ 0 (
     ECHO Error: %ERRORLEVEL% && EXIT
 )
 
+REM Tools
+make -f "tools/Makefile.tools.windows.mak" all
+IF %ERRORLEVEL% NEQ 0 (
+    ECHO Error: %ERRORLEVEL% && EXIT
+)
+
 ECHO "All assemblies built successfully."
 
 @REM Post Build Tasks

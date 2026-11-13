@@ -2,40 +2,20 @@
 
 ECHO "Compiling shaders..."
 
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=vert assets/shaders/Builtin.MaterialShader.vert.glsl -o assets/shaders/Builtin.MaterialShader.vert.spv
+PUSHD bin
+
+tools.exe buildshaders ^
+..\assets\shaders\Builtin.MaterialShader.vert.glsl ^
+..\assets\shaders\Builtin.MaterialShader.frag.glsl ^
+..\assets\shaders\Builtin.UIShader.vert.glsl ^
+..\assets\shaders\Builtin.UIShader.frag.glsl ^
+..\assets\shaders\Builtin.SkyboxShader.vert.glsl ^
+..\assets\shaders\Builtin.SkyboxShader.frag.glsl
 
 IF %ERRORLEVEL% NEQ 0 (
     ECHO Error: %ERRORLEVEL% && EXIT
 )
 
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=frag assets/shaders/Builtin.MaterialShader.frag.glsl -o assets/shaders/Builtin.MaterialShader.frag.spv
-
-IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && EXIT
-)
-
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=vert assets/shaders/Builtin.UIShader.vert.glsl -o assets/shaders/Builtin.UIShader.vert.spv
-
-IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && EXIT
-)
-
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=frag assets/shaders/Builtin.UIShader.frag.glsl -o assets/shaders/Builtin.UIShader.frag.spv
-
-IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && EXIT
-)
-
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=vert assets/shaders/Builtin.SkyboxShader.vert.glsl -o assets/shaders/Builtin.SkyboxShader.vert.spv
-
-IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && EXIT
-)
-
-%VULKAN_SDK%\bin\glslc.exe -fshader-stage=frag assets/shaders/Builtin.SkyboxShader.frag.glsl -o assets/shaders/Builtin.SkyboxShader.frag.spv
-
-IF %ERRORLEVEL% NEQ 0 (
-    ECHO Error: %ERRORLEVEL% && EXIT
-)
+POPD
 
 ECHO "Done."

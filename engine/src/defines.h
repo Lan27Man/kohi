@@ -1,8 +1,8 @@
 /**
  * @file defines.h
  * @author Travis Vroman (travis@kohiengine.com)
- * @brief This file contains global type definitions which are used 
- * throughout the entire engine and applications referencing it. 
+ * @brief This file contains global type definitions which are used
+ * throughout the entire engine and applications referencing it.
  * Numeric types are asserted statically to gurantee expected size.
  * @version 1.0
  * @date 2022-01-10
@@ -265,7 +265,7 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
  * @param max The maximum value of the range.
  * @returns The clamped value.
 */
-#define KCLAMP(value, min, max) (value <= min) ? min : (value >= max) ? max : value;
+#define KCLAMP(value, min, max) ((value <= min) ? min : (value >= max) ? max : value)
                                                                       
 // Inlining.
 #if defined(__clang__) || defined(__gcc__)
