@@ -5,8 +5,8 @@ ASSEMBLY := tools
 EXTENSION :=
 COMPILER_FLAGS := -g -MD -Werror=vla -fdeclspec -fPIC
 INCLUDE_FLAGS := -Iengine/src -Itools/src
-LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -Wl,-rpath,.
-DEFINES := D_DEBUG -DKIMPORT
+LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -lm -Wl,-rpath,.
+DEFINES := -D_DEBUG -DKIMPORT
 
 # Make does not offer a recursive wildcard function, so here's one:
 #rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
@@ -23,16 +23,16 @@ scaffold: # Create build directory.
 	@mkdir -p $(addprefix $(OBJ_DIR)/,$(DIRECTORIES))
 	@echo Done.
 
-.PHONY link
+.PHONY: link
 link: scaffold $(OBJ_FILES) # Link.
 	@echo Linking $(ASSEMBLY)...
 	clang $(OBJ_FILES) -o $(BUILD_DIR)/$(ASSEMBLY)$(EXTENSION) $(LINKER_FLAGS)
 
-.PHONY compile
+.PHONY: compile
 compile: # Compile .c files.
 	@echo Compiling...
 
-.PHONY clean
+.PHONY: clean
 clean: # Clean build directory.
 	rm -rf $(BUILD_DIR)/$(ASSEMBLY)
 	rm -rf $(OBJ_DIR)/$(ASSEMBLY)

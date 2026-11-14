@@ -14,7 +14,7 @@ pushd bin
 ../assets/shaders/Builtin.SkyboxShader.frag.glsl
 
 ERRORLEVEL=$?
-if [ $ERRORLEVEL -ne 0]
+if [ $ERRORLEVEL -ne 0 ]
 then
 echo "Error: " $ERRORLEVEL && exit
 fi

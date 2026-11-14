@@ -16,7 +16,7 @@
 
 /**
  * @brief Performs startup routines within the platform layer. Should be called twice,
- * once to obtain the memory requirement (with state=0), then a second time passing 
+ * once to obtain the memory requirement (with state = 0), then a second time passing 
  * an allocated block of memory to state.
  * 
  * @param memory_requirement A pointer to hold the memory requirement in bytes.
@@ -132,3 +132,10 @@ f64 platform_get_absolute_time();
  * @param ms The number of milliseconds to sleep for.
 */
 void platform_sleep(u64 ms);
+
+/**
+ * @brief Obtains the number of logical processor cores.
+ * 
+ * @returns The number of logical processor cores.
+*/
+i32 platform_get_processor_count();

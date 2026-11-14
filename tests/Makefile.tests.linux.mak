@@ -5,7 +5,7 @@ ASSEMBLY := tests
 EXTENSION :=
 COMPILER_FLAGS := -g -MD -Wvla -Wno-missing-braces -fdeclspec -fPIC
 INCLUDE_FLAGS := -Iengine/src -I$(VULKAN_SDK)\include
-LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -Wl, -rpath,.
+LINKER_FLAGS := -L./$(BUILD_DIR)/ -lengine -lm -Wl,-rpath,.
 DEFINES := -D_DEBUG -DKIMPORT
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -37,7 +37,7 @@ clean: # Clean build directory.
 	rm -rf $(BUILD_DIR)\$(ASSEMBLY)
 	rm -rf $(OBJ_DIR)\$(ASSEMBLY)
 
-$(OBJ_DIR)/%.c.o: %c # Compile .c to .o object.
+$(OBJ_DIR)/%.c.o: %.c # Compile .c to .o object.
 	@echo	$<...
 	@clang $< $(COMPILER_FLAGS) -c -o $@ $(DEFINES) $(INCLUDE_FLAGS)
 
