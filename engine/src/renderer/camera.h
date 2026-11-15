@@ -54,7 +54,7 @@ typedef struct camera
  * 
  * @returns A copy of a newly-created camera.
 */
-camera camera_create();
+KAPI camera camera_create();
 
 /**
  * @brief Defaults the provided camera to default zero
@@ -62,7 +62,7 @@ camera camera_create();
  * 
  * @param camera A pointer to the camera to be reset.
 */
-void camera_reset(camera* camera);
+KAPI void camera_reset(camera* camera);
 
 /**
  * @brief Gets a copy of the camera's position.
@@ -70,7 +70,7 @@ void camera_reset(camera* camera);
  * @param camera A constant pointer to a camera.
  * @returns A copy of the camera's position.
 */
-vec3 camera_position_get(const camera* camera);
+KAPI vec3 camera_position_get(const camera* camera);
 
 /**
  * @brief Sets the provided camera's position.
@@ -86,7 +86,7 @@ KAPI void camera_position_set(camera* camera, vec3 position);
  * @param camera A constant pointer to a camera.
  * @returns A copy of the camera's rotation in Euler angles.
 */
-vec3 camera_rotation_euler_get(const camera* camera);
+KAPI vec3 camera_rotation_euler_get(const camera* camera);
 
 /**
  * @brief Sets the provided camera's rotation in Euler angles.
@@ -94,7 +94,7 @@ vec3 camera_rotation_euler_get(const camera* camera);
  * @param camera A pointer to a camera.
  * @param position The rotation in Euler angles to be set.
 */
-void camera_rotation_euler_set(camera* camera, vec3 rotation);
+KAPI void camera_rotation_euler_set(camera* camera, vec3 rotation);
 
 /**
  * @brief Obtains a copy of the camera's view matrix. If camera is
@@ -103,7 +103,7 @@ void camera_rotation_euler_set(camera* camera, vec3 rotation);
  * @param camera A pointer to a camera.
  * @returns A copy of the up-to-date view matrix.
 */
-mat4 camera_view_get(camera* camera);
+KAPI mat4 camera_view_get(camera* camera);
 
 /**
  * @brief Returns a copy of the camera's forward vector.
@@ -111,7 +111,7 @@ mat4 camera_view_get(camera* camera);
  * @param camera A pointer to a camera.
  * @returns A copy of the camera's forward vector.
 */
-vec3 camera_forward(camera* camera);
+KAPI vec3 camera_forward(camera* camera);
 
 /**
  * @brief Returns a copy of the camera's backward vector.
@@ -119,7 +119,7 @@ vec3 camera_forward(camera* camera);
  * @param camera A pointer to a camera.
  * @returns A copy of the camera's backward vector.
 */
-vec3 camera_backward(camera* camera);
+KAPI vec3 camera_backward(camera* camera);
 
 /**
  * @brief Returns a copy of the camera's left vector.
@@ -127,7 +127,7 @@ vec3 camera_backward(camera* camera);
  * @param camera A pointer to a camera.
  * @returns A copy of the camera's left vector.
 */
-vec3 camera_left(camera* camera);
+KAPI vec3 camera_left(camera* camera);
 
 /**
  * @brief Returns a copy of the camera's right vector.
@@ -135,7 +135,7 @@ vec3 camera_left(camera* camera);
  * @param camera A pointer to a camera.
  * @returns A copy of the camera's right vector.
 */
-vec3 camera_right(camera* camera);
+KAPI vec3 camera_right(camera* camera);
 
 /**
  * @brief Moves the camera forward by the given amount.

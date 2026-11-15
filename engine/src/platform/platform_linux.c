@@ -465,7 +465,7 @@ void kthread_destroy(kthread* thread)
 
 void kthread_detach(kthread* thread)
 {
-    if (thread->internal_data)
+    if (thread && thread->internal_data)
     {
         i32 result = pthread_detach(*(pthread_t*)thread->internal_data);
 
@@ -493,7 +493,7 @@ void kthread_detach(kthread* thread)
 
 void kthread_cancel(kthread* thread)
 {
-    if (thread->internal_data)
+    if (thread && thread->internal_data)
     {
         i32 result = pthread_cancel(*(pthread_t*)thread->internal_data);
 
@@ -563,7 +563,7 @@ b8 kmutex_create(kmutex* out_mutex)
 
 void kmutex_destroy(kmutex* mutex)
 {
-    if (mutex)
+    if (mutex && mutex->internal_data)
     {
         i32 result = pthread_mutex_destroy((pthread_mutex_t*)mutex->internal_data);
 

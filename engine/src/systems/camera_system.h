@@ -55,7 +55,7 @@ void camera_system_shutdown(void* state);
  * @param name The name of the camera to acquire.
  * @returns A pointer to a camera if successful; 0 if an error occurs.
 */
-camera* camera_system_acquire(const char* name);
+KAPI camera* camera_system_acquire(const char* name);
 
 /**
  * @brief Releases a camera with the given name. Internal reference
@@ -64,7 +64,7 @@ camera* camera_system_acquire(const char* name);
  * 
  * @param name The name of the camera to release.
 */
-void camera_system_release(const char* name);
+KAPI void camera_system_release(const char* name);
 
 /**
  * @brief Gets a pointer to the default camera.
