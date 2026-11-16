@@ -2,6 +2,9 @@
 #include "core/kmemory.h"
 #include "containers/darray.h"
 
+// This should be more than enough codes...
+#define MAX_MESSAGE_CODES 16384
+
 typedef struct registered_event
 {
     void* listener;
@@ -12,9 +15,6 @@ typedef struct event_code_entry
 {
     registered_event* events;
 } event_code_entry;
-
-// This should be more than enough codes...
-#define MAX_MESSAGE_CODES 16384
 
 // State structure.
 typedef struct event_system_state

@@ -948,6 +948,11 @@ typedef struct vulkan_context
     render_target world_render_targets[3];
 
     /**
+     * @brief Indicates if multithreading is supported by this device.
+    */
+    b8 multithreading_enabled;
+
+    /**
      * @brief A function pointer to find a memory index of the given type and with the given properties.
      * 
      * @param type_filter The types of memory to search for.

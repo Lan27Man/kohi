@@ -342,3 +342,10 @@ texture* vulkan_renderer_depth_attachment_get();
  * @returns The current window attachment index.
 */
 u8 vulkan_renderer_window_attachment_index_get();
+
+/**
+ * @brief Determines if the Vulkan renderer is multithreaded.
+ * 
+ * @returns true if the Vulkan renderer is multithreaded; otherwise false.
+*/
+b8 vulkan_renderer_is_multithreaded();

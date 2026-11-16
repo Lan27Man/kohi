@@ -190,6 +190,9 @@ b8 vulkan_renderer_initialize(renderer_backend* backend, const renderer_backend_
     VK_CHECK(vkCreateInstance(&create_info, context.allocator, &context.instance));
     KINFO("Vulkan Instance created!");
 
+    // TODO: Implement multi-threading.
+    context.multithreading_enabled = false;
+
 // Debugger.
 #if defined(_DEBUG)
     KDEBUG("Creating Vulkan debugger...");
@@ -2414,4 +2417,9 @@ texture* vulkan_renderer_depth_attachment_get()
 u8 vulkan_renderer_window_attachment_index_get()
 {
     return (u8)context.image_index;
+}
+
+b8 vulkan_renderer_is_multithreaded()
+{
+    return context.multithreading_enabled;
 }

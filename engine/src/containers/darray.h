@@ -19,14 +19,6 @@
 
 #include "defines.h"
 
-enum
-{
-    DARRAY_CAPACITY,
-    DARRAY_LENGTH,
-    DARRAY_STRIDE,
-    DARRAY_FIELD_LENGTH
-};
-
 /**
  * @brief The default darray capacity.
 */
@@ -36,6 +28,14 @@ enum
  * @brief The default resize factor (doubles on resize).
 */
 #define DARRAY_RESIZE_FACTOR 2
+
+enum
+{
+    DARRAY_CAPACITY,
+    DARRAY_LENGTH,
+    DARRAY_STRIDE,
+    DARRAY_FIELD_LENGTH
+};
 
 /**
  * @brief Creates a new darray of the given length and stride.
