@@ -100,13 +100,13 @@ b8 render_view_ui_on_build_packet(const struct render_view* self, void* data, st
     // Iterate all meshes and add them to the packet's geometries collection.
     for (u32 i = 0; i < mesh_data->mesh_count; ++i)
     {
-        mesh* mesh = &mesh_data->meshes[i];
+        mesh* m = mesh_data->meshes[i];
 
-        for (u32 j = 0; j < mesh->geometry_count; ++j)
+        for (u32 j = 0; j < m->geometry_count; ++j)
         {
             geometry_render_data render_data;
-            render_data.geometry = mesh->geometries[j];
-            render_data.model = transform_get_world(&mesh->transform);
+            render_data.geometry = m->geometries[j];
+            render_data.model = transform_get_world(&m->transform);
 
             darray_push(out_packet->geometries, render_data);
 
