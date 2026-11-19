@@ -828,6 +828,10 @@ b8 application_run()
             // TODO: Temporary.
 
             // Clean-up.
+            for (u32 i = 0; i < packet.view_count; ++i)
+            {
+                packet.views[i].view->on_destroy_packet(packet.views[i].view, &packet.views[i]);
+            }
 
             // TODO: End Temporary.
 

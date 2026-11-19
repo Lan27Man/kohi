@@ -32,6 +32,13 @@ KAPI u64 string_length(const char* str);
 KAPI char* string_duplicate(const char* str);
 
 /**
+ * @brief Frees the memory of the given string.
+ * 
+ * @param The string to be freed.
+*/
+KAPI void string_free(char* str);
+
+/**
  * @brief Case-sensitive string comparison.
  * 
  * @param str0 The first string to be compared.

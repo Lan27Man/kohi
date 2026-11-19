@@ -2,8 +2,11 @@
 
 #include <core/logger.h>
 #include <core/kmemory.h>
+
+#include <core/kstring.h>
 #include <core/input.h>
 #include <core/event.h>
+
 #include <math/kmath.h>
 #include <renderer/renderer_types.inl>
 
@@ -28,6 +31,12 @@ b8 game_update(game* game_inst, f32 delta_time)
 
     if (input_is_key_up('M') && input_was_key_down('M'))
     {
+        char* usage = get_memory_usage_str();
+
+        KINFO(usage);
+
+        string_free(usage);
+
         KDEBUG("Allocations: %llu (%llu this frame)", alloc_count, alloc_count - prev_alloc_count);
     }
 
