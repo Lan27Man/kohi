@@ -205,7 +205,7 @@ typedef struct vertex_3d
     /**
      * @brief The tangent of the vertex.
     */
-    vec4 tangent;
+    vec3 tangent;
 } vertex_3d;
 
 /**

@@ -1,8 +1,12 @@
 #include "renderer_frontend.h"
+
 #include "renderer_backend.h"
 
 #include "core/logger.h"
+#include "core/kmemory.h"
 #include "math/kmath.h"
+#include "platform/platform.h"
+
 #include "resources/resource_types.h"
 #include "systems/resource_system.h"
 #include "systems/texture_system.h"
@@ -258,6 +262,8 @@ b8 renderer_draw_frame(render_packet* packet)
         else
         {
             // Skip rendering the frame and try again next time.
+            // NOTE: Simulate a frame being "drawn" at 60 FPS.
+            platform_sleep(16);
             return true;
         }
     }

@@ -189,7 +189,7 @@ typedef enum system_event_code
     /**
      * @brief Mouse wheel moved.
      * Context usage:
-     * u8 z_delta = data.data.u8[0];
+     * i8 z_delta = data.data.i8[0];
     */
     EVENT_CODE_MOUSE_WHEEL = 0x07,
 
