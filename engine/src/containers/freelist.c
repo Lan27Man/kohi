@@ -88,13 +88,6 @@ void freelist_destroy(freelist* list)
 
 b8 freelist_allocate_block(freelist* list, u64 size, u64* out_offset)
 {
-    u16 rubbish_alignment_offset = 0;
-
-    return freelist_allocate_block_aligned(list, size, 1, out_offset, &rubbish_alignment_offset);
-}
-
-b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment, u64* out_offset, u16* out_alignment_offset)
-{
     if (!list || !out_offset || !list->memory)
     {
         return false;
@@ -106,21 +99,10 @@ b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment, u64*
 
     while (node)
     {
-        // Get the aligned offset for the node.
-        u64 aligned_offset = get_aligned(node->offset, alignment);
-
-        // The number of bytes taken to perform the alignment.
-        u64 alignment_offset = aligned_offset - node->offset;
-
-        // The total size required by the aligned allocation.
-        u64 aligned_size = size + alignment_offset;
-
-        if (node->size == aligned_size && aligned_offset == 0)
+        if (node->size == size)
         {
-            // Exact match. Just return the node *if also aligned properly*.
-            // If not aligned, this won't be large enough.
-            *out_offset = aligned_offset;
-            *out_alignment_offset = 0;
+            // Exact match. Just return the node.
+            *out_offset = node->offset;
 
             freelist_node* node_to_return = 0;
 
@@ -140,15 +122,14 @@ b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment, u64*
             return_node(list, node_to_return);
             return true;
         }
-        else if (node->size > aligned_size)
+        else if (node->size > size)
         {
-            // Node is larger than the requirement + the alignment offset.
-            // Deduct the memory from it and move the offset by that amount.
-            *out_offset = aligned_offset;
-            *out_alignment_offset = alignment_offset;
+            // Node is larger. Deduct the memory from it and move the offset
+            // by that amount.
+            *out_offset = node->offset;
 
-            node->size -= aligned_size;
-            node->offset += aligned_size;
+            node->size -= size;
+            node->offset += size;
             return true;
         }
 
@@ -164,11 +145,6 @@ b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment, u64*
 
 b8 freelist_free_block(freelist* list, u64 size, u64 offset)
 {
-    return freelist_free_block_aligned(list, size, offset, 0);
-}
-
-b8 freelist_free_block_aligned(freelist* list, u64 size, u64 offset, u16 alignment_offset)
-{
     if (!list || !list->memory || !size)
     {
         return false;
@@ -178,16 +154,13 @@ b8 freelist_free_block_aligned(freelist* list, u64 size, u64 offset, u16 alignme
     freelist_node* node = state->head;
     freelist_node* previous = 0;
 
-    u64 unaligned_offset = offset - alignment_offset;
-    u64 unaligned_size = size + alignment_offset;
-
     if (!node)
     {
         // Check for the case where the entire thing is allocated.
         // In this case a new node is needed at the head.
         freelist_node* new_node = get_node(list);
-        new_node->offset = unaligned_offset;
-        new_node->size = unaligned_size;
+        new_node->offset = offset;
+        new_node->size = size;
         new_node->next = 0;
         state->head = new_node;
         return true;
@@ -196,10 +169,10 @@ b8 freelist_free_block_aligned(freelist* list, u64 size, u64 offset, u16 alignme
     {
         while(node)
         {
-            if (node->offset == unaligned_offset)
+            if (node->offset == offset)
             {
                 // Can just be appended to this node.
-                node->size += unaligned_size;
+                node->size += size;
 
                 // Check if this then connects the range between this and the next
                 // node, and if so, combine them and return the second node.
@@ -216,12 +189,12 @@ b8 freelist_free_block_aligned(freelist* list, u64 size, u64 offset, u16 alignme
 
                 return true;
             }
-            else if (node->offset > unaligned_offset)
+            else if (node->offset > offset)
             {
                 // Iterated beyond the space to be freed. Need a new node.
                 freelist_node* new_node = get_node(list);
-                new_node->offset = unaligned_offset;
-                new_node->size = unaligned_size;
+                new_node->offset = offset;
+                new_node->size = size;
 
                 // If there is a previous node, the new node should be inserted between this and it.
                 if (previous)

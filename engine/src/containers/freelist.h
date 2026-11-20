@@ -54,19 +54,6 @@ KAPI void freelist_destroy(freelist* list);
 KAPI b8 freelist_allocate_block(freelist* list, u64 size, u64* out_offset);
 
 /**
- * @brief Attempts to find a memory-aligned free block of memory of the given size
- * and granularity.
- * 
- * @param list A pointer to the list to search.
- * @param size The size to allocate.
- * @param alignment The number of bytes to align to.
- * @param out_offset A pointer to hold the offset to the aligned, allocated memory.
- * @param out_alignment_offset A pointer to hold the internal alignment offset in bytes.
- * @returns true if a block of memory was found and allocated; otherwise false.
-*/
-KAPI b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment, u64* out_offset, u16* out_alignment_offset);
-
-/**
  * @brief Attempts to free a block of memory at the given offset, and of the given
  * size. Can fail if invalid data is passed.
  * 
@@ -76,18 +63,6 @@ KAPI b8 freelist_allocate_block_aligned(freelist* list, u64 size, u16 alignment,
  * @returns true if successful; otherwise false. False should be treated as an error.
 */
 KAPI b8 freelist_free_block(freelist* list, u64 size, u64 offset);
-
-/**
- * @brief Attempts to free a block of aligned memory at the given offset, and of the given
- * size. Can fail if invalid data is passed.
- * 
- * @param list A pointer to the list to free from.
- * @param size The size to be freed.
- * @param offset The offset to free at.
- * @param alignment_offset The alignment offset.
- * @returns true if successful; otherwise false. False should be treated as an error.
-*/
-KAPI b8 freelist_free_block_aligned(freelist* list, u64 size, u64 offset, u16 alignment_offset);
 
 /**
  * @brief Attempts to resize the provided freelist to the given size. Internal data is copied to the new
