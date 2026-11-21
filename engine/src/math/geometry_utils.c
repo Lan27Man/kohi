@@ -1,4 +1,5 @@
 #include "geometry_utils.h"
+
 #include "kmath.h"
 
 #include "core/logger.h"

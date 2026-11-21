@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include <entry.h>
+#include <core/kmemory.h>
 
 // Define the function to create a game.
 b8 create_game(game* out_game)

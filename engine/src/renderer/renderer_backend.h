@@ -24,6 +24,6 @@ b8 renderer_backend_create(renderer_backend_type type, renderer_backend* out_ren
 /**
  * @brief Destroys the given renderer backend.
  * 
- * @param renderer_backend A pointer to the backend to be destroyed.
+ * @param backend A pointer to the renderer backend to be destroyed.
 */
-void renderer_backend_destroy(renderer_backend* renderer_backend);
+void renderer_backend_destroy(renderer_backend* backend);

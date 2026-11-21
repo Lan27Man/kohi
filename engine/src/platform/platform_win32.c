@@ -1,4 +1,4 @@
-#include "platform/platform.h"
+#include "platform.h"
 
 // Windows platform layer.
 #if KPLATFORM_WINDOWS
@@ -9,6 +9,7 @@
 #include "core/kthread.h"
 #include "core/kmutex.h"
 #include "containers/darray.h"
+#include "renderer/vulkan/vulkan_types.inl"
 
 #include <windows.h>
 #include <windowsx.h>   // Param input extraction.
@@ -17,8 +18,6 @@
 // For surface creation.
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_win32.h>
-
-#include "renderer/vulkan/vulkan_types.inl"
 
 typedef struct platform_state
 {
@@ -293,12 +292,6 @@ void kthread_destroy(kthread* thread)
         DWORD exit_code;
 
         GetExitCodeThread(thread->internal_data, &exit_code);
-
-        // if (exit_code == STILL_ACTIVE)
-        // {
-        //     TerminateThread(thread->internal_data, 0);  // 0 = failure.
-        // }
-
         CloseHandle((HANDLE)thread->internal_data);
 
         thread->internal_data = 0;

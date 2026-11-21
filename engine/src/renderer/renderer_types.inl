@@ -97,9 +97,6 @@ typedef enum renderpass_clear_flag
     RENDERPASS_CLEAR_STENCIL_BUFFER_FLAG = 0x4
 } renderpass_clear_flag;
 
-/**
- * @brief Represents a generic renderpass configuration.
-*/
 typedef struct renderpass_config
 {
     /**

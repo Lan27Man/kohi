@@ -2,7 +2,11 @@
 
 #include "core/logger.h"
 #include "core/kmemory.h"
+#include "core/event.h"
 #include "math/kmath.h"
+#include "math/transform.h"
+#include "containers/darray.h"
+#include "systems/material_system.h"
 #include "systems/shader_system.h"
 #include "systems/camera_system.h"
 #include "renderer/renderer_frontend.h"

@@ -56,7 +56,7 @@ b8 renderer_backend_create(renderer_backend_type type, renderer_backend* out_ren
     return false;
 }
 
-void renderer_backend_destroy(renderer_backend* renderer_backend)
+void renderer_backend_destroy(renderer_backend* backend)
 {
-    kzero_memory(renderer_backend, sizeof(renderer_backend));
+    kzero_memory(backend, sizeof(renderer_backend));
 }

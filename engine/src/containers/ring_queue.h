@@ -1,5 +1,5 @@
 /**
- * @file hashtable.h
+ * @file ring_queue.h
  * @author Travis Vroman (travis@kohiengine.com)
  * @brief This file contains the ring queue implementation.
  * @version 1.0

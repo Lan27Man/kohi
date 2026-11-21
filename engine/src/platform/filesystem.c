@@ -1,6 +1,7 @@
 #include "filesystem.h"
 
 #include "core/logger.h"
+#include "core/kmemory.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -40,7 +41,7 @@ b8 filesystem_open(const char* path, file_modes mode, b8 binary, file_handle* ou
     }
     else
     {
-        KERROR("Invalid mode passed while trying to open file: '%s'.", path);
+        KERROR("Invalid mode passed while trying to open file: '%s'!", path);
         return false;
     }
 
@@ -49,7 +50,7 @@ b8 filesystem_open(const char* path, file_modes mode, b8 binary, file_handle* ou
 
     if (!file)
     {
-        KERROR("Error opening file: '%s'.", path);
+        KERROR("Error opening file: '%s'!", path);
         return false;
     }
 

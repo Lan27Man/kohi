@@ -87,9 +87,6 @@ void renderer_texture_resize(texture* texture, u32 new_width, u32 new_height);
 
 /**
  * @brief Writes the given data to the provided texture.
- * NOTE: At this level, this can either be a writeable or non-writeable texture because
- * this also handles the initial texture load. The texture system itself should be
- * responsible for blocking write requests to non-writeable textures.
  * 
  * @param texture A pointer to the texture to be written to.
  * @param offset The offset in bytes from the beginning of the data to be written.

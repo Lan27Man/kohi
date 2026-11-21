@@ -1,4 +1,5 @@
-#include "core/input.h"
+#include "input.h"
+
 #include "core/event.h"
 #include "core/kmemory.h"
 #include "core/logger.h"

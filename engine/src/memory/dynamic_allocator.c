@@ -43,7 +43,7 @@ b8 dynamic_allocator_create(u64 total_size, u64* memory_requirement, void* memor
 
     *memory_requirement = freelist_requirement + sizeof(dynamic_allocator_state) + total_size;
 
-    // If only obtaining memory requirement, boot out.
+    // If only obtaining requirement, boot out.
     if (!memory)
     {
         return true;

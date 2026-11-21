@@ -1,9 +1,11 @@
 #include "vulkan_swapchain.h"
-#include "vulkan_device.h"
-#include "vulkan_image.h"
 
 #include "core/logger.h"
 #include "core/kmemory.h"
+
+#include "vulkan_device.h"
+#include "vulkan_image.h"
+
 #include "systems/texture_system.h"
 
 void create(vulkan_context* context, u32 width, u32 height, vulkan_swapchain* swapchain);
@@ -59,7 +61,7 @@ b8 vulkan_swapchain_acquire_next_image_index(
     }
     else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
     {
-        KFATAL("Failed to acquire swap chain image!");
+        KFATAL("Failed to acquire swapchain image!");
         return false;
     }
 

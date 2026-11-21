@@ -288,36 +288,36 @@ b8 render_view_world_on_render(const struct render_view* self, const struct rend
 
         for (u32 i = 0; i < count; ++i)
         {
-            material* material = 0;
+            material* m = 0;
 
             if (packet->geometries[i].geometry->material)
             {
-                material = packet->geometries[i].geometry->material;
+                m = packet->geometries[i].geometry->material;
             }
             else
             {
-                material = material_system_get_default_material();
+                m = material_system_get_default_material();
             }
 
             // Update the material if it hasn't already been this frame. This keeps the
             // same material from being updated multiple times. It still needs to be bound
             // either way, so this check result gets passed to the backend which either
             // updates the internal shader bindings and binds them, or only binds them.
-            b8 needs_update = material->render_frame_number != frame_number;
+            b8 needs_update = m->render_frame_number != frame_number;
 
-            if (!material_system_apply_instance(material, needs_update))
+            if (!material_system_apply_instance(m, needs_update))
             {
-                KWARN("Failed to apply material '%s'. Skipping draw.", material->name);
+                KWARN("Failed to apply material '%s'. Skipping draw.", m->name);
                 continue;
             }
             else
             {
                 // Sync the frame number.
-                material->render_frame_number = frame_number;
+                m->render_frame_number = frame_number;
             }
 
             // Apply the locals.
-            material_system_apply_local(material, &packet->geometries[i].model);
+            material_system_apply_local(m, &packet->geometries[i].model);
 
             // Draw it.
             renderer_draw_geometry(&packet->geometries[i]);

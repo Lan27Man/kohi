@@ -1,4 +1,5 @@
 #include "vulkan_backend.h"
+
 #include "vulkan_types.inl"
 #include "vulkan_platform.h"
 #include "vulkan_device.h"
@@ -28,6 +29,16 @@ const u32 DESC_SET_INDEX_GLOBAL = 0;
 
 // The index of the instance descriptor set.
 const u32 DESC_SET_INDEX_INSTANCE = 1;
+
+#ifdef _DEBUG
+#define SHADER_VERIFY_SHADER_ID(shader_id)                                      \
+    if (shader_id == INVALID_ID || context.shaders[shader_id].id == INVALID_ID) \
+    {                                                                           \
+        return false;                                                           \
+    }
+#else
+#define SHADER_VERIFY_SHADER_ID(shader_id)  // Do nothing.
+#endif
 
 VKAPI_ATTR VkBool32 VKAPI_CALL vk_debug_callback(
     VkDebugUtilsMessageSeverityFlagBitsEXT message_severity,
@@ -99,7 +110,7 @@ b8 vulkan_renderer_initialize(renderer_backend* backend, const renderer_backend_
 
     // Setup Vulkan instance.
     VkApplicationInfo app_info = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
-    app_info.apiVersion = VK_API_VERSION_1_4;
+    app_info.apiVersion = VK_API_VERSION_1_2;
     app_info.pApplicationName = config->application_name;
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName = "Kohi Engine";
@@ -116,6 +127,7 @@ b8 vulkan_renderer_initialize(renderer_backend* backend, const renderer_backend_
 
 #if defined(_DEBUG)
     darray_push(required_extensions, &VK_EXT_DEBUG_UTILS_EXTENSION_NAME);  // Debug utilities.
+
     KDEBUG("Required extensions:");
 
     u32 length = darray_length(required_extensions);
@@ -296,9 +308,9 @@ b8 vulkan_renderer_initialize(renderer_backend* backend, const renderer_backend_
         }
 
         // Setup the renderpass.
-        context.registered_passes[i].clear_flags = config->pass_configs[i].clear_flags;
-        context.registered_passes[i].clear_colour = config->pass_configs[i].clear_colour;
-        context.registered_passes[i].render_area = config->pass_configs[i].render_area;
+        context.registered_passes[id].clear_flags = config->pass_configs[i].clear_flags;
+        context.registered_passes[id].clear_colour = config->pass_configs[i].clear_colour;
+        context.registered_passes[id].render_area = config->pass_configs[i].render_area;
 
         vulkan_renderer_renderpass_create(&context.registered_passes[id], 1.0f, 0, config->pass_configs[i].prev_name != 0, config->pass_configs[i].next_name != 0);
 
@@ -474,7 +486,7 @@ b8 vulkan_renderer_begin_frame(renderer_backend* backend, f32 delta_time)
 
         if (!vulkan_result_is_success(result))
         {
-            KERROR("vulkan_renderer_begin_frame() vkDeviceWaitIdle() (1) failed: '%s'", vulkan_result_string(result, true));
+            KERROR("vkDeviceWaitIdle() (1) failed: '%s'", vulkan_result_string(result, true));
             return false;
         }
 
@@ -489,7 +501,7 @@ b8 vulkan_renderer_begin_frame(renderer_backend* backend, f32 delta_time)
 
         if (!vulkan_result_is_success(result))
         {
-            KERROR("vulkan_renderer_begin_frame() vkDeviceWaitIdle() (2) failed: '%s'", vulkan_result_string(result, true));
+            KERROR("vkDeviceWaitIdle() (2) failed: '%s'", vulkan_result_string(result, true));
             return false;
         }
 
@@ -708,7 +720,7 @@ renderpass* vulkan_renderer_renderpass_get(const char* name)
 {
     if (!name || name[0] == 0)
     {
-        KERROR("vulkan_renderer_renderpass_get() requires a name. Nothing will be returned.");
+        KERROR("vulkan_renderer_renderpass_get() requires a name! Nothing will be returned.");
         return 0;
     }
 
@@ -767,7 +779,7 @@ i32 find_memory_index(u32 type_filter, u32 property_flags)
         }
     }
 
-    KWARN("Unable to find suitable memory type!");
+    KERROR("Unable to find suitable memory type!");
     return -1;
 }
 
@@ -812,14 +824,14 @@ b8 recreate_swapchain(renderer_backend* backend)
     // If already being recreated, do not try again.
     if (context.recreating_swapchain)
     {
-        KDEBUG("recreate_swapchain() called when already recreating, booting.")
+        KDEBUG("recreate_swapchain() called when already recreating. Booting.")
         return false;
     }
 
     // Detect if the window is too small to be drawn to.
     if (context.framebuffer_width == 0 || context.framebuffer_height == 0)
     {
-        KDEBUG("recreate_swapchain() called when window is < 1 in a dimension, booting.");
+        KDEBUG("recreate_swapchain() called when window is < 1 in a dimension. Booting.");
         return false;
     }
 
@@ -990,7 +1002,8 @@ void vulkan_renderer_texture_create_writeable(texture* texture)
     vulkan_image* image = (vulkan_image*)texture->internal_data;
     VkFormat image_format = channel_count_to_format(texture->channel_count, VK_FORMAT_R8G8B8A8_UNORM);
 
-    // TODO: Lots of assumptions here, different texture types will require different options here.
+    // TODO: Lots of assumptions here, different texture types will require
+    // different options here.
     vulkan_image_create(
         &context,
         texture->type,
@@ -1292,7 +1305,7 @@ b8 vulkan_renderer_shader_create(shader* shader, const shader_config* config, re
                 vk_stages[i] = VK_SHADER_STAGE_COMPUTE_BIT;
                 break;
             default:
-                KERROR("Unsupported stage type: %x!", stages[i]);
+                KERROR("Unsupported stage type: %d!", stages[i]);
                 break;
         }
     }
@@ -1335,7 +1348,7 @@ b8 vulkan_renderer_shader_create(shader* shader, const shader_config* config, re
                 break;
             default:
                 // Go to the next type.
-                KERROR("vulkan_shader_create(): Unsupported shader stage flagged: %x! Stage ignored.", stages[i]);
+                KERROR("vulkan_shader_create(): Unsupported shader stage flagged: %d! Stage ignored.", stages[i]);
                 continue;
         }
 
@@ -1399,7 +1412,7 @@ b8 vulkan_renderer_shader_create(shader* shader, const shader_config* config, re
     out_shader->config.pool_sizes[0] = (VkDescriptorPoolSize){VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1024};         // HACK: Max number of ubo descriptor sets.
     out_shader->config.pool_sizes[1] = (VkDescriptorPoolSize){VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4096}; // HACK: Max number of image sampler descriptors.
 
-    if (out_shader->global_uniform_count > 0 || out_shader->instance_uniform_sampler_count > 0)
+    if (out_shader->global_uniform_count > 0 || out_shader->global_uniform_sampler_count > 0)
     {
         // Global descriptor set config.
         vulkan_descriptor_set_config* set_config = &out_shader->config.descriptor_sets[out_shader->config.descriptor_set_count];
@@ -1808,9 +1821,9 @@ b8 vulkan_renderer_shader_apply_globals(shader* shader)
     if (global_set_binding_count > 1)
     {
         // TODO: There are samplers to be written. Support this.
-        KERROR("Global image samplers are not yet supported.");
-
         global_set_binding_count = 1;
+
+        KERROR("Global image samplers are not yet supported.");
     }
 
     vkUpdateDescriptorSets(context.device.logical_device, global_set_binding_count, descriptor_writes, 0, 0);
@@ -1908,7 +1921,7 @@ b8 vulkan_renderer_shader_apply_instance(shader* shader, b8 needs_update)
                             t = texture_system_get_default_normal_texture();
                             break;
                         default:
-                            KWARN("Udefined texture use %d", map->use);
+                            KWARN("Undefined texture use %d", map->use);
                             t = texture_system_get_default_texture();
                             break;
                     }

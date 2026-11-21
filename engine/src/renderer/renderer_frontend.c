@@ -288,7 +288,7 @@ b8 renderer_draw_frame(render_packet* packet)
 
         if (!result)
         {
-            KERROR("backend.end_frame() failed. Application shutting down!");
+            KERROR("renderer_draw_frame() failed. Application shutting down!");
             return false;
         }
     }
@@ -311,14 +311,14 @@ void renderer_texture_create_writeable(texture* texture)
     state_ptr->backend.texture_create_writeable(texture);
 }
 
-void renderer_texture_resize(texture* texture, u32 new_width, u32 new_height)
-{
-    state_ptr->backend.texture_resize(texture, new_width, new_height);
-}
-
 void renderer_texture_write_data(texture* texture, u32 offset, u32 size, const u8* pixels)
 {
     state_ptr->backend.texture_write_data(texture, offset, size, pixels);
+}
+
+void renderer_texture_resize(texture* texture, u32 new_width, u32 new_height)
+{
+    state_ptr->backend.texture_resize(texture, new_width, new_height);
 }
 
 b8 renderer_create_geometry(geometry* geometry, u32 vertex_size, u32 vertex_count, const void* vertices, u32 index_size, u32 index_count, const void* indices)

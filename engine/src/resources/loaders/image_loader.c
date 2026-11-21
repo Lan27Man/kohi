@@ -1,12 +1,14 @@
 #include "image_loader.h"
-#include "loader_utils.h"
 
 #include "core/logger.h"
 #include "core/kmemory.h"
 #include "core/kstring.h"
-#include "platform/filesystem.h"
 #include "resources/resource_types.h"
 #include "systems/resource_system.h"
+
+#include "platform/filesystem.h"
+
+#include "loader_utils.h"
 
 // TODO: Resource loader.
 #define STB_IMAGE_IMPLEMENTATION
@@ -114,6 +116,8 @@ b8 image_loader_load(struct resource_loader* self, const char* name, void* param
         KERROR("Image resource loader failed to load file '%s'!", full_file_path);
         return false;
     }
+
+    kfree(raw_data, file_size, MEMORY_TAG_TEXTURE);
 
     image_resource_data* resource_data = kallocate(sizeof(image_resource_data), MEMORY_TAG_TEXTURE);
     resource_data->pixels = data;

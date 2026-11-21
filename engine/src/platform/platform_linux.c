@@ -9,6 +9,7 @@
 #include "core/kthread.h"
 #include "core/kmutex.h"
 #include "containers/darray.h"
+#include "renderer/vulkan/vulkan_types.inl"
 
 #include <xcb/xcb.h>
 #include <X11/keysym.h>
@@ -35,7 +36,6 @@
 #define VK_USE_PLATFORM_XCB_KHR
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_xcb.h>
-#include "renderer/vulkan/vulkan_types.inl"
 
 typedef struct platform_state
 {
@@ -217,7 +217,7 @@ b8 platform_pump_messages()
 
         b8 quit_flagged = false;
 
-        // Poll for events until NULL is returned.
+        // Poll for events until null is returned.
         while ((event = xcb_poll_for_event(state_ptr->connection)))
         {
             // Input events.
@@ -234,12 +234,12 @@ b8 platform_pump_messages()
                         state_ptr->display,
                         (KeyCode)code,  // event.xkey.keycode
                         0,
-                        0 /*code & ShiftMask ? 1 : 0 */
+                        0
                     );
 
                     keys key = translate_keycode(key_sym);
 
-                    // Pass to input subsystem for processing.
+                    // Pass to the input subsystem for processing.
                     input_process_key(key, pressed);
                 }
                 break;
@@ -417,7 +417,7 @@ b8 kthread_create(pfn_thread_start start_function_ptr, void* params, b8 auto_det
                 KERROR("Failed to create thread: Insufficient resources to create another thread!");
                 return false;
             case EINVAL:
-                KERROR("Failed to created thread: Invalid settings were passed in attributes!");
+                KERROR("Failed to create thread: Invalid settings were passed in attributes!");
                 return false;
             default:
                 KERROR("Failed to create thread: An unhandled error has occurred! errno = %i", result);
@@ -739,11 +739,10 @@ keys translate_keycode(u32 x_keycode)
         case XK_Help:
             return KEY_HELP;
 
+        // TODO: Not sure these are right.
         case XK_Meta_L:
-            // TODO: Not sure this is right.
             return KEY_LWIN;
         case XK_Meta_R:
-            // TODO: Not sure this is right.
             return KEY_RWIN;
 
         case XK_KP_0:

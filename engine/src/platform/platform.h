@@ -28,15 +28,7 @@
  * @param height The initial height of the main window.
  * @returns true on success; otherwise false.
 */
-b8 platform_system_startup(
-    u64* memory_requirement,
-    void* state,
-    const char* application_name,
-    i32 x,
-    i32 y,
-    i32 width,
-    i32 height
-);
+b8 platform_system_startup(u64* memory_requirement, void* state, const char* application_name, i32 x, i32 y, i32 width, i32 height);
 
 /**
  * @brief Shuts down the platform layer.

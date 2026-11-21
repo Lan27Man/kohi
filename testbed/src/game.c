@@ -44,7 +44,7 @@ b8 game_update(game* game_inst, f32 delta_time)
 
     if (input_is_key_up('T') && input_was_key_down('T'))
     {
-        KDEBUG("Swapping Texture!");
+        KDEBUG("Swapping texture!");
 
         event_context context = {};
 

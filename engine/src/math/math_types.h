@@ -36,7 +36,7 @@ typedef union vec2_u
         {
             /**
              * @brief The second element.
-             */
+            */
             f32 y, g, t, v;
         };
     };
@@ -49,7 +49,7 @@ typedef union vec3_u
 {
     /**
      * @brief An array of x, y, z.
-     */
+    */
     f32 elements[3];
 
     struct
@@ -74,7 +74,7 @@ typedef union vec3_u
         {
             /**
              * @brief The third element.
-             */
+            */
             f32 z, b, p, w;
         };
     };

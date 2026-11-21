@@ -549,7 +549,7 @@ b8 physical_device_meets_requirements(
     {
         if (properties->deviceType != VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
         {
-            KINFO("Device is not a discrete GPU, and one is required, skipping.");
+            KINFO("Device is not a discrete GPU, and one is required. Skipping.");
             return false;
         }
     }
@@ -654,9 +654,9 @@ b8 physical_device_meets_requirements(
     {
         KINFO("Device meets queue requirements!");
         KTRACE("Graphics Family Index: %i", out_queue_info->graphics_family_index);
-        KTRACE("Present Family Index: %i", out_queue_info->present_family_index);
+        KTRACE("Present Family Index:  %i", out_queue_info->present_family_index);
         KTRACE("Transfer Family Index: %i", out_queue_info->transfer_family_index);
-        KTRACE("Compute Family Index: %i", out_queue_info->compute_family_index);
+        KTRACE("Compute Family Index:  %i", out_queue_info->compute_family_index);
 
         // Query swapchain support.
         vulkan_device_query_swapchain_support(device, surface, out_swapchain_support);

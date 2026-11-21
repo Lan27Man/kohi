@@ -1,10 +1,10 @@
 #include "application.h"
-#include "game_types.h"
 
-#include "logger.h"
+#include "game_types.h"
 
 #include "platform/platform.h"
 #include "core/kmemory.h"
+#include "core/logger.h"
 #include "core/event.h"
 #include "core/input.h"
 #include "core/clock.h"
@@ -136,7 +136,7 @@ b8 event_on_debug_event(u16 code, void* sender, void* listener_inst, event_conte
 
             if (!g->material)
             {
-                KWARN("event_on_debug_event() - no material found! Using default instead.");
+                KWARN("event_on_debug_event() - no material found! Using default material.");
                 g->material = material_system_get_default_material();
             }
 

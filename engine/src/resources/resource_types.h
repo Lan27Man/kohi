@@ -53,11 +53,6 @@ typedef enum resource_type
     RESOURCE_TYPE_MATERIAL,
 
     /**
-     * @brief Static Mesh resource type.
-    */
-    RESOURCE_TYPE_STATIC_MESH,
-
-    /**
      * @brief Shader resource type (or more accurately shader config).
     */
     RESOURCE_TYPE_SHADER,
@@ -286,7 +281,7 @@ typedef enum texture_use
     /**
      * @brief The texture is used as a cube map.
     */
-    TEXTURE_USE_MAP_CUBEMAP = 0x4
+    TEXTURE_USE_MAP_CUBEMAP = 0x04
 } texture_use;
 
 /**

@@ -1,4 +1,5 @@
 #include "text_loader.h"
+
 #include "loader_utils.h"
 
 #include "core/logger.h"
@@ -6,6 +7,7 @@
 #include "core/kstring.h"
 #include "resources/resource_types.h"
 #include "systems/resource_system.h"
+#include "math/kmath.h"
 #include "platform/filesystem.h"
 
 b8 text_loader_load(struct resource_loader* self, const char* name, void* params, resource* out_resource)

@@ -1,8 +1,9 @@
 #include "logger.h"
-#include "asserts.h"
-#include "kstring.h"
-#include "kmemory.h"
 
+#include "asserts.h"
+
+#include "core/kstring.h"
+#include "core/kmemory.h"
 #include "platform/platform.h"
 #include "platform/filesystem.h"
 

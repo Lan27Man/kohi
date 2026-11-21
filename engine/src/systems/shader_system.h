@@ -290,7 +290,7 @@ void shader_system_shutdown(void* state);
  * @param config The configuration to be used when creating the shader.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_create(const shader_config* config);
+KAPI b8 shader_system_create(const shader_config* config);
 
 /**
  * @brief Gets the identifier of a shader by name.
@@ -298,7 +298,7 @@ b8 shader_system_create(const shader_config* config);
  * @param shader_name The name of the shader.
  * @returns The shader id, if found; otherwise INVALID_ID.
 */
-u32 shader_system_get_id(const char* shader_name);
+KAPI u32 shader_system_get_id(const char* shader_name);
 
 /**
  * @brief Returns a pointer to a shader with the given identifier.
@@ -306,7 +306,7 @@ u32 shader_system_get_id(const char* shader_name);
  * @param shader_id The shader identifier.
  * @returns A pointer to a shader, if found; otherwise 0.
 */
-shader* shader_system_get_by_id(u32 shader_id);
+KAPI shader* shader_system_get_by_id(u32 shader_id);
 
 /**
  * @brief Returns a pointer to a shader with the given name.
@@ -314,7 +314,7 @@ shader* shader_system_get_by_id(u32 shader_id);
  * @param shader_name The name to search for. Case sensitive.
  * @returns A pointer to a shader, if found; otherwise 0.
 */
-shader* shader_system_get(const char* shader_name);
+KAPI shader* shader_system_get(const char* shader_name);
 
 /**
  * @brief Uses the shader with the given name.
@@ -322,7 +322,7 @@ shader* shader_system_get(const char* shader_name);
  * @param shader_name The name of the shader to use. Case sensitive.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_use(const char* shader_name);
+KAPI b8 shader_system_use(const char* shader_name);
 
 /**
  * @brief Uses the shader with the given identifier.
@@ -330,7 +330,7 @@ b8 shader_system_use(const char* shader_name);
  * @param shader_id The identifier of the shader to be used.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_use_by_id(u32 shader_id);
+KAPI b8 shader_system_use_by_id(u32 shader_id);
 
 /**
  * @brief Returns the uniform index for a uniform with the given name, if found.
@@ -339,7 +339,7 @@ b8 shader_system_use_by_id(u32 shader_id);
  * @param uniform_name The name of the uniform to search for.
  * @returns The uniform index, if found; otherwise INVALID_ID_U16.
 */
-u16 shader_system_uniform_index(shader* shader, const char* uniform_name);
+KAPI u16 shader_system_uniform_index(shader* shader, const char* uniform_name);
 
 /**
  * @brief Sets the value of a uniform with the given name to the supplied value.
@@ -349,7 +349,7 @@ u16 shader_system_uniform_index(shader* shader, const char* uniform_name);
  * @param value The value to be set.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_uniform_set(const char* uniform_name, const void* value);
+KAPI b8 shader_system_uniform_set(const char* uniform_name, const void* value);
 
 /**
  * @brief Sets the texture of a sampler with the given name to the supplied texture.
@@ -359,7 +359,7 @@ b8 shader_system_uniform_set(const char* uniform_name, const void* value);
  * @param texture A pointer to the texture to be set.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_sampler_set(const char* sampler_name, const texture* texture);
+KAPI b8 shader_system_sampler_set(const char* sampler_name, const texture* texture);
 
 /**
  * @brief Sets a uniform value by index.
@@ -369,7 +369,7 @@ b8 shader_system_sampler_set(const char* sampler_name, const texture* texture);
  * @param value The value of the uniform.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_uniform_set_by_index(u16 index, const void* value);
+KAPI b8 shader_system_uniform_set_by_index(u16 index, const void* value);
 
 /**
  * @brief Sets a sampler value by index.
@@ -379,7 +379,7 @@ b8 shader_system_uniform_set_by_index(u16 index, const void* value);
  * @param texture A pointer to the texture to be set.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_sampler_set_by_index(u16 index, const struct texture* texture);
+KAPI b8 shader_system_sampler_set_by_index(u16 index, const struct texture* texture);
 
 /**
  * @brief Applies global-scoped uniforms.
@@ -387,7 +387,7 @@ b8 shader_system_sampler_set_by_index(u16 index, const struct texture* texture);
  * 
  * @returns true on success; otherwise false.
 */
-b8 shader_system_apply_global();
+KAPI b8 shader_system_apply_global();
 
 /**
  * @brief Applies instance-scoped uniforms.
@@ -396,7 +396,7 @@ b8 shader_system_apply_global();
  * @param needs_update Indicates if shader internals need to be updated or just to be bound.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_apply_instance(b8 needs_update);
+KAPI b8 shader_system_apply_instance(b8 needs_update);
 
 /**
  * @brief Binds the instance with the given id for use. Must be done before setting
@@ -406,4 +406,4 @@ b8 shader_system_apply_instance(b8 needs_update);
  * @param instance_id The identifier of the instance to bind.
  * @returns true on success; otherwise false.
 */
-b8 shader_system_bind_instance(u32 instance_id);
+KAPI b8 shader_system_bind_instance(u32 instance_id);
