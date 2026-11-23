@@ -121,6 +121,11 @@ typedef struct vulkan_buffer
     VkDeviceMemory memory;
 
     /**
+     * @brief The memory requirements for this buffer.
+    */
+    VkMemoryRequirements memory_requirements;
+
+    /**
      * @brief The index of the memory used by the buffer.
     */
     i32 memory_index;
@@ -291,6 +296,16 @@ typedef struct vulkan_image
      * @brief The view for the image, which is used to access the image.
     */
     VkImageView view;
+
+    /**
+     * @brief The GPU memory requirements for this image.
+    */
+    VkMemoryRequirements memory_requirements;
+
+    /**
+     * @brief Memory property flags.
+    */
+    VkMemoryPropertyFlags memory_flags;
 
     /**
      * @brief The image width.

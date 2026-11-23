@@ -49,6 +49,15 @@ typedef struct mesh_group_data
     mesh_face_data* faces;
 } mesh_group_data;
 
+/**
+ * @brief Imports an obj file. This reads the obj, creates geometry configs, then calls logic to write
+ * those geometries out to a binary ksm file. That file can be used on the next load.
+ * 
+ * @param obj_file A pointer to the obj file handle to be read.
+ * @param out_ksm_filename The path to the ksm file to be written to.
+ * @param out_geometries_darray A darray of geometries parsed from the file.
+ * @returns true on success; otherwise false.
+*/
 b8 import_obj_file(file_handle* obj_file, const char* out_ksm_filename, geometry_config** out_geometries_darray);
 
 void process_subobject(vec3* positions, vec3* normals, vec2* tex_coords, mesh_face_data* faces, geometry_config* out_data);
@@ -59,6 +68,14 @@ b8 load_ksm_file(file_handle* ksm_file, geometry_config** out_geometries_darray)
 
 b8 write_ksm_file(const char* path, const char* name, u32 geometry_count, geometry_config* geometries);
 
+/**
+ * @brief Write out a kohi material file from config. This gets loaded by name later when the mesh
+ * is requested for load.
+ * 
+ * @param mtl_file_path The filepath of the material library file which originally contained the material definitions.
+ * @param config A pointer to the config to be converted to .kmt.
+ * @returns true on success; otherwise false.
+*/
 b8 write_kmt_file(const char* mtl_file_path, material_config* config);
 
 b8 mesh_loader_load(struct resource_loader* self, const char* name, void* params, resource* out_resource)
@@ -308,15 +325,6 @@ b8 write_ksm_file(const char* path, const char* name, u32 geometry_count, geomet
     return true;
 }
 
-/**
- * @brief Imports an obj file. This reads the obj, creates geometry configs, then calls logic to write
- * those geometries out to a binary ksm file. That file can be used on the next load.
- * 
- * @param obj_file A pointer to the obj file handle to be read.
- * @param out_ksm_filename The path to the ksm file to be written to.
- * @param out_geometries_darray A darray of geometries parsed from the file.
- * @returns true on success; otherwise false.
-*/
 b8 import_obj_file(file_handle* obj_file, const char* out_ksm_filename, geometry_config** out_geometries_darray)
 {
     // Positions.
@@ -994,14 +1002,6 @@ b8 import_obj_material_library_file(const char* mtl_file_path)
     return true;
 }
 
-/**
- * @brief Write out a kohi material file from config. This gets loaded by name later when the mesh
- * is requested for load.
- * 
- * @param mtl_file_path The filepath of the material library file which originally contained the material definitions.
- * @param config A pointer to the config to be converted to .kmt.
- * @returns true on success; otherwise false.
-*/
 b8 write_kmt_file(const char* mtl_file_path, material_config* config)
 {
     // NOTE: The .obj file this came from (and resulting .mtl file) sit in the

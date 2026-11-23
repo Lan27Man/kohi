@@ -1,14 +1,13 @@
 #include "image_loader.h"
 
+#include "loader_utils.h"
+
 #include "core/logger.h"
 #include "core/kmemory.h"
 #include "core/kstring.h"
 #include "resources/resource_types.h"
 #include "systems/resource_system.h"
-
 #include "platform/filesystem.h"
-
-#include "loader_utils.h"
 
 // TODO: Resource loader.
 #define STB_IMAGE_IMPLEMENTATION
